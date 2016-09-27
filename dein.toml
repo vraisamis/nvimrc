@@ -1,0 +1,190 @@
+# 起動時に読み込む
+[[plugins]]
+repo = 'Shougo/dein.vim'
+
+
+[[plugins]]
+repo = 'itchyny/lightline.vim'
+hook_add = '''
+	set laststatus=2
+	let g:lightline = {
+	\ 'colorscheme' : 'wombat',
+	\}
+'''
+
+[[plugins]]
+repo = 'scrooloose/nerdtree'
+
+[[plugins]]
+repo = 'Shougo/unite.vim'
+hook_add = '''
+let g:unite_split_rule = 'botright'
+nnoremap <silent> [unite] <nop>
+nmap <Space> [unite]
+nnoremap [unite]u :Unite 
+nnoremap [unite]s :Unite source<CR>
+nnoremap [unite]f :Unite file<CR>
+nnoremap [unite]c :Unite tab buffer<CR>
+nnoremap [unite]h :Unite file_mru directory_mru<CR>
+nnoremap [unite]b :Unite bookmark<CR>
+""  Unite menu settings
+nnoremap [unite]m :Unite menu:action -vertical -winwidth=40<CR>
+" init
+if !exists("g:unite_source_menu_menus")
+	let g:unite_source_menu_menus = {}
+endif
+let g:unite_source_menu_menus.action = {
+			\ 'description' : 'My Shortcuts',
+			\ }
+let g:unite_source_menu_menus.action.candidates = [
+			\ [ '~/.vim' , expand('~/.vim') ],
+			\ [ 'vimrc' , expand('~/.vim/vimrc') ],
+			\ [ 'plugin' , expand('~/.vim/plugin.vimrc') ],
+			\ [ 'VimFiler' , 'VimFiler' ],
+			\ [ 'VimShell' , 'VimShell' ],
+			\ [ 'NERDTree' , 'NERDTreeToggle' ],
+			\ [ 'run cpp' , 'QuickRun cpp'],
+			\ [ 'run and show PDF' , 'call My_latex_compile_and_show_pdf()' ],
+			\ [ 'open in browser' , 'PrevimOpen' ],
+			\ ]
+
+function! g:unite_source_menu_menus.action.map(key, value)
+	let [word, value] = a:value
+	if isdirectory(value)
+		return {
+					\ 'word'              : '[directory] '.word,
+					\ 'kind'              : 'command',
+					\ 'action__command' : ':VimFiler '.value
+					\ }
+	elseif !empty(glob(value))
+		return {
+					\ 'word'           : '[file] '.word,
+					\ 'kind'           : 'file',
+					\ 'default_action' : 'tabdrop',
+					\ 'action__path'   : value
+					\ }
+	else
+		return {
+					\ 'word'            : '[command] '.word,
+					\ 'kind'            : 'command',
+					\ 'action__command' : value
+					\ }
+	endif
+endfunction
+
+function! My_latex_compile_and_show_pdf()
+	exec "QuickRun"
+	exec "!evince %:r.pdf &"
+	return
+endfunction
+
+'''
+
+[[plugins]]
+repo = 'Shougo/unite-outline'
+on_source = 'unite.vim'
+hook_add = '''
+nnoremap [unite]o :Unite outline -no-focus -no-quit -vertical -winwidth=40 -toggle<CR>
+'''
+
+[[plugins]]
+repo = 'Shougo/vimproc.vim'
+hook_post_update = '''
+let g:dein#plugin.build = 'make'
+'''
+
+[[plugins]]
+repo = 'Shougo/vimshell.vim'
+hook_add = '''
+let g:vimshell_prompt_expr='getcwd()." > "'
+let g:vimshell_prompt_pattern='^\f\+ > '
+'''
+
+[[plugins]]
+repo = 'Shougo/vimfiler'
+
+[[plugins]]
+repo = 'Shougo/vimproc.vim'
+
+[[plugins]]
+repo = 'thinca/vim-quickrun'
+
+[[plugins]]
+repo = 'nathanaelkane/vim-indent-guides'
+
+[[plugins]]
+repo = 'kannokanno/previm'
+
+[[plugins]]
+repo = 'tyru/open-browser.vim'
+
+[[plugins]]
+repo = 'osyo-manga/unite-filetype'
+
+[[plugins]]
+repo = 'kana/vim-filetype-haskell'
+on_ft = 'haskell'
+
+[[plugins]]
+repo = 'itchyny/vim-haskell-indent'
+on_ft = 'haskell'
+
+[[plugins]]
+repo = 'osyo-manga/vim-precious'
+depends = 'context_filetype.vim'
+
+[[plugins]]
+repo = 'Shougo/context_filetype.vim'
+
+[[plugins]]
+repo = 'Shougo/deoplete.nvim'
+hook_add = '''
+let g:deoplete#enable_at_startup = 1
+'''
+
+[[plugins]]
+repo = 'tomtom/tcomment_vim'
+
+[[plugins]]
+repo = 'tpope/vim-surround'
+
+[[plugins]]
+repo = 'Shougo/neosnippet.vim'
+depends = ['neosnippet-snippets', 'unite.vim']
+hook_add = '''
+imap <expr><Tab>
+\ neosnippet#jumpable() <Bar><Bar> neosnippet#expandable() ?
+\ "\<Plug>(neosnippet_jump_or_expand)" : "\<Tab>"
+
+inoremap <silent> [i-unite] <nop>
+imap <C-u> [i-unite]
+imap <C-s> [i-unite]s
+inoremap [i-unite]s <C-o>:Unite neosnippet neosnippet/user -start-insert -wrap -buffer-name=unite-snippets<CR>
+nnoremap <silent> <C-s> :Unite neosnippet neosnippet/user -start-insert -wrap -buffer-name=unite-snippets<CR>
+
+au FileType unite call s:unite_settings()
+function s:unite_settings()
+	let unite = unite#get_current_unite()
+	if unite.profile_name == 'unite-snippets'
+		imap <buffer> <Tab> <Plug>(unite_do_default_action)
+	end
+endfunction'''
+
+[[plugins]]
+repo = 'Shougo/neosnippet-snippets'
+
+[[plugins]]
+repo = 'Shougo/neoyank.vim'
+depends = ['unite.vim']
+hook_add = '''
+nnoremap [unite]y :Unite history/yank<CR>
+'''
+
+[[plugins]]
+repo = 'kmnk/vim-unite-giti'
+depends = ['unite.vim']
+hook_add = '''
+nnoremap [unite]gg :Unite giti<CR>
+nnoremap [unite]gs :Unite giti/status<CR>
+'''
+#####

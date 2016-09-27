@@ -1,0 +1,8 @@
+**
+!.gitignore
+!init.vim
+!dein.vim
+!dein.toml
+!dein_lazy.toml
+!/colors/
+!/colors/**

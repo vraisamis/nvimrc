@@ -1,0 +1,12 @@
+[[plugins]]
+repo = 'plasticboy/vim-markdown'
+on_ft = 'markdown'
+
+[[plugins]]
+repo = 'cespare/vim-toml'
+on_ft = 'toml'
+
+[[plugins]]
+repo = 'Shougo/neomru.vim'
+on_if = 1
+
