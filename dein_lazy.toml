@@ -9,4 +9,110 @@ on_ft = 'toml'
 [[plugins]]
 repo = 'Shougo/neomru.vim'
 on_if = 1
+on_source = 'unite.vim'
 
+[[plugins]]
+repo = 'Shougo/unite.vim'
+depends = 'neomru.vim'
+hook_add = '''
+let g:unite_split_rule = 'botright'
+nnoremap <silent> [unite] <nop>
+nmap <Space> [unite]
+nnoremap [unite]u :Unite 
+nnoremap [unite]s :Unite source<CR>
+nnoremap [unite]f :Unite file<CR>
+nnoremap [unite]c :Unite tab buffer<CR>
+nnoremap [unite]h :Unite file_mru directory_mru<CR>
+nnoremap [unite]b :Unite bookmark<CR>
+""  Unite menu settings
+nnoremap [unite]m :Unite menu:action -vertical -winwidth=40<CR>
+" init
+if !exists("g:unite_source_menu_menus")
+	let g:unite_source_menu_menus = {}
+endif
+let g:unite_source_menu_menus.action = {
+			\ 'description' : 'My Shortcuts',
+			\ }
+let g:unite_source_menu_menus.action.candidates = [
+			\ [ '~/.vim' , expand('~/.vim') ],
+			\ [ 'vimrc' , expand('~/.vim/vimrc') ],
+			\ [ 'plugin' , expand('~/.vim/plugin.vimrc') ],
+			\ [ 'VimFiler' , 'VimFiler' ],
+			\ [ 'VimShell' , 'VimShell' ],
+			\ [ 'NERDTree' , 'NERDTreeToggle' ],
+			\ [ 'run cpp' , 'QuickRun cpp'],
+			\ [ 'run and show PDF' , 'call My_latex_compile_and_show_pdf()' ],
+			\ [ 'open in browser' , 'PrevimOpen' ],
+			\ ]
+
+function! g:unite_source_menu_menus.action.map(key, value)
+	let [word, value] = a:value
+	if isdirectory(value)
+		return {
+					\ 'word'              : '[directory] '.word,
+					\ 'kind'              : 'command',
+					\ 'action__command' : ':VimFiler '.value
+					\ }
+	elseif !empty(glob(value))
+		return {
+					\ 'word'           : '[file] '.word,
+					\ 'kind'           : 'file',
+					\ 'default_action' : 'tabdrop',
+					\ 'action__path'   : value
+					\ }
+	else
+		return {
+					\ 'word'            : '[command] '.word,
+					\ 'kind'            : 'command',
+					\ 'action__command' : value
+					\ }
+	endif
+endfunction
+
+function! My_latex_compile_and_show_pdf()
+	exec "QuickRun"
+	exec "!evince %:r.pdf &"
+	return
+endfunction
+
+'''
+
+[[plugins]]
+repo = 'vim-latex/vim-latex'
+on_ft = ['tex','latex']
+hook_add = '''
+"insert here
+"set shellslash
+"set grepprg=grep\ -nH\ $*
+let g:tex_flavor='latex'
+"let g:Imap_UsePlaceHolders = 1
+"let g:Imap_DeleteEmptyPlaceHolders = 1
+"let g:Imap_StickyPlaceHolders = 0
+let g:Tex_DefaultTargetFormat = 'pdf'
+let g:Tex_MultipleCompileFormats='dvi,pdf'
+let g:Tex_FormatDependency_pdf = 'pdf'
+"let g:Tex_FormatDependency_pdf = 'dvi,pdf'
+"let g:Tex_FormatDependency_pdf = 'dvi,ps,pdf'
+let g:Tex_FormatDependency_ps = 'dvi,ps'
+"let g:Tex_CompileRule_pdf = 'ptex2pdf -u -l -ot "-synctex=1 -interaction=nonstopmode -file-line-error-style" $*'
+"let g:Tex_CompileRule_pdf = 'pdflatex -synctex=1 -interaction=nonstopmode -file-line-error-style $*'
+let g:Tex_CompileRule_pdf = 'lualatex -synctex=1 -interaction=nonstopmode -file-line-error-style $*'
+"let g:Tex_CompileRule_pdf = 'luajitlatex -synctex=1 -interaction=nonstopmode -file-line-error-style $*'
+"let g:Tex_CompileRule_pdf = 'xelatex -synctex=1 -interaction=nonstopmode -file-line-error-style $*'
+"let g:Tex_CompileRule_pdf = 'ps2pdf $*.ps'
+let g:Tex_CompileRule_ps = 'dvips -Ppdf -o $*.ps $*.dvi'
+"let g:Tex_CompileRule_dvi = 'uplatex -synctex=1 -interaction=nonstopmode -file-line-error-style $*'
+let g:Tex_CompileRule_dvi = 'lualatex -synctex=1 -interaction=nonstopmode -file-line-error-style -output-format=dvi $*'
+let g:Tex_BibtexFlavor = 'pbibtex'
+let g:Tex_MakeIndexFlavor = 'mendex $*.idx'
+"let g:Tex_UseEditorSettingInDVIViewer = 1
+let g:Tex_ViewRule_pdf = 'xdg-open'
+"let g:Tex_ViewRule_pdf = 'evince'
+"let g:Tex_ViewRule_pdf = 'okular --unique'
+"let g:Tex_ViewRule_pdf = 'zathura -x "vim --servername synctex -n --remote-silent +\%{line} \%{input}"'
+"let g:Tex_ViewRule_pdf = 'qpdfview --unique'
+"let g:Tex_ViewRule_pdf = 'texworks'
+"let g:Tex_ViewRule_pdf = 'mupdf'
+"let g:Tex_ViewRule_pdf = 'firefox -new-window'
+"let g:Tex_ViewRule_pdf = 'chromium --new-window'
+'''

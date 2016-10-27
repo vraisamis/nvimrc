@@ -16,71 +16,6 @@ hook_add = '''
 repo = 'scrooloose/nerdtree'
 
 [[plugins]]
-repo = 'Shougo/unite.vim'
-hook_add = '''
-let g:unite_split_rule = 'botright'
-nnoremap <silent> [unite] <nop>
-nmap <Space> [unite]
-nnoremap [unite]u :Unite 
-nnoremap [unite]s :Unite source<CR>
-nnoremap [unite]f :Unite file<CR>
-nnoremap [unite]c :Unite tab buffer<CR>
-nnoremap [unite]h :Unite file_mru directory_mru<CR>
-nnoremap [unite]b :Unite bookmark<CR>
-""  Unite menu settings
-nnoremap [unite]m :Unite menu:action -vertical -winwidth=40<CR>
-" init
-if !exists("g:unite_source_menu_menus")
-	let g:unite_source_menu_menus = {}
-endif
-let g:unite_source_menu_menus.action = {
-			\ 'description' : 'My Shortcuts',
-			\ }
-let g:unite_source_menu_menus.action.candidates = [
-			\ [ '~/.vim' , expand('~/.vim') ],
-			\ [ 'vimrc' , expand('~/.vim/vimrc') ],
-			\ [ 'plugin' , expand('~/.vim/plugin.vimrc') ],
-			\ [ 'VimFiler' , 'VimFiler' ],
-			\ [ 'VimShell' , 'VimShell' ],
-			\ [ 'NERDTree' , 'NERDTreeToggle' ],
-			\ [ 'run cpp' , 'QuickRun cpp'],
-			\ [ 'run and show PDF' , 'call My_latex_compile_and_show_pdf()' ],
-			\ [ 'open in browser' , 'PrevimOpen' ],
-			\ ]
-
-function! g:unite_source_menu_menus.action.map(key, value)
-	let [word, value] = a:value
-	if isdirectory(value)
-		return {
-					\ 'word'              : '[directory] '.word,
-					\ 'kind'              : 'command',
-					\ 'action__command' : ':VimFiler '.value
-					\ }
-	elseif !empty(glob(value))
-		return {
-					\ 'word'           : '[file] '.word,
-					\ 'kind'           : 'file',
-					\ 'default_action' : 'tabdrop',
-					\ 'action__path'   : value
-					\ }
-	else
-		return {
-					\ 'word'            : '[command] '.word,
-					\ 'kind'            : 'command',
-					\ 'action__command' : value
-					\ }
-	endif
-endfunction
-
-function! My_latex_compile_and_show_pdf()
-	exec "QuickRun"
-	exec "!evince %:r.pdf &"
-	return
-endfunction
-
-'''
-
-[[plugins]]
 repo = 'Shougo/unite-outline'
 on_source = 'unite.vim'
 hook_add = '''
@@ -114,6 +49,10 @@ repo = 'nathanaelkane/vim-indent-guides'
 
 [[plugins]]
 repo = 'kannokanno/previm'
+hook_add = '''
+let g:previm_open_cmd = 'google-chrome'
+"let g:previm_custom_css_path = expand('~') . '/.config/nvim/css/bootstrap-md.css'
+'''
 
 [[plugins]]
 repo = 'tyru/open-browser.vim'
@@ -164,6 +103,7 @@ nnoremap <silent> <C-s> :Unite neosnippet neosnippet/user -start-insert -wrap -b
 
 au FileType unite call s:unite_settings()
 function s:unite_settings()
+	nnoremap <buffer> <Esc> :q<CR>
 	let unite = unite#get_current_unite()
 	if unite.profile_name == 'unite-snippets'
 		imap <buffer> <Tab> <Plug>(unite_do_default_action)
