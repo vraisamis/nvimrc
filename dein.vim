@@ -1,6 +1,7 @@
 " dein.vimの設定
+let s:confhome = $XDG_CONFIG_HOME == '' ? $HOME . '/.config' : $XDG_CONFIG_HOME
 
-let s:neovim_dir = expand($XDG_CONFIG_HOME . '/nvim')
+let s:neovim_dir = expand(s:confhome . '/nvim')
 let s:dein_dir = expand(s:neovim_dir . '/dein')
 
 let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'

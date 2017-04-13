@@ -1,4 +1,5 @@
-source $XDG_CONFIG_HOME/nvim/dein.vim
+let s:confhome = $XDG_CONFIG_HOME == '' ? $HOME . '/.config' : $XDG_CONFIG_HOME
+exec ( 'source ' . s:confhome . '/nvim/dein.vim')
 "----------------
 "System Settings
 "----------------
@@ -217,3 +218,10 @@ if has('iconv')
   unlet s:enc_jis
 endif
 
+
+"--------
+"Overwrite for Environment
+"--------
+if filereadable(expand(s:confhome . '/nvim/environment.vim'))
+	exec('source ' . s:confhome . '/nvim/environment.vim')
+endif
