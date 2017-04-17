@@ -135,4 +135,45 @@ hook_add = '''
 nnoremap [unite]gg :Unite giti<CR>
 nnoremap [unite]gs :Unite giti/status<CR>
 '''
+
+[[plugins]]
+repo = 'tpope/vim-surround'
+
+[[plugins]]
+repo = 'tpope/vim-endwise'
+
+[[plugins]]
+repo = 'tpope/vim-rails'
+
+[[plugins]]
+repo = 'basyura/unite-rails'
+depends = ['unite.vim']
+hook_add = '''
+nnoremap [unite]r :Unite menu:rails<CR>
+" init
+if !exists("g:unite_source_menu_menus")
+	let g:unite_source_menu_menus = {}
+endif
+let g:unite_source_menu_menus.rails = {
+			\ 'description' : 'unite-rails sources',
+			\ }
+let g:unite_source_menu_menus.rails.command_candidates = {
+			\ 'models'      : 'Unite rails/model',
+			\ 'views'       : 'Unite rails/view',
+			\ 'controllers' : 'Unite rails/controller',
+			\ 'helpers'     : 'Unite rails/helper',
+			\ 'mailers'     : 'Unite rails/mailer',
+			\ 'lib'         : 'Unite rails/lib',
+			\ 'DB'          : 'Unite rails/db',
+			\ 'config'      : 'Unite rails/config',
+			\ 'log'         : 'Unite rails/log',
+			\ 'javascripts' : 'Unite rails/javascript',
+			\ 'stypesheets' : 'Unite rails/stypesheet',
+			\ 'bundle'      : 'Unite rails/bundle',
+			\ 'bundle gems' : 'Unite rails/bundle_gem',
+			\ 'routes'      : 'Unite rails/route',
+			\ 'root'        : 'Unite rails/root',
+			\ 'command'     : 'Unite rails/command',
+			\ }
+'''
 #####
