@@ -75,6 +75,13 @@ function! My_latex_compile_and_show_pdf()
 	return
 endfunction
 
+"for unite grep
+if executable('ag')
+	let g:unite_source_grep_command = 'ag'
+	let g:unite_source_grep_default_opts = '--nogroup --nocolor --column'
+	let g:unite_source_grep_recursive_opt = ''
+endif
+
 '''
 
 [[plugins]]
@@ -116,4 +123,81 @@ let g:Tex_ViewRule_pdf = 'xdg-open'
 "let g:Tex_ViewRule_pdf = 'firefox -new-window'
 "let g:Tex_ViewRule_pdf = 'chromium --new-window'
 let g:Imap_FreezeImap=1
+'''
+
+[[plugins]]
+repo = 'Shougo/denite.nvim'
+depends = ['unite.vim', 'neomru.vim']
+hook_add = '''
+nnoremap <silent> [denite] <nop>
+nmap <C-Space> [denite]
+nnoremap [denite]d     :Denite 
+nnoremap [denite]<C-d> :Denite
+nnoremap [denite]f     :Denite file<CR>
+nnoremap [denite]<C-f> :Denite file<CR>
+nnoremap [denite]b     :Denite buffer<CR>
+nnoremap [denite]<C-b> :Denite buffer<CR>
+nnoremap [denite]h     :Denite file_mru<CR>
+nnoremap [denite]<C-h> :Denite file_mru<CR>
+nnoremap [denite]s     :DeniteProjectDir grep -buffer-name=grep -auto-preview <CR>
+nnoremap [denite]<C-s> :DeniteProjectDir grep -buffer-name=grep -auto-preview <CR>
+nnoremap [denite]n     :Denite -resume -buffer-name=grep -immediately -select=+1<CR>
+nnoremap [denite]<C-n> :Denite -resume -buffer-name=grep -immediately -select=+1<CR>
+nnoremap [denite]p     :Denite -resume -buffer-name=grep -immediately -select=-1<CR>
+nnoremap [denite]<C-p> :Denite -resume -buffer-name=grep -immediately -select=-1<CR>
+""  menu settings
+nnoremap [denite]m     :Denite menu:action<CR>
+nnoremap [denite]<C-m> :Denite menu:action<CR>
+'''
+hook_post_source = '''
+" init
+let s:menus = {}
+let s:menus.action = {
+			\ 'description' : 'My Shortcuts',
+			\ }
+let s:menus.action.candidates = [
+			\ [ '~/.vim' , expand('~/.vim') ],
+			\ [ 'vimrc' , expand('~/.vim/vimrc') ],
+			\ [ 'plugin' , expand('~/.vim/plugin.vimrc') ],
+			\ [ 'VimFiler' , 'VimFiler' ],
+			\ [ 'VimShell' , 'VimShell' ],
+			\ [ 'NERDTree' , 'NERDTreeToggle' ],
+			\ [ 'open in browser' , 'PrevimOpen' ],
+			\ ]
+
+function! s:menus.action.map(key, value)
+	let [word, value] = a:value
+	if isdirectory(value)
+		return {
+					\ 'word'              : '[directory] '.word,
+					\ 'kind'              : 'command',
+					\ 'action__command' : ':VimFiler '.value
+					\ }
+	elseif !empty(glob(value))
+		return {
+					\ 'word'           : '[file] '.word,
+					\ 'kind'           : 'file',
+					\ 'default_action' : 'tabdrop',
+					\ 'action__path'   : value
+					\ }
+	else
+		return {
+					\ 'word'            : '[command] '.word,
+					\ 'kind'            : 'command',
+					\ 'action__command' : value
+					\ }
+	endif
+endfunction
+
+" call dein#custom#var('menu', 'menus', s:menus)
+call dein#custom#var('menu', 'unite_source_menu_compatibility', true);
+
+"for denite grep
+call denite#custom#var('file_rec', 'command',
+\ ['pt', '--follow', '--nocolor', '--nogroup', '--hidden', '-g', ''])
+call denite#custom#var('grep', 'command',
+\ ['pt', '--nogroup', '--nocolor', '--smart-case', '--hidden'])
+call denite#custom#var('grep', 'default_opts', [])
+call denite#custom#var('grep', 'recursive_opts', [])
+
 '''

@@ -177,3 +177,13 @@ let g:unite_source_menu_menus.rails.command_candidates = {
 			\ }
 '''
 #####
+
+[[plugins]]
+repo = 'ctrlpvim/ctrlp.vim'
+if = 0
+
+[[plugins]]
+repo = 'mhinz/vim-signify'
+
+[[plugins]]
+repo = 'tpope/vim-fugitive'
