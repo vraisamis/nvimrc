@@ -150,54 +150,69 @@ nnoremap [denite]m     :Denite menu:action<CR>
 nnoremap [denite]<C-m> :Denite menu:action<CR>
 '''
 hook_post_source = '''
+call denite#custom#map(
+			\ 'insert',
+			\ '<C-j>',
+			\ '<denite:move_to_next_line>',
+			\ 'noremap'
+			\)
+call denite#custom#map(
+			\ 'insert',
+			\ '<C-k>',
+			\ '<denite:move_to_previous_line>',
+			\ 'noremap'
+			\)
 " init
 let s:menus = {}
-let s:menus.action = {
-			\ 'description' : 'My Shortcuts',
-			\ }
-let s:menus.action.candidates = [
-			\ [ '~/.vim' , expand('~/.vim') ],
-			\ [ 'vimrc' , expand('~/.vim/vimrc') ],
-			\ [ 'plugin' , expand('~/.vim/plugin.vimrc') ],
-			\ [ 'VimFiler' , 'VimFiler' ],
-			\ [ 'VimShell' , 'VimShell' ],
-			\ [ 'NERDTree' , 'NERDTreeToggle' ],
-			\ [ 'open in browser' , 'PrevimOpen' ],
-			\ ]
+" let s:menus.action = {
+" 			\ 'description' : 'My Shortcuts',
+" 			\ }
+" let s:menus.action.candidates = [
+" 			\ [ '~/.vim' , expand('~/.vim') ],
+" 			\ [ 'vimrc' , expand('~/.vim/vimrc') ],
+" 			\ [ 'plugin' , expand('~/.vim/plugin.vimrc') ],
+" 			\ [ 'VimFiler' , 'VimFiler' ],
+" 			\ [ 'VimShell' , 'VimShell' ],
+" 			\ [ 'NERDTree' , 'NERDTreeToggle' ],
+" 			\ [ 'open in browser' , 'PrevimOpen' ],
+" 			\ ]
 
-function! s:menus.action.map(key, value)
-	let [word, value] = a:value
-	if isdirectory(value)
-		return {
-					\ 'word'              : '[directory] '.word,
-					\ 'kind'              : 'command',
-					\ 'action__command' : ':VimFiler '.value
-					\ }
-	elseif !empty(glob(value))
-		return {
-					\ 'word'           : '[file] '.word,
-					\ 'kind'           : 'file',
-					\ 'default_action' : 'tabdrop',
-					\ 'action__path'   : value
-					\ }
-	else
-		return {
-					\ 'word'            : '[command] '.word,
-					\ 'kind'            : 'command',
-					\ 'action__command' : value
-					\ }
-	endif
-endfunction
+" function! s:menus.action.map(key, value)
+" 	let [word, value] = a:value
+" 	if isdirectory(value)
+" 		return {
+" 					\ 'word'              : '[directory] '.word,
+" 					\ 'kind'              : 'command',
+" 					\ 'action__command' : ':VimFiler '.value
+" 					\ }
+" 	elseif !empty(glob(value))
+" 		return {
+" 					\ 'word'           : '[file] '.word,
+" 					\ 'kind'           : 'file',
+" 					\ 'default_action' : 'tabdrop',
+" 					\ 'action__path'   : value
+" 					\ }
+" 	else
+" 		return {
+" 					\ 'word'            : '[command] '.word,
+" 					\ 'kind'            : 'command',
+" 					\ 'action__command' : value
+" 					\ }
+" 	endif
+" endfunction
 
-" call dein#custom#var('menu', 'menus', s:menus)
-call dein#custom#var('menu', 'unite_source_menu_compatibility', true);
+" call denite#custom#var('menu', 'menus', s:menus)
+call denite#custom#var('menu', 'unite_source_menu_compatibility', v:true)
 
-"for denite grep
 call denite#custom#var('file_rec', 'command',
-\ ['pt', '--follow', '--nocolor', '--nogroup', '--hidden', '-g', ''])
-call denite#custom#var('grep', 'command',
-\ ['pt', '--nogroup', '--nocolor', '--smart-case', '--hidden'])
-call denite#custom#var('grep', 'default_opts', [])
+			\ ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
+"for denite grep
+call denite#custom#var('grep', 'command', ['ag'])
+call denite#custom#var('grep', 'default_opts',
+			\ ['--nogroup', '--nocolor', '--column'])
 call denite#custom#var('grep', 'recursive_opts', [])
+call denite#custom#var('grep', 'pattern_opt', [])
+call denite#custom#var('grep', 'separator', ['--'])
+call denite#custom#var('grep', 'final_opts', [])
 
 '''

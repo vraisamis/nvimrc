@@ -13,7 +13,7 @@ if &runtimepath !~# '/dein.vim'
 	execute 'set runtimepath^=' . fnamemodify(s:dein_repo_dir, ':p')
 endif
 
-"if dein#load_state(s:dein_dir)
+if dein#load_state(s:dein_dir)
 	call dein#begin(s:dein_dir)
 
 	" プラグインリストを収めた TOML ファイル
@@ -28,7 +28,7 @@ endif
 	" 設定終了
 	call dein#end()
 	call dein#save_state()
-"endif
+endif
 
 if dein#check_install()
 	call dein#install()
