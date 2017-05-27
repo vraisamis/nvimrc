@@ -81,6 +81,8 @@ set confirm
 set breakindent
 "マウスの有効モード設定
 set mouse=nv
+
+set clipboard^=unnamed,unnamedplus
 """mappings
 "----------------
 "Syntax Highlight
