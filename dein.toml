@@ -99,6 +99,7 @@ nnoremap [unite]o :Unite outline -no-focus -no-quit -vertical -winwidth=40 -togg
 
 [[plugins]]
 repo = 'Shougo/vimproc.vim'
+build = 'make'
 hook_post_update = '''
 let g:dein#plugin.build = 'make'
 '''
@@ -112,9 +113,7 @@ let g:vimshell_prompt_pattern='^\f\+ > '
 
 [[plugins]]
 repo = 'Shougo/vimfiler'
-
-[[plugins]]
-repo = 'Shougo/vimproc.vim'
+depends = 'unite.vim'
 
 [[plugins]]
 repo = 'thinca/vim-quickrun'
