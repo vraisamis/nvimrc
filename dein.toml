@@ -117,6 +117,9 @@ depends = 'unite.vim'
 
 [[plugins]]
 repo = 'thinca/vim-quickrun'
+hook_add = '''
+let g:quickrun_no_default_key_mappings = 1
+'''
 
 [[plugins]]
 repo = 'nathanaelkane/vim-indent-guides'
@@ -165,6 +168,9 @@ let g:deoplete#enable_at_startup = 1
 
 [[plugins]]
 repo = 'tomtom/tcomment_vim'
+hook_add = '''
+let g:tcommentMaps = 0
+'''
 
 [[plugins]]
 repo = 'tpope/vim-surround'
