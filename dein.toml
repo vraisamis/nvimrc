@@ -119,6 +119,11 @@ depends = 'unite.vim'
 repo = 'thinca/vim-quickrun'
 hook_add = '''
 let g:quickrun_no_default_key_mappings = 1
+" let g:quickrun_config = {
+"             \    "java": {
+"             \        "exec": "java %S:r:gs?[/\\]?.?"
+"             \    }
+"             \}
 '''
 
 [[plugins]]
@@ -169,7 +174,7 @@ let g:deoplete#enable_at_startup = 1
 [[plugins]]
 repo = 'tomtom/tcomment_vim'
 hook_add = '''
-let g:tcommentMaps = 0
+" let g:tcommentMaps = 0
 '''
 
 [[plugins]]
