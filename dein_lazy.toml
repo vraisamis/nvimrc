@@ -216,3 +216,23 @@ call denite#custom#var('grep', 'separator', ['--'])
 call denite#custom#var('grep', 'final_opts', [])
 
 '''
+
+[[plugins]]
+repo = 'vim-syntastic/syntastic'
+on_ft = 'java'
+on_if = "filereadable('./build.gradle')"
+hook_add = '''
+let g:syntastic_java_checkers=['javac']
+let g:syntastic_java_javac_config_file_enabled = 1
+'''
+
+[[plugins]]
+repo = 'Scuilion/gradle-syntastic-plugin'
+depends = 'syntastic'
+on_ft = 'java'
+on_if = "filereadable('./build.gradle')"
+
+[[plugins]]
+repo = 'fatih/vim-go'
+on_ft = 'go'
+

@@ -6,22 +6,23 @@ repo = 'Shougo/dein.vim'
 [[plugins]]
 repo = 'itchyny/lightline.vim'
 hook_add = '''
-	set laststatus=2
+set laststatus=2
 let g:lightline = {
 	\ 'colorscheme' : 'wombat',
 	\ 'mode_map': { 'c': 'NORMAL' },
 	\ 'active': {
-	\   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ] ]
+	\   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename', 'ale' ] ]
 	\ },
 	\ 'component_function': {
 	\   'modified': 'LightlineModified',
-	" \   'readonly': 'LightlineReadonly',
+	\   'readonly': 'LightlineReadonly',
 	\   'fugitive': 'LightlineFugitive',
 	\   'filename': 'LightlineFilename',
 	\   'fileformat': 'LightlineFileformat',
 	\   'filetype': 'LightlineFiletype',
 	\   'fileencoding': 'LightlineFileencoding',
 	\   'mode': 'LightlineMode',
+	\   'ale': 'ALEGetStatusLine'
 	\ },
 	" \ 'separator': { 'left': '⮀', 'right': '⮂' },
 	" \ 'subseparator': { 'left': '⮁', 'right': '⮃' }
@@ -266,6 +267,14 @@ let g:unite_source_menu_menus.rails.command_candidates = {
 [[plugins]]
 repo = 'ctrlpvim/ctrlp.vim'
 if = 0
+
+[[plugins]]
+repo = 'w0rp/ale'
+hook_add = '''
+let g:ale_sign_column_always = 1
+" let g:ale_statusline_format = ['x %d', '! %d', '* ok']
+let g:ale_set_loclist = 1
+'''
 
 [[plugins]]
 repo = 'mhinz/vim-signify'
