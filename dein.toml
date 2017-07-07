@@ -141,7 +141,11 @@ let g:indent_guides_guide_size=1
 [[plugins]]
 repo = 'kannokanno/previm'
 hook_add = '''
-let g:previm_open_cmd = 'google-chrome'
+if has('win32')
+elseif has('mac')
+else
+    let g:previm_open_cmd = 'google-chrome'
+endif
 "let g:previm_custom_css_path = expand('~') . '/.config/nvim/css/bootstrap-md.css'
 '''
 
