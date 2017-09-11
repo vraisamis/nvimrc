@@ -230,6 +230,15 @@ call denite#custom#var('grep', 'final_opts', [])
 '''
 
 [[plugins]]
+repo = 'osyo-manga/vim-precious'
+depends = 'context_filetype.vim'
+on_ft = 'toml'
+
+[[plugins]]
+repo = 'Shougo/context_filetype.vim'
+on_ft = 'toml'
+
+[[plugins]]
 repo = 'vim-syntastic/syntastic'
 on_ft = 'java'
 on_if = "filereadable('./build.gradle')"
@@ -258,3 +267,33 @@ repo = 'zchee/deoplete-go'
 on_ft = 'go'
 depends = ['gocode', 'deoplete.nvim']
 build = 'make'
+
+[[plugins]]
+repo = 'artur-shaik/vim-javacomplete2'
+depends = 'deoplete.nvim'
+on_if = 0
+# on_ft = 'java'
+hook_post_source = '''
+au FileType java setl omnifunc=javacomplete#Complete
+'''
+
+[[plugins]]
+repo = 'osyo-manga/vim-monster'
+# on_if = 0
+on_ft = 'ruby'
+hook_add = '''
+" let g:monster#completion#rcodetools#backend = "async_rct_complete"
+let g:deoplete#sources#omni#input_patterns = {
+\   "ruby" : '[^. *\t]\.\w*\|\h\w*::',
+\}
+'''
+
+[[plugins]]
+repo = 'vim-ruby/vim-ruby'
+on_if = 0
+# on_ft = 'ruby'
+
+[[plugins]]
+repo = 'fishbullet/deoplete-ruby'
+on_if = 0
+# on_ft = 'ruby'
