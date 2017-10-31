@@ -147,6 +147,7 @@ else
     let g:previm_open_cmd = 'google-chrome'
 endif
 "let g:previm_custom_css_path = expand('~') . '/.config/nvim/css/bootstrap-md.css'
+let g:previm_enable_realtime = 1
 '''
 
 [[plugins]]
