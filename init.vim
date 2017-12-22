@@ -21,7 +21,7 @@ set incsearch
 "
 "
 """Global Settings
-colorscheme molokai
+colorscheme iceberg
 
 """Tab Settings
 set tabstop=4
@@ -90,6 +90,8 @@ if &t_Co > 2 || has("gui_running")
 	syntax on
 endif
 filetype plugin indent on
+" 大文字小文字曖昧一致
+set ignorecase
 set smartcase
 set smarttab
 

@@ -270,6 +270,7 @@ build = 'make'
 
 [[plugins]]
 repo = 'artur-shaik/vim-javacomplete2'
+if = 0
 depends = 'deoplete.nvim'
 on_if = 0
 # on_ft = 'java'

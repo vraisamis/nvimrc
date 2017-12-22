@@ -11,12 +11,13 @@ let g:lightline = {
 	\ 'colorscheme' : 'wombat',
 	\ 'mode_map': { 'c': 'NORMAL' },
 	\ 'active': {
-	\   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename', 'ale' ] ]
+	\   'left': [ [ 'mode', 'paste' ], [ 'gina', 'filename', 'ale' ] ]
 	\ },
 	\ 'component_function': {
-	\   'modified': 'LightlineModified',
-	\   'readonly': 'LightlineReadonly',
-	\   'fugitive': 'LightlineFugitive',
+	" \   'modified': 'LightlineModified',
+	" \   'readonly': 'LightlineReadonly',
+	" \   'fugitive': 'LightlineFugitive',
+	\   'gina': 'MyGitStatus',
 	\   'filename': 'LightlineFilename',
 	\   'fileformat': 'LightlineFileformat',
 	\   'filetype': 'LightlineFiletype',
@@ -28,12 +29,16 @@ let g:lightline = {
 	" \ 'subseparator': { 'left': '⮁', 'right': '⮃' }
 	\ }
 
+function! EmptyForTest()
+  return 'empty'
+endfunction
+
 function! LightlineModified()
 	return &ft =~ 'help\|vimfiler\|gundo' ? '' : &modified ? '+' : &modifiable ? '' : '-'
 endfunction
 
 function! LightlineReadonly()
-	return &ft !~? 'help\|vimfiler\|gundo' && &readonly ? '⭤' : ''
+	return &ft !~? 'help\|vimfiler\|gundo' && &readonly ? '[RO]' : ''
 endfunction
 
 function! LightlineFilename()
@@ -41,6 +46,7 @@ function! LightlineFilename()
 				\ (&ft == 'vimfiler' ? vimfiler#get_status_string() :
 				\  &ft == 'unite' ? unite#get_status_string() :
 				\  &ft == 'vimshell' ? vimshell#get_status_string() :
+				\  &ft =~ '^gina' ? &ft :
 				\ '' != expand('%:t') ? expand('%:t') : '[No Name]') .
 				\ ('' != LightlineModified() ? ' ' . LightlineModified() : '')
 endfunction
@@ -59,7 +65,7 @@ function! LightlineFileformat()
 endfunction
 
 function! LightlineFiletype()
-	return winwidth(0) > 70 ? (&filetype !=# '' ? &filetype : 'no ft') : ''
+	return winwidth(0) > 70 ? (&filetype !=# '' ? &filetype : '[no ft]') : ''
 endfunction
 
 function! LightlineFileencoding()
@@ -69,13 +75,35 @@ endfunction
 function! LightlineMode()
 	return winwidth(0) > 60 ? lightline#mode() : ''
 endfunction
+
+function! MyGitStatus()
+  let staged = gina#component#status#staged()
+  let unstaged = gina#component#status#unstaged()
+  let conflicted = gina#component#status#conflicted()
+  let value = gina#component#repo#preset('ascii')
+  if staged != ''
+    let value .= printf(' %s staged', staged)
+  endif
+  if unstaged != ''
+    let value .= printf(' %s unstaged', unstaged)
+  endif
+  if conflicted != ''
+    let value .= printf(' %s conflicted', conflicted)
+  endif
+  return value
+endfunction
 '''
+
+[[plugins]]
+repo = 'justinmk/vim-dirvish'
+if = 0
 
 [[plugins]]
 repo = 'scrooloose/nerdtree'
 
 [[plugins]]
 repo = 'Xuyuanp/nerdtree-git-plugin'
+depends = 'nerdtree'
 hook_add = '''
 let g:NERDTreeIndicatorMapCustom = {
     \ "Modified"  : "✹",
@@ -100,6 +128,7 @@ nnoremap [unite]o :Unite outline -no-focus -no-quit -vertical -winwidth=40 -togg
 
 [[plugins]]
 repo = 'Shougo/vimproc.vim'
+# if = 0
 build = 'make'
 hook_post_update = '''
 let g:dein#plugin.build = 'make'
@@ -107,6 +136,7 @@ let g:dein#plugin.build = 'make'
 
 [[plugins]]
 repo = 'Shougo/vimshell.vim'
+if = 0
 hook_add = '''
 let g:vimshell_prompt_expr='getcwd()." > "'
 let g:vimshell_prompt_pattern='^\f\+ > '
@@ -129,6 +159,7 @@ let g:quickrun_no_default_key_mappings = 1
 
 [[plugins]]
 repo = 'nathanaelkane/vim-indent-guides'
+# if = 0
 hook_add = '''
 let g:indent_guides_enable_on_vim_startup=1
 let g:indent_guides_start_level=1
@@ -177,9 +208,6 @@ hook_add = '''
 '''
 
 [[plugins]]
-repo = 'tpope/vim-surround'
-
-[[plugins]]
 repo = 'Shougo/neosnippet.vim'
 depends = ['neosnippet-snippets', 'unite.vim']
 hook_add = '''
@@ -187,6 +215,7 @@ imap <expr><Tab>
 \ neosnippet#jumpable() <Bar><Bar> neosnippet#expandable() ?
 \ "\<Plug>(neosnippet_jump_or_expand)" : "\<Tab>"
 
+" NOTE: 挙動が微妙
 inoremap <silent> [i-unite] <nop>
 imap <C-u> [i-unite]
 imap <C-s> [i-unite]s
@@ -292,3 +321,10 @@ depends = 'fzf'
 
 [[plugins]]
 repo = 'tpope/vim-abolish'
+
+[[plugins]]
+repo = 'lambdalisue/gina.vim'
+# if = 0
+
+[[plugins]]
+repo = 'cocopon/iceberg.vim'
