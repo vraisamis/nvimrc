@@ -232,11 +232,11 @@ call denite#custom#var('grep', 'final_opts', [])
 [[plugins]]
 repo = 'osyo-manga/vim-precious'
 depends = 'context_filetype.vim'
-on_ft = ['toml', 'markdown']
+on_ft = ['toml', 'markdown', 'jsp']
 
 [[plugins]]
 repo = 'Shougo/context_filetype.vim'
-on_ft = ['toml', 'markdown']
+on_ft = ['toml', 'markdown', 'jsp']
 
 [[plugins]]
 repo = 'vim-syntastic/syntastic'

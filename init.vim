@@ -225,8 +225,9 @@ function! FullFilePath(line1, line2)
     let l:lines = a:line1 == a:line2 ? a:line1 : a:line1 . "," . a:line2
     return expand("%:p"). " :".l:lines
 endfunction
-command -range -register CopyFilePath let @<reg> = call('FullFilePath', [<line1>, <line2>])
+command -range CopyFilePath let @+ = call('FullFilePath', [<line1>, <line2>])
 
+command! OpenBrowserCurrent execute "OpenBrowser" expand("%:p")
 "--------
 "Overwrite for Environment
 "--------
