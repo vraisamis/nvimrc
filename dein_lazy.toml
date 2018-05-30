@@ -240,6 +240,7 @@ on_ft = ['toml', 'markdown', 'jsp']
 
 [[plugins]]
 repo = 'vim-syntastic/syntastic'
+if = 0
 on_ft = 'java'
 on_if = "filereadable('./build.gradle')"
 hook_add = '''
@@ -249,6 +250,7 @@ let g:syntastic_java_javac_config_file_enabled = 1
 
 [[plugins]]
 repo = 'Scuilion/gradle-syntastic-plugin'
+if = 0
 depends = 'syntastic'
 on_ft = 'java'
 on_if = "filereadable('./build.gradle')"
@@ -309,15 +311,17 @@ let g:rustfmt_autosave = 1
 [[plugins]]
 repo = 'autozimu/LanguageClient-neovim'
 depends = 'deoplete.nvim'
-on_ft = ['rust']
+on_ft = ['rust', 'java']
 build = 'bash ./install.sh'
 merged = 0
-hook_source = '''
-let g:LanguageClient_serverCommands = {
-    \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
-    \ }
+hook_add = '''
+if !exists("g:LanguageClient_serverCommands")
+	let g:LanguageClient_serverCommands = {}
+endif
+let g:LanguageClient_serverCommands['rust'] = ['rustup', 'run', 'nightly', 'rls']
 let g:LanguageClient_autoStart = 1
 nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
 nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
 nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
+nnoremap <silent> <F3> :call LanguageClient_textDocument_references()<CR>
 '''

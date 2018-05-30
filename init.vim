@@ -234,3 +234,5 @@ command! OpenBrowserCurrent execute "OpenBrowser" expand("%:p")
 if filereadable(expand(s:confhome . '/nvim/environment.vim'))
 	exec('source ' . s:confhome . '/nvim/environment.vim')
 endif
+
+source $VIMRUNTIME/macros/matchit.vim

@@ -8,7 +8,7 @@ repo = 'itchyny/lightline.vim'
 hook_add = '''
 set laststatus=2
 let g:lightline = {
-	\ 'colorscheme' : 'wombat',
+	\ 'colorscheme' : 'iceberg',
 	\ 'mode_map': { 'c': 'NORMAL' },
 	\ 'active': {
 	\   'left': [ [ 'mode', 'paste' ], [ 'gina', 'filename', 'ale' ] ]
@@ -23,7 +23,7 @@ let g:lightline = {
 	\   'filetype': 'LightlineFiletype',
 	\   'fileencoding': 'LightlineFileencoding',
 	\   'mode': 'LightlineMode',
-	\   'ale': 'ALEGetStatusLine'
+	\   'ale': 'MyALEStatus'
 	\ },
 	" \ 'separator': { 'left': '⮀', 'right': '⮂' },
 	" \ 'subseparator': { 'left': '⮁', 'right': '⮃' }
@@ -92,6 +92,11 @@ function! MyGitStatus()
   endif
   return value
 endfunction
+
+function! MyALEStatus()
+  return s:ale_running != '' ? '[linting]' : ALEGetStatusLine()
+  endif
+endfunction
 '''
 
 [[plugins]]
@@ -100,6 +105,9 @@ if = 0
 
 [[plugins]]
 repo = 'scrooloose/nerdtree'
+hook_add = '''
+command! NEF NERDTreeFind
+'''
 
 [[plugins]]
 repo = 'Xuyuanp/nerdtree-git-plugin'
@@ -302,6 +310,12 @@ let g:ale_sign_column_always = 1
 " let g:ale_statusline_format = ['x %d', '! %d', '* ok']
 let g:ale_set_loclist = 1
 let g:ale_linters = {'java': []}
+let s:ale_running = 0
+augroup ALEProgress
+  autocmd!
+  autocmd User ALELintPre  let s:ale_running = 1 | redrawstatus
+  autocmd User ALELintPost let s:ale_running = 0 | redrawstatus
+augroup end
 '''
 
 [[plugins]]
@@ -318,6 +332,9 @@ merged = 0
 [[plugins]]
 repo = 'junegunn/fzf.vim'
 depends = 'fzf'
+hook_add = '''
+command! -nargs=* -bang AG <bang>Ag <args>
+'''
 
 [[plugins]]
 repo = 'tpope/vim-abolish'
