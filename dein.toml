@@ -1,8 +1,52 @@
 # 起動時に読み込む
+# プラグイン管理
 [[plugins]]
 repo = 'Shougo/dein.vim'
 
+# doc
+[[plugins]]
+repo = 'vim-jp/vimdoc-ja'
 
+# colorscheme
+[[plugins]]
+repo = 'cocopon/iceberg.vim'
+
+# fazzy matcher
+[[plugins]]
+repo = 'junegunn/fzf'
+build = './install --all'
+merged = 0
+
+[[plugins]]
+repo = 'junegunn/fzf.vim'
+depends = 'fzf'
+hook_add = '''
+" Ag コマンドがあるが、typoが多いのでalias
+command! -nargs=* -bang AG <bang>Ag <args>
+'''
+
+# gitコマンド
+[[plugins]]
+repo = 'lambdalisue/gina.vim'
+# if = 0
+
+# linter
+[[plugins]]
+repo = 'w0rp/ale'
+hook_add = '''
+let g:ale_sign_column_always = 1
+" let g:ale_statusline_format = ['x %d', '! %d', '* ok']
+let g:ale_set_loclist = 1
+let g:ale_linters = {'java': []}
+let s:ale_running = 0
+augroup ALEProgress
+  autocmd!
+  autocmd User ALELintPre  let s:ale_running = 1 | redrawstatus
+  autocmd User ALELintPost let s:ale_running = 0 | redrawstatus
+augroup end
+'''
+
+# statusline
 [[plugins]]
 repo = 'itchyny/lightline.vim'
 hook_add = '''
@@ -13,25 +57,16 @@ let g:lightline = {
 	\ 'active': {
 	\   'left': [ [ 'mode', 'paste' ], [ 'gina', 'filename', 'ale' ] ]
 	\ },
+	\ 'component': {
+	\   'gina': '%{g:gina_status_str}'
+	\ },
 	\ 'component_function': {
-	" \   'modified': 'LightlineModified',
-	" \   'readonly': 'LightlineReadonly',
-	" \   'fugitive': 'LightlineFugitive',
-	\   'gina': 'MyGitStatus',
 	\   'filename': 'LightlineFilename',
-	\   'fileformat': 'LightlineFileformat',
-	\   'filetype': 'LightlineFiletype',
-	\   'fileencoding': 'LightlineFileencoding',
-	\   'mode': 'LightlineMode',
 	\   'ale': 'MyALEStatus'
 	\ },
 	" \ 'separator': { 'left': '⮀', 'right': '⮂' },
 	" \ 'subseparator': { 'left': '⮁', 'right': '⮃' }
 	\ }
-
-function! EmptyForTest()
-  return 'empty'
-endfunction
 
 function! LightlineModified()
 	return &ft =~ 'help\|vimfiler\|gundo' ? '' : &modified ? '+' : &modifiable ? '' : '-'
@@ -51,47 +86,36 @@ function! LightlineFilename()
 				\ ('' != LightlineModified() ? ' ' . LightlineModified() : '')
 endfunction
 
-function! LightlineFugitive()
-	if &ft !~? 'vimfiler\|gundo' && exists("*fugitive#head")
-		let branch = fugitive#head()
-		return branch !=# '' ? branch : ''
-		" return branch !=# '' ? '⭠ '.branch : ''
-	endif
-	return ''
-endfunction
+augroup gina-status-lazy
+  autocmd!
+  autocmd CursorMoved,CursorMovedI * call s:f_gina_status('CursorMoved')
+  autocmd CursorHold,CursorHoldI * call s:f_gina_status('CursorHold')
+  autocmd WinEnter * call s:f_gina_status('WinEnter')
+  autocmd WinLeave * call s:f_gina_status('WinLeave')
 
-function! LightlineFileformat()
-	return winwidth(0) > 70 ? &fileformat : ''
-endfunction
-
-function! LightlineFiletype()
-	return winwidth(0) > 70 ? (&filetype !=# '' ? &filetype : '[no ft]') : ''
-endfunction
-
-function! LightlineFileencoding()
-	return winwidth(0) > 70 ? (&fenc !=# '' ? &fenc : &enc) : ''
-endfunction
-
-function! LightlineMode()
-	return winwidth(0) > 60 ? lightline#mode() : ''
-endfunction
-
-function! MyGitStatus()
-  let staged = gina#component#status#staged()
-  let unstaged = gina#component#status#unstaged()
-  let conflicted = gina#component#status#conflicted()
-  let value = gina#component#repo#preset('ascii')
-  if staged != ''
-    let value .= printf(' %s staged', staged)
-  endif
-  if unstaged != ''
-    let value .= printf(' %s unstaged', unstaged)
-  endif
-  if conflicted != ''
-    let value .= printf(' %s conflicted', conflicted)
-  endif
-  return value
-endfunction
+  let s:gina_status = 0
+  let g:gina_status_str = gina#component#repo#preset()
+  function! s:f_gina_status(event)
+    if a:event ==# 'WinEnter'
+      let g:gina_status_str = gina#component#repo#preset()
+      let s:gina_status = 2
+    elseif a:event ==# 'WinLeave'
+      " Do nothing
+    elseif a:event ==# 'CursorMoved'
+      if s:gina_status
+        if 1 < s:gina_status
+          let s:gina_status = 1
+        else
+          " Do nothing
+          let s:gina_status = 0
+        endif
+      endif
+    elseif a:event ==# 'CursorHold'
+      let g:gina_status_str = gina#component#repo#preset()
+      let s:gina_status = 1
+    endif
+  endfunction
+augroup END
 
 function! MyALEStatus()
   return s:ale_running != '' ? '[linting]' : ALEGetStatusLine()
@@ -100,8 +124,13 @@ endfunction
 '''
 
 [[plugins]]
-repo = 'justinmk/vim-dirvish'
-if = 0
+repo = 'tpope/vim-fugitive'
+
+[[plugins]]
+repo = 'tpope/vim-abolish'
+
+[[plugins]]
+repo = 'mhinz/vim-signify'
 
 [[plugins]]
 repo = 'scrooloose/nerdtree'
@@ -128,44 +157,6 @@ let g:NERDTreeIndicatorMapCustom = {
 '''
 
 [[plugins]]
-repo = 'Shougo/unite-outline'
-on_source = 'unite.vim'
-hook_add = '''
-nnoremap [unite]o :Unite outline -no-focus -no-quit -vertical -winwidth=40 -toggle<CR>
-'''
-
-[[plugins]]
-repo = 'Shougo/vimproc.vim'
-# if = 0
-build = 'make'
-hook_post_update = '''
-let g:dein#plugin.build = 'make'
-'''
-
-[[plugins]]
-repo = 'Shougo/vimshell.vim'
-if = 0
-hook_add = '''
-let g:vimshell_prompt_expr='getcwd()." > "'
-let g:vimshell_prompt_pattern='^\f\+ > '
-'''
-
-[[plugins]]
-repo = 'Shougo/vimfiler'
-depends = 'unite.vim'
-
-[[plugins]]
-repo = 'thinca/vim-quickrun'
-hook_add = '''
-let g:quickrun_no_default_key_mappings = 1
-" let g:quickrun_config = {
-"             \    "java": {
-"             \        "exec": "java %S:r:gs?[/\\]?.?"
-"             \    }
-"             \}
-'''
-
-[[plugins]]
 repo = 'nathanaelkane/vim-indent-guides'
 # if = 0
 hook_add = '''
@@ -176,6 +167,18 @@ autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=235
 autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=236
 let g:indent_guides_guide_size=1
 '''
+
+[[plugins]]
+repo = 'tomtom/tcomment_vim'
+hook_add = '''
+" let g:tcommentMaps = 0
+'''
+
+[[plugins]]
+repo = 'tpope/vim-surround'
+
+[[plugins]]
+repo = 'tpope/vim-endwise'
 
 [[plugins]]
 repo = 'kannokanno/previm'
@@ -191,157 +194,3 @@ let g:previm_enable_realtime = 1
 
 [[plugins]]
 repo = 'tyru/open-browser.vim'
-
-[[plugins]]
-repo = 'osyo-manga/unite-filetype'
-
-[[plugins]]
-repo = 'kana/vim-filetype-haskell'
-on_ft = 'haskell'
-
-[[plugins]]
-repo = 'itchyny/vim-haskell-indent'
-on_ft = 'haskell'
-
-[[plugins]]
-repo = 'Shougo/deoplete.nvim'
-hook_add = '''
-let g:deoplete#enable_at_startup = 1
-'''
-
-[[plugins]]
-repo = 'tomtom/tcomment_vim'
-hook_add = '''
-" let g:tcommentMaps = 0
-'''
-
-[[plugins]]
-repo = 'Shougo/neosnippet.vim'
-depends = ['neosnippet-snippets', 'unite.vim']
-hook_add = '''
-imap <expr><Tab>
-\ neosnippet#jumpable() <Bar><Bar> neosnippet#expandable() ?
-\ "\<Plug>(neosnippet_jump_or_expand)" : "\<Tab>"
-
-" NOTE: 挙動が微妙
-inoremap <silent> [i-unite] <nop>
-imap <C-u> [i-unite]
-imap <C-s> [i-unite]s
-inoremap [i-unite]s <C-o>:Unite neosnippet neosnippet/user -start-insert -wrap -buffer-name=unite-snippets<CR>
-nnoremap <silent> <C-s> :Unite neosnippet neosnippet/user -start-insert -wrap -buffer-name=unite-snippets<CR>
-
-au FileType unite call s:unite_settings()
-function s:unite_settings()
-	nnoremap <buffer> <Esc> :q<CR>
-	let unite = unite#get_current_unite()
-	if unite.profile_name == 'unite-snippets'
-		imap <buffer> <Tab> <Plug>(unite_do_default_action)
-	end
-endfunction'''
-
-[[plugins]]
-repo = 'Shougo/neosnippet-snippets'
-
-[[plugins]]
-repo = 'Shougo/neoyank.vim'
-depends = ['unite.vim']
-hook_add = '''
-nnoremap [unite]y :Unite history/yank<CR>
-'''
-
-[[plugins]]
-repo = 'kmnk/vim-unite-giti'
-depends = ['unite.vim']
-hook_add = '''
-nnoremap [unite]gg :Unite giti<CR>
-nnoremap [unite]gs :Unite giti/status<CR>
-'''
-
-[[plugins]]
-repo = 'tpope/vim-surround'
-
-[[plugins]]
-repo = 'tpope/vim-endwise'
-
-[[plugins]]
-repo = 'tpope/vim-rails'
-
-[[plugins]]
-repo = 'basyura/unite-rails'
-depends = ['unite.vim']
-hook_add = '''
-nnoremap [unite]r :Unite menu:rails<CR>
-" init
-if !exists("g:unite_source_menu_menus")
-	let g:unite_source_menu_menus = {}
-endif
-let g:unite_source_menu_menus.rails = {
-			\ 'description' : 'unite-rails sources',
-			\ }
-let g:unite_source_menu_menus.rails.command_candidates = {
-			\ 'models'      : 'Unite rails/model',
-			\ 'views'       : 'Unite rails/view',
-			\ 'controllers' : 'Unite rails/controller',
-			\ 'helpers'     : 'Unite rails/helper',
-			\ 'mailers'     : 'Unite rails/mailer',
-			\ 'lib'         : 'Unite rails/lib',
-			\ 'DB'          : 'Unite rails/db',
-			\ 'config'      : 'Unite rails/config',
-			\ 'log'         : 'Unite rails/log',
-			\ 'javascripts' : 'Unite rails/javascript',
-			\ 'stypesheets' : 'Unite rails/stypesheet',
-			\ 'bundle'      : 'Unite rails/bundle',
-			\ 'bundle gems' : 'Unite rails/bundle_gem',
-			\ 'routes'      : 'Unite rails/route',
-			\ 'root'        : 'Unite rails/root',
-			\ 'command'     : 'Unite rails/command',
-			\ }
-'''
-#####
-
-[[plugins]]
-repo = 'ctrlpvim/ctrlp.vim'
-if = 0
-
-[[plugins]]
-repo = 'w0rp/ale'
-hook_add = '''
-let g:ale_sign_column_always = 1
-" let g:ale_statusline_format = ['x %d', '! %d', '* ok']
-let g:ale_set_loclist = 1
-let g:ale_linters = {'java': []}
-let s:ale_running = 0
-augroup ALEProgress
-  autocmd!
-  autocmd User ALELintPre  let s:ale_running = 1 | redrawstatus
-  autocmd User ALELintPost let s:ale_running = 0 | redrawstatus
-augroup end
-'''
-
-[[plugins]]
-repo = 'mhinz/vim-signify'
-
-[[plugins]]
-repo = 'tpope/vim-fugitive'
-
-[[plugins]]
-repo = 'junegunn/fzf'
-build = './install --all'
-merged = 0
-
-[[plugins]]
-repo = 'junegunn/fzf.vim'
-depends = 'fzf'
-hook_add = '''
-command! -nargs=* -bang AG <bang>Ag <args>
-'''
-
-[[plugins]]
-repo = 'tpope/vim-abolish'
-
-[[plugins]]
-repo = 'lambdalisue/gina.vim'
-# if = 0
-
-[[plugins]]
-repo = 'cocopon/iceberg.vim'

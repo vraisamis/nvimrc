@@ -1,11 +1,34 @@
+scriptencoding utf-8
 let s:confhome = $XDG_CONFIG_HOME == '' ? $HOME . '/.config' : $XDG_CONFIG_HOME
+
+function! ProfileCursorMove() abort
+  let profile_file = expand('~/log/vim-profile.log')
+  if filereadable(profile_file)
+    call delete(profile_file)
+  endif
+
+  normal! gg
+  normal! zR
+
+  execute 'profile start ' . profile_file
+  profile func *
+  profile file *
+
+  augroup ProfileCursorMove
+    autocmd!
+    autocmd CursorHold <buffer> profile pause | q
+  augroup END
+
+  for i in range(100)
+    call feedkeys('j')
+  endfor
+endfunction
+
 exec ( 'source ' . s:confhome . '/nvim/dein.vim')
 "----------------
 "System Settings
 "----------------
-set encoding=utf-8
 set fileencoding=utf-8
-scriptencoding utf-8
 
 "BSで消去できる文字の設定
 set backspace=indent,eol,start
@@ -17,9 +40,9 @@ set formatoptions+=roqmM
 set hlsearch
 "インクリメンタルサーチ
 set incsearch
-"
-"
-"
+
+
+
 """Global Settings
 colorscheme iceberg
 
@@ -32,23 +55,18 @@ set noexpandtab
 set autoindent
 "高度な自動インデント
 set smartindent
-""Indents
-"set preserveindent
 
 """Input Settings
-
 set include=^\s*#\s*include
 set define=^\(#\s*define\|[a-z]*\s*const\s*[a-z]*\)
 "文字表示の設定
 set display=lastline,uhex
 "折畳みの設定
-set foldlevelstart=1
-set foldmethod=indent
-set foldignore+=/*
-set foldignore+=<Space>
+"set foldlevelstart=1
+"set foldmethod=indent
+"set foldignore+=/*
+"set foldignore+=<Space>
 set nofen
-"IMを切り替えるキーの提示
-"set imactivatekey=S-C-space
 "行番号の表示
 set number
 "モードを表示
@@ -79,6 +97,7 @@ set confirm
 
 "折り返しインデント
 set breakindent
+set breakindentopt=min:20,shift:0,sbr
 "マウスの有効モード設定
 set mouse=nv
 
@@ -95,7 +114,6 @@ set ignorecase
 set smartcase
 set smarttab
 
-"set clipboard+=unnamed
 
 "set paste
 

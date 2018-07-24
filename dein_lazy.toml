@@ -7,123 +7,113 @@ repo = 'cespare/vim-toml'
 on_ft = 'toml'
 
 [[plugins]]
-repo = 'Shougo/neomru.vim'
-on_if = 1
-on_source = 'unite.vim'
+repo = 'pangloss/vim-javascript'
+on_ft = ['javascript', 'javascript.jsx']
 
 [[plugins]]
-repo = 'Shougo/unite.vim'
-depends = 'neomru.vim'
+repo = 'othree/yajs.vim'
+on_ft = ['javascript', 'javascript.jsx']
+
+[[plugins]]
+repo = 'othree/es.next.syntax.vim'
+on_ft = ['javascript', 'javascript.jsx']
+
+[[plugins]]
+repo = 'othree/javascript-libraries-syntax.vim'
+on_ft = ['javascript', 'javascript.jsx']
 hook_add = '''
-let g:unite_split_rule = 'botright'
-nnoremap <silent> [unite] <nop>
-nmap <Space> [unite]
-nnoremap [unite]u :Unite 
-nnoremap [unite]s :Unite source<CR>
-nnoremap [unite]f :Unite file<CR>
-nnoremap [unite]c :Unite tab buffer<CR>
-nnoremap [unite]h :Unite file_mru directory_mru<CR>
-nnoremap [unite]b :Unite bookmark<CR>
-""  Unite menu settings
-nnoremap [unite]m :Unite menu:action -vertical -winwidth=40<CR>
-" init
-if !exists("g:unite_source_menu_menus")
-	let g:unite_source_menu_menus = {}
-endif
-let g:unite_source_menu_menus.action = {
-			\ 'description' : 'My Shortcuts',
-			\ }
-let g:unite_source_menu_menus.action.candidates = [
-			\ [ '~/.vim' , expand('~/.vim') ],
-			\ [ 'vimrc' , expand('~/.vim/vimrc') ],
-			\ [ 'plugin' , expand('~/.vim/plugin.vimrc') ],
-			\ [ 'VimFiler' , 'VimFiler' ],
-			\ [ 'VimShell' , 'VimShell' ],
-			\ [ 'NERDTree' , 'NERDTreeToggle' ],
-			\ [ 'run cpp' , 'QuickRun cpp'],
-			\ [ 'run and show PDF' , 'call My_latex_compile_and_show_pdf()' ],
-			\ [ 'open in browser' , 'PrevimOpen' ],
-			\ ]
-
-function! g:unite_source_menu_menus.action.map(key, value)
-	let [word, value] = a:value
-	if isdirectory(value)
-		return {
-					\ 'word'              : '[directory] '.word,
-					\ 'kind'              : 'command',
-					\ 'action__command' : ':VimFiler '.value
-					\ }
-	elseif !empty(glob(value))
-		return {
-					\ 'word'           : '[file] '.word,
-					\ 'kind'           : 'file',
-					\ 'default_action' : 'tabdrop',
-					\ 'action__path'   : value
-					\ }
-	else
-		return {
-					\ 'word'            : '[command] '.word,
-					\ 'kind'            : 'command',
-					\ 'action__command' : value
-					\ }
-	endif
+function! EnableJavascript()
+  " Setup used libraries
+  let g:used_javascript_libs = 'jquery,underscore,react,flux,jasmine,d3'
+  let b:javascript_lib_use_jquery = 1
+  let b:javascript_lib_use_underscore = 1
+  let b:javascript_lib_use_react = 1
+  let b:javascript_lib_use_flux = 1
+  let b:javascript_lib_use_jasmine = 1
+  let b:javascript_lib_use_d3 = 1
 endfunction
-
-function! My_latex_compile_and_show_pdf()
-	exec "QuickRun"
-	exec "!evince %:r.pdf &"
-	return
-endfunction
-
-"for unite grep
-if executable('ag')
-	let g:unite_source_grep_command = 'ag'
-	let g:unite_source_grep_default_opts = '--nogroup --nocolor --column'
-	let g:unite_source_grep_recursive_opt = ''
-endif
-
+autocmd FileType javascript,javascript.jsx call EnableJavascript()
 '''
 
 [[plugins]]
-repo = 'vim-latex/vim-latex'
-on_ft = ['tex','latex']
-hook_add = '''
-"insert here
-"set shellslash
-"set grepprg=grep\ -nH\ $*
-let g:tex_flavor='latex'
-"let g:Imap_UsePlaceHolders = 1
-"let g:Imap_DeleteEmptyPlaceHolders = 1
-"let g:Imap_StickyPlaceHolders = 0
-let g:Tex_DefaultTargetFormat = 'pdf'
-let g:Tex_MultipleCompileFormats='dvi,pdf'
-let g:Tex_FormatDependency_pdf = 'pdf'
-"let g:Tex_FormatDependency_pdf = 'dvi,pdf'
-"let g:Tex_FormatDependency_pdf = 'dvi,ps,pdf'
-let g:Tex_FormatDependency_ps = 'dvi,ps'
-"let g:Tex_CompileRule_pdf = 'ptex2pdf -u -l -ot "-synctex=1 -interaction=nonstopmode -file-line-error-style" $*'
-"let g:Tex_CompileRule_pdf = 'pdflatex -synctex=1 -interaction=nonstopmode -file-line-error-style $*'
-let g:Tex_CompileRule_pdf = 'lualatex -synctex=1 -interaction=nonstopmode -file-line-error-style $*'
-"let g:Tex_CompileRule_pdf = 'luajitlatex -synctex=1 -interaction=nonstopmode -file-line-error-style $*'
-"let g:Tex_CompileRule_pdf = 'xelatex -synctex=1 -interaction=nonstopmode -file-line-error-style $*'
-"let g:Tex_CompileRule_pdf = 'ps2pdf $*.ps'
-let g:Tex_CompileRule_ps = 'dvips -Ppdf -o $*.ps $*.dvi'
-"let g:Tex_CompileRule_dvi = 'uplatex -synctex=1 -interaction=nonstopmode -file-line-error-style $*'
-let g:Tex_CompileRule_dvi = 'lualatex -synctex=1 -interaction=nonstopmode -file-line-error-style -output-format=dvi $*'
-let g:Tex_BibtexFlavor = 'pbibtex'
-let g:Tex_MakeIndexFlavor = 'mendex $*.idx'
-"let g:Tex_UseEditorSettingInDVIViewer = 1
-let g:Tex_ViewRule_pdf = 'xdg-open'
-"let g:Tex_ViewRule_pdf = 'evince'
-"let g:Tex_ViewRule_pdf = 'okular --unique'
-"let g:Tex_ViewRule_pdf = 'zathura -x "vim --servername synctex -n --remote-silent +\%{line} \%{input}"'
-"let g:Tex_ViewRule_pdf = 'qpdfview --unique'
-"let g:Tex_ViewRule_pdf = 'texworks'
-"let g:Tex_ViewRule_pdf = 'mupdf'
-"let g:Tex_ViewRule_pdf = 'firefox -new-window'
-"let g:Tex_ViewRule_pdf = 'chromium --new-window'
-let g:Imap_FreezeImap=1
+repo = 'osyo-manga/vim-precious'
+depends = 'context_filetype.vim'
+on_ft = ['toml', 'markdown', 'jsp']
+
+[[plugins]]
+repo = 'Shougo/context_filetype.vim'
+on_ft = ['toml', 'markdown', 'jsp']
+
+[[plugins]]
+repo = 'kana/vim-filetype-haskell'
+on_ft = 'haskell'
+
+[[plugins]]
+repo = 'itchyny/vim-haskell-indent'
+on_ft = 'haskell'
+
+[[plugins]]
+repo = 'tpope/vim-rails'
+on_ft = ['ruby', 'erb']
+
+[[plugins]]
+repo = 'rust-lang/rust.vim'
+on_ft = 'rust'
+hook_source = '''
+let g:rustfmt_autosave = 1
 '''
+
+[[plugins]]
+repo = 'autozimu/LanguageClient-neovim'
+depends = 'deoplete.nvim'
+on_ft = ['rust', 'java', 'javascript']
+build = 'bash ./install.sh'
+merged = 0
+hook_add = '''
+if !exists("g:LanguageClient_serverCommands")
+	let g:LanguageClient_serverCommands = {}
+endif
+let g:LanguageClient_serverCommands['rust'] = ['rustup', 'run', 'nightly', 'rls']
+let g:LanguageClient_serverCommands['javascript'] = ['javascript-typescript-stdio']
+" let g:LanguageClient_serverCommands['ruby'] = ['rbenv', 'exec', 'language_server-ruby']
+let g:LanguageClient_autoStart = 1
+nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
+nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
+nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
+nnoremap <silent> <F3> :call LanguageClient_textDocument_references()<CR>
+'''
+
+[[plugins]]
+repo = 'vim-syntastic/syntastic'
+if = 0
+on_ft = 'java'
+on_if = "filereadable('./build.gradle')"
+hook_add = '''
+let g:syntastic_java_checkers=['javac']
+let g:syntastic_java_javac_config_file_enabled = 1
+'''
+
+[[plugins]]
+repo = 'Scuilion/gradle-syntastic-plugin'
+if = 0
+depends = 'syntastic'
+on_ft = 'java'
+on_if = "filereadable('./build.gradle')"
+
+[[plugins]]
+repo = 'fatih/vim-go'
+on_ft = ['go', 'gotexttmpl', 'gohtmltmpl' ]
+
+[[plugins]]
+repo = 'nsf/gocode'
+rtp = 'nvim/'
+on_ft = 'go'
+
+[[plugins]]
+repo = 'zchee/deoplete-go'
+on_ft = 'go'
+depends = ['gocode', 'deoplete.nvim']
+build = 'make'
 
 [[plugins]]
 repo = 'Shougo/denite.nvim'
@@ -226,102 +216,45 @@ call denite#custom#var('grep', 'recursive_opts', [])
 call denite#custom#var('grep', 'pattern_opt', [])
 call denite#custom#var('grep', 'separator', ['--'])
 call denite#custom#var('grep', 'final_opts', [])
-
 '''
 
 [[plugins]]
-repo = 'osyo-manga/vim-precious'
-depends = 'context_filetype.vim'
-on_ft = ['toml', 'markdown', 'jsp']
-
-[[plugins]]
-repo = 'Shougo/context_filetype.vim'
-on_ft = ['toml', 'markdown', 'jsp']
-
-[[plugins]]
-repo = 'vim-syntastic/syntastic'
-if = 0
-on_ft = 'java'
-on_if = "filereadable('./build.gradle')"
+repo = 'vim-latex/vim-latex'
+on_ft = ['tex','latex']
 hook_add = '''
-let g:syntastic_java_checkers=['javac']
-let g:syntastic_java_javac_config_file_enabled = 1
-'''
-
-[[plugins]]
-repo = 'Scuilion/gradle-syntastic-plugin'
-if = 0
-depends = 'syntastic'
-on_ft = 'java'
-on_if = "filereadable('./build.gradle')"
-
-[[plugins]]
-repo = 'fatih/vim-go'
-on_ft = ['go', 'gotexttmpl', 'gohtmltmpl' ]
-
-[[plugins]]
-repo = 'nsf/gocode'
-rtp = 'nvim/'
-on_ft = 'go'
-
-[[plugins]]
-repo = 'zchee/deoplete-go'
-on_ft = 'go'
-depends = ['gocode', 'deoplete.nvim']
-build = 'make'
-
-[[plugins]]
-repo = 'artur-shaik/vim-javacomplete2'
-if = 0
-depends = 'deoplete.nvim'
-on_if = 0
-# on_ft = 'java'
-hook_post_source = '''
-au FileType java setl omnifunc=javacomplete#Complete
-'''
-
-[[plugins]]
-repo = 'osyo-manga/vim-monster'
-# on_if = 0
-on_ft = 'ruby'
-hook_add = '''
-" let g:monster#completion#rcodetools#backend = "async_rct_complete"
-let g:deoplete#sources#omni#input_patterns = {
-\   "ruby" : '[^. *\t]\.\w*\|\h\w*::',
-\}
-'''
-
-[[plugins]]
-repo = 'vim-ruby/vim-ruby'
-on_if = 0
-# on_ft = 'ruby'
-
-[[plugins]]
-repo = 'fishbullet/deoplete-ruby'
-on_if = 0
-# on_ft = 'ruby'
-
-[[plugins]]
-repo = 'rust-lang/rust.vim'
-on_ft = 'rust'
-hook_source = '''
-let g:rustfmt_autosave = 1
-'''
-
-[[plugins]]
-repo = 'autozimu/LanguageClient-neovim'
-depends = 'deoplete.nvim'
-on_ft = ['rust', 'java']
-build = 'bash ./install.sh'
-merged = 0
-hook_add = '''
-if !exists("g:LanguageClient_serverCommands")
-	let g:LanguageClient_serverCommands = {}
-endif
-let g:LanguageClient_serverCommands['rust'] = ['rustup', 'run', 'nightly', 'rls']
-let g:LanguageClient_autoStart = 1
-nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
-nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
-nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
-nnoremap <silent> <F3> :call LanguageClient_textDocument_references()<CR>
+"insert here
+"set shellslash
+"set grepprg=grep\ -nH\ $*
+let g:tex_flavor='latex'
+"let g:Imap_UsePlaceHolders = 1
+"let g:Imap_DeleteEmptyPlaceHolders = 1
+"let g:Imap_StickyPlaceHolders = 0
+let g:Tex_DefaultTargetFormat = 'pdf'
+let g:Tex_MultipleCompileFormats='dvi,pdf'
+let g:Tex_FormatDependency_pdf = 'pdf'
+"let g:Tex_FormatDependency_pdf = 'dvi,pdf'
+"let g:Tex_FormatDependency_pdf = 'dvi,ps,pdf'
+let g:Tex_FormatDependency_ps = 'dvi,ps'
+"let g:Tex_CompileRule_pdf = 'ptex2pdf -u -l -ot "-synctex=1 -interaction=nonstopmode -file-line-error-style" $*'
+"let g:Tex_CompileRule_pdf = 'pdflatex -synctex=1 -interaction=nonstopmode -file-line-error-style $*'
+let g:Tex_CompileRule_pdf = 'lualatex -synctex=1 -interaction=nonstopmode -file-line-error-style $*'
+"let g:Tex_CompileRule_pdf = 'luajitlatex -synctex=1 -interaction=nonstopmode -file-line-error-style $*'
+"let g:Tex_CompileRule_pdf = 'xelatex -synctex=1 -interaction=nonstopmode -file-line-error-style $*'
+"let g:Tex_CompileRule_pdf = 'ps2pdf $*.ps'
+let g:Tex_CompileRule_ps = 'dvips -Ppdf -o $*.ps $*.dvi'
+"let g:Tex_CompileRule_dvi = 'uplatex -synctex=1 -interaction=nonstopmode -file-line-error-style $*'
+let g:Tex_CompileRule_dvi = 'lualatex -synctex=1 -interaction=nonstopmode -file-line-error-style -output-format=dvi $*'
+let g:Tex_BibtexFlavor = 'pbibtex'
+let g:Tex_MakeIndexFlavor = 'mendex $*.idx'
+"let g:Tex_UseEditorSettingInDVIViewer = 1
+let g:Tex_ViewRule_pdf = 'xdg-open'
+"let g:Tex_ViewRule_pdf = 'evince'
+"let g:Tex_ViewRule_pdf = 'okular --unique'
+"let g:Tex_ViewRule_pdf = 'zathura -x "vim --servername synctex -n --remote-silent +\%{line} \%{input}"'
+"let g:Tex_ViewRule_pdf = 'qpdfview --unique'
+"let g:Tex_ViewRule_pdf = 'texworks'
+"let g:Tex_ViewRule_pdf = 'mupdf'
+"let g:Tex_ViewRule_pdf = 'firefox -new-window'
+"let g:Tex_ViewRule_pdf = 'chromium --new-window'
+let g:Imap_FreezeImap=1
 '''
