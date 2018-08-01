@@ -36,6 +36,10 @@ autocmd FileType javascript,javascript.jsx call EnableJavascript()
 '''
 
 [[plugins]]
+repo = 'galooshi/vim-import-js'
+on_ft = ['javascript', 'javascript.jsx']
+
+[[plugins]]
 repo = 'osyo-manga/vim-precious'
 depends = 'context_filetype.vim'
 on_ft = ['toml', 'markdown', 'jsp']
@@ -66,7 +70,7 @@ let g:rustfmt_autosave = 1
 [[plugins]]
 repo = 'autozimu/LanguageClient-neovim'
 depends = 'deoplete.nvim'
-on_ft = ['rust', 'java', 'javascript']
+on_ft = ['rust', 'java', 'javascript.jsx']
 build = 'bash ./install.sh'
 merged = 0
 hook_add = '''
@@ -74,7 +78,7 @@ if !exists("g:LanguageClient_serverCommands")
 	let g:LanguageClient_serverCommands = {}
 endif
 let g:LanguageClient_serverCommands['rust'] = ['rustup', 'run', 'nightly', 'rls']
-let g:LanguageClient_serverCommands['javascript'] = ['javascript-typescript-stdio']
+let g:LanguageClient_serverCommands['javascript.jsx'] = ['javascript-typescript-stdio']
 " let g:LanguageClient_serverCommands['ruby'] = ['rbenv', 'exec', 'language_server-ruby']
 let g:LanguageClient_autoStart = 1
 nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
