@@ -218,3 +218,9 @@ let g:quickrun_no_default_key_mappings = 1
 "             \    }
 "             \}
 '''
+
+[[plugins]]
+repo = 'luochen1990/rainbow'
+hook_add = '''
+let g:rainbow_active = 1
+'''
