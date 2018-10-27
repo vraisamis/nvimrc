@@ -45,12 +45,6 @@ let g:ale_fixers['javascript'] = ['prettier']
 let g:ale_javascript_prettier_options = '--print-width 140 --single-quote --jsx-bracket-same-line'
 " ローカルの設定ファイルを考慮する
 let g:ale_javascript_prettier_use_local_config = 1
-let s:ale_running = 0
-augroup ALEProgress
-  autocmd!
-  autocmd User ALELintPre  let s:ale_running = 1 | redrawstatus
-  autocmd User ALELintPost let s:ale_running = 0 | redrawstatus
-augroup end
 '''
 
 # statusline
@@ -62,7 +56,7 @@ let g:lightline = {
 	\ 'colorscheme' : 'iceberg',
 	\ 'mode_map': { 'c': 'NORMAL' },
 	\ 'active': {
-	\   'left': [ [ 'mode', 'paste' ], [ 'gina', 'filename', 'ale' ] ]
+	\   'left': [ [ 'mode', 'paste' ], [ 'gina', 'filename', 'ale' ] , [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok' ]]
 	\ },
 	\ 'component': {
 	\   'gina': '%{g:gina_status_str}'
@@ -73,6 +67,18 @@ let g:lightline = {
 	\ },
 	" \ 'separator': { 'left': '⮀', 'right': '⮂' },
 	" \ 'subseparator': { 'left': '⮁', 'right': '⮃' }
+  \ 'component_expand' : {
+  \  'linter_checking': 'lightline#ale#checking',
+  \  'linter_warnings': 'lightline#ale#warnings',
+  \  'linter_errors': 'lightline#ale#errors',
+  \  'linter_ok': 'lightline#ale#ok',
+  \ },
+  \ 'component_type' : {
+  " \     'linter_checking': 'left',
+  \     'linter_warnings': 'warning',
+  \     'linter_errors': 'error',
+  " \     'linter_ok': 'left',
+  \ },
 	\ }
 
 function! LightlineModified()
@@ -123,11 +129,12 @@ augroup gina-status-lazy
     endif
   endfunction
 augroup END
+'''
 
-function! MyALEStatus()
-  return s:ale_running != '' ? '[linting]' : ALEGetStatusLine()
-  endif
-endfunction
+[[plugins]]
+repo = 'maximbaz/lightline-ale'
+depends = ['ale', 'lightline']
+hook_add = '''
 '''
 
 [[plugins]]
@@ -223,4 +230,16 @@ let g:quickrun_no_default_key_mappings = 1
 repo = 'luochen1990/rainbow'
 hook_add = '''
 let g:rainbow_active = 1
+'''
+
+[[plugins]]
+repo = 'Shougo/vimfiler'
+depends = 'unite.vim'
+
+[[plugins]]
+repo = 'Shougo/unite-outline'
+if = 0
+on_source = 'unite.vim'
+hook_add = '''
+nnoremap [unite]o :Unite outline -no-focus -no-quit -vertical -winwidth=40 -toggle<CR>
 '''
