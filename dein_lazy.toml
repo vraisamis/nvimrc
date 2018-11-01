@@ -70,7 +70,7 @@ let g:rustfmt_autosave = 1
 [[plugins]]
 repo = 'autozimu/LanguageClient-neovim'
 depends = 'deoplete.nvim'
-on_ft = ['rust', 'java', 'javascript.jsx']
+on_ft = ['rust', 'java', 'javascript.jsx', 'python']
 build = 'bash ./install.sh'
 merged = 0
 hook_add = '''
@@ -80,6 +80,7 @@ endif
 let g:LanguageClient_serverCommands['rust'] = ['rustup', 'run', 'nightly', 'rls']
 let g:LanguageClient_serverCommands['javascript.jsx'] = ['javascript-typescript-stdio']
 " let g:LanguageClient_serverCommands['ruby'] = ['rbenv', 'exec', 'language_server-ruby']
+let g:LanguageClient_serverCommands['python'] = ['pyls']
 let g:LanguageClient_autoStart = 1
 nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
 nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
