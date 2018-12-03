@@ -40,6 +40,7 @@ let g:ale_sign_column_always = 1
 let g:ale_fix_on_save = 1
 let g:ale_set_loclist = 1
 let g:ale_linters = {'java': []}
+let g:ale_linters_ignore = {'javascript': ['tsserver', 'flow-language-server']}
 let g:ale_fixers = {}
 let g:ale_fixers['javascript'] = ['prettier']
 let g:ale_javascript_prettier_options = '--print-width 140 --single-quote --jsx-bracket-same-line'
@@ -56,14 +57,13 @@ let g:lightline = {
 	\ 'colorscheme' : 'iceberg',
 	\ 'mode_map': { 'c': 'NORMAL' },
 	\ 'active': {
-	\   'left': [ [ 'mode', 'paste' ], [ 'gina', 'filename', 'ale' ] , [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok' ]]
+	\   'left': [ [ 'mode', 'paste' ], [ 'gina', 'filename' ] , [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok' ]]
 	\ },
 	\ 'component': {
 	\   'gina': '%{g:gina_status_str}'
 	\ },
 	\ 'component_function': {
 	\   'filename': 'LightlineFilename',
-	\   'ale': 'MyALEStatus'
 	\ },
 	" \ 'separator': { 'left': '⮀', 'right': '⮂' },
 	" \ 'subseparator': { 'left': '⮁', 'right': '⮃' }
@@ -134,8 +134,6 @@ augroup END
 [[plugins]]
 repo = 'maximbaz/lightline-ale'
 depends = ['ale', 'lightline']
-hook_add = '''
-'''
 
 [[plugins]]
 repo = 'tpope/vim-fugitive'
@@ -145,6 +143,10 @@ repo = 'tpope/vim-abolish'
 
 [[plugins]]
 repo = 'mhinz/vim-signify'
+
+[[plugins]]
+repo = 'ryanoasis/vim-devicons'
+if = 0
 
 [[plugins]]
 repo = 'scrooloose/nerdtree'
@@ -157,17 +159,25 @@ repo = 'Xuyuanp/nerdtree-git-plugin'
 depends = 'nerdtree'
 hook_add = '''
 let g:NERDTreeIndicatorMapCustom = {
-    \ "Modified"  : "✹",
-    \ "Staged"    : "✚",
-    \ "Untracked" : "✭",
-    \ "Renamed"   : "➜",
-    \ "Unmerged"  : "═",
-    \ "Deleted"   : "✖",
-    \ "Dirty"     : "✗",
-    \ "Clean"     : "✔︎",
-    \ 'Ignored'   : '☒',
+    \ "Modified"  : "M",
+    \ "Staged"    : "+",
+    \ "Untracked" : "?",
+    \ "Renamed"   : "R",
+    \ "Unmerged"  : "m",
+    \ "Deleted"   : "D",
+    \ "Dirty"     : "?",
+    \ "Clean"     : "o",
+    \ 'Ignored'   : 'X',
     \ "Unknown"   : "?"
     \ }
+'''
+
+[[plugins]]
+repo = 'tiagofumo/vim-nerdtree-syntax-highlight'
+depends = ['nerdtree', 'vim-devicons']
+if = 0
+hook_add = '''
+let g:NERDTreeLimitedSyntax = 1
 '''
 
 [[plugins]]
@@ -213,6 +223,11 @@ repo = 'tyru/open-browser.vim'
 repo = 'Shougo/deoplete.nvim'
 hook_add = '''
 let g:deoplete#enable_at_startup = 1
+inoremap <silent> <CR> <C-r>=<SID>my_deoplete_cr_function()<CR>
+function! s:my_deoplete_cr_function()
+	return pumvisible() ? "\<C-y>" : "\<CR>"
+endfunction
+inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 '''
 
 [[plugins]]
@@ -238,8 +253,127 @@ depends = 'unite.vim'
 
 [[plugins]]
 repo = 'Shougo/unite-outline'
-if = 0
+# if = 0
 on_source = 'unite.vim'
 hook_add = '''
 nnoremap [unite]o :Unite outline -no-focus -no-quit -vertical -winwidth=40 -toggle<CR>
+'''
+
+[[plugins]]
+repo = 'xolox/vim-misc'
+
+[[plugins]]
+repo = 'xolox/vim-session'
+depends = [ 'vim-misc' ]
+hook_add = '''
+" gitリポジトリ配下ならgitのrootを返す。そうでないなら空を返す
+function! s:GetGitDir()
+  " Set 'gitdir' to be the folder containing .git
+  let gitdir = system("git rev-parse --show-toplevel")
+  " See if the command output starts with 'fatal' (if it does, not in a git repo)
+  let isnotgitdir=matchstr(gitdir, '^fatal:.*')
+  " If it empty, there was no error. Let's cd
+  if empty(isnotgitdir)
+    return substitute(gitdir, '\n', '', 'g')
+  else
+    return ""
+  endif
+endfunction
+
+function! s:GetGitCurrentBranch()
+  " Set 'gitdir' to be the folder containing .git
+  let branch = system("git rev-parse --abbrev-ref HEAD")
+  " See if the command output starts with 'fatal' (if it does, not in a git repo)
+  let isnotgitdir=matchstr(branch, '^fatal:.*')
+  " If it empty, there was no error. Let's cd
+  if empty(isnotgitdir)
+    return substitute(branch, '\n', '', 'g')
+  else
+    return ""
+  endif
+endfunction
+
+" https://www.g104robo.com/entry/vim-session
+" 現在のディレクトリ直下の .vimsessions/ を取得
+let s:local_session_directory = xolox#misc#path#merge(getcwd(), '.vimsessions')
+if isdirectory(s:local_session_directory)
+  " 存在すれば
+  " session保存ディレクトリをそのディレクトリの設定
+  let g:session_directory = s:local_session_directory
+  " vimを辞める時に自動保存
+  let g:session_autosave = 'yes'
+  " 引数なしでvimを起動した時にsession保存ディレクトリのdefault.vimを開く
+  let g:session_autoload = 'yes'
+  " 1分間に1回自動保存
+  let g:session_autosave_periodic = 1
+  let g:session_autosave_silent = 1
+else
+  " 存在しなければ
+  " 現在のリポジトリroot配下の .vimsessions/ を取得
+  let s:git_dir = s:GetGitDir()
+  if strlen(s:git_dir) > 0
+    " gitリポジトリ配下なら
+    let s:local_session_directory = xolox#misc#path#merge(s:git_dir, '.vimsessions')
+    " 存在しなければディレクトリ作成する
+    if !isdirectory(s:local_session_directory)
+      call mkdir(s:local_session_directory)
+    endif
+    " session保存ディレクトリをそのディレクトリの設定
+    let g:session_directory = s:local_session_directory
+    " vimを辞める時に自動保存
+    let g:session_autosave = 'yes'
+    " 引数なしでvimを起動した時にsession保存ディレクトリのdefault.vimを開く
+    let g:session_autoload = 'yes'
+    " 1分間に1回自動保存
+    let g:session_autosave_periodic = 1
+    let g:session_autosave_silent = 1
+  else
+    " neovimのディレクトリにsession作成
+    s:local_session_directory = expand('~/.config/nvim/default-sessions')
+    " 存在しなければディレクトリ作成する
+    if !isdirectory(s:local_session_directory)
+      call mkdir(s:local_session_directory)
+    endif
+    " デフォルトの保存ディレクトリを変更する
+    let g:session_directory = s:local_session_directory
+    " vimを辞める時に自動保存
+    let g:session_autosave = 'no'
+    " 引数なしでvimを起動した時にsession保存ディレクトリのdefault.vimを開く
+    let g:session_autoload = 'no'
+  endif
+  unlet s:git_dir
+endif
+unlet s:local_session_directory
+
+" https://qiita.com/ToruIwashita/items/8c5039655ab73ea9261e
+function! s:save_session(...)
+  if a:0
+    let session_name = a:1
+  else
+    let session_name = s:GetGitCurrentBranch()
+  end
+
+  if strlen(session_name)
+    execute 'SaveSession ' . session_name . '.branch'
+  else
+    echo 'not a git repository'
+  endif
+endfunction
+
+function! s:load_session(...)
+  if a:0
+    let session_name = a:1
+  else
+    let session_name = s:GetGitCurrentBranch()
+  end
+
+  if strlen(session_name)
+    execute 'OpenSession ' . session_name . '.branch'
+  else
+    echo 'no target session found'
+  endif
+endfunction
+
+command! -nargs=? SaveBranchSession call s:save_session(<f-args>)
+command! -nargs=? LoadBranchSession call s:load_session(<f-args>)
 '''
