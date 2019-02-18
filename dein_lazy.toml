@@ -69,24 +69,75 @@ let g:rustfmt_autosave = 1
 
 [[plugins]]
 repo = 'autozimu/LanguageClient-neovim'
-depends = 'deoplete.nvim'
-on_ft = [ 'rust', 'java', 'python', 'ruby' ]
+depends = [ 'deoplete.nvim' 'fzf.vim' ]
+on_ft = [ 'rust', 'java', 'python', 'ruby', 'go' ]
 build = 'bash ./install.sh'
 merged = 0
 hook_add = '''
+let g:LanguageClient_autoStart = 1
 if !exists("g:LanguageClient_serverCommands")
 	let g:LanguageClient_serverCommands = {}
 endif
-let g:LanguageClient_serverCommands['rust'] = ['rustup', 'run', 'nightly', 'rls']
+if !exists("g:LanguageClient_rootMarkers")
+  let g:LanguageClient_rootMarkers = {}
+endif
+
+" java
+" # Language Server Install
+" $ mkdir ~/local
+" $ git clone https://github.com/eclipse/eclipse.jdt.ls.git ~/local/eclipse.jdt.ls
+" $ cd ~/local/eclipse.jdt.ls
+" $ git checkout v0.3.0
+" $ ./mvnw clean verify
+" $ mkdir ~/bin
+" $ vim ~/bin/jdtls
+" ```
+" #!/usr/bin/env sh
+" 
+" server=$HOME/local
+" environment=mac # linux, mac, win
+" 
+" java \
+"     -Declipse.application=org.eclipse.jdt.ls.core.id1 \
+"     -Dosgi.bundles.defaultStartLevel=4 \
+"     -Declipse.product=org.eclipse.jdt.ls.core.product \
+"     -noverify \
+"     -Xms1G \
+"     -jar $server/eclipse.jdt.ls/org.eclipse.jdt.ls.product/target/repository/plugins/org.eclipse.equinox.launcher_1.*.jar \
+"     -configuration $server/eclipse.jdt.ls/org.eclipse.jdt.ls.product/target/repository/config_$environment/ \
+"     "$@"
+" ```
+" $ chmod 755 ~/bin/jdtls
+" let g:LanguageClient_serverCommands['java'] = ['jdtls']
+" let g:LanguageClient_rootMarkers['java'] = ['build.gradle']
+
+" javascript
 " let g:LanguageClient_serverCommands['javascript.jsx'] = ['javascript-typescript-stdio']
 " let g:LanguageClient_serverCommands['javascript'] = ['javascript-typescript-stdio']
-let g:LanguageClient_serverCommands['ruby'] = ['rbenv', 'exec', 'language_server-ruby']
+
+" rust
+let g:LanguageClient_serverCommands['rust'] = ['rustup', 'run', 'nightly', 'rls']
+
+" ruby
+" let g:LanguageClient_serverCommands['ruby'] = ['solargraph', 'stdio']
+
+" python
 let g:LanguageClient_serverCommands['python'] = ['pyls']
-let g:LanguageClient_autoStart = 1
+
+" go
+" $ go get -u golang.org/x/lint/golint
+" $ go get -u github.com/sourcegraph/go-langserver
+" $ go get -u -v github.com/nsf/gocode
+let g:LanguageClient_serverCommands['go'] = [ $GOPATH.'/bin/go-langserver', '-format-tool', 'gofmt', 'lint-tool', 'golint' ]
+
+" map
 nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
 nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
 nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
 nnoremap <silent> <F3> :call LanguageClient_textDocument_references()<CR>
+
+call deoplete#custom#source('LanguageClient',
+      \ 'min_pattern_length', 2)
 '''
 
 [[plugins]]

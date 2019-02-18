@@ -34,18 +34,24 @@ repo = 'lambdalisue/gina.vim'
 [[plugins]]
 repo = 'w0rp/ale'
 hook_add = '''
+" let g:ale_completion_enabled = 1
 let g:ale_sign_column_always = 1
 " let g:ale_statusline_format = ['x %d', '! %d', '* ok']
 " ファイル保存時に実行
 let g:ale_fix_on_save = 1
 let g:ale_set_loclist = 1
 let g:ale_linters = {'java': []}
-let g:ale_linters_ignore = {'javascript': ['tsserver', 'flow-language-server']}
+let g:ale_linters_ignore = {
+      \ 'javascript': ['tsserver', 'flow-language-server'],
+      \ 'ruby': ['solargraph']
+      \ }
 let g:ale_fixers = {}
-let g:ale_fixers['javascript'] = ['prettier']
+let g:ale_fixers['javascript'] = ['prettier', 'eslint']
 let g:ale_javascript_prettier_options = '--print-width 140 --single-quote --jsx-bracket-same-line'
 " ローカルの設定ファイルを考慮する
 let g:ale_javascript_prettier_use_local_config = 1
+" toolchain考慮できてないので今はしない
+" let g:ale_rust_rls_executable = expand('~/.cargo/bin/rls')
 '''
 
 # statusline
@@ -383,3 +389,7 @@ endfunction
 command! -nargs=? SaveBranchSession call s:save_session(<f-args>)
 command! -nargs=? LoadBranchSession call s:load_session(<f-args>)
 '''
+
+[[plugins]]
+repo = 'kylef/apiblueprint.vim'
+

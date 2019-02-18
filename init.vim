@@ -184,6 +184,8 @@ nnoremap S <silent>
 
 "hlsearchの切り替えを簡単にする
 nnoremap ch :setl hlsearch!<CR><C-L>
+"toggle <PASTE>
+nnoremap <silent> cp :setl paste!<CR>
 
 "簡易コンパイル
 "nnoremap [action] <nop>
