@@ -226,7 +226,14 @@ let g:previm_enable_realtime = 1
 repo = 'tyru/open-browser.vim'
 
 [[plugins]]
+repo = 'sirver/ultisnips'
+
+[[plugins]]
+repo = 'honza/vim-snippets'
+
+[[plugins]]
 repo = 'Shougo/deoplete.nvim'
+depends = ['ultisnips']
 hook_add = '''
 let g:deoplete#enable_at_startup = 1
 inoremap <silent> <CR> <C-r>=<SID>my_deoplete_cr_function()<CR>
