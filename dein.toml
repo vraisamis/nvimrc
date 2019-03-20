@@ -40,10 +40,14 @@ let g:ale_sign_column_always = 1
 " ファイル保存時に実行
 let g:ale_fix_on_save = 1
 let g:ale_set_loclist = 1
-let g:ale_linters = {'java': []}
+let g:ale_linters = {
+      \ 'java': [],
+      \ 'go': ['gofmt', 'golint', 'govet', 'golangserver'],
+      \ 'rust': ['cargo', 'rls']
+      \ }
 let g:ale_linters_ignore = {
       \ 'javascript': ['tsserver', 'flow-language-server'],
-      \ 'ruby': ['solargraph']
+      \ 'ruby': ['solargraph', 'rubocop'],
       \ }
 let g:ale_fixers = {}
 let g:ale_fixers['javascript'] = ['prettier', 'eslint']

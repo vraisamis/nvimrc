@@ -70,7 +70,8 @@ let g:rustfmt_autosave = 1
 [[plugins]]
 repo = 'autozimu/LanguageClient-neovim'
 depends = [ 'deoplete.nvim' 'fzf.vim' ]
-on_ft = [ 'rust', 'java', 'python', 'ruby', 'go' ]
+# if = 0
+on_ft = [ 'rust', 'java', 'python', 'ruby' ]
 build = 'bash ./install.sh'
 merged = 0
 hook_add = '''
@@ -141,6 +142,69 @@ call deoplete#custom#source('LanguageClient',
 '''
 
 [[plugins]]
+repo = 'prabirshrestha/async.vim'
+if = 0
+
+[[plugins]]
+repo = 'prabirshrestha/vim-lsp'
+depends = [ 'async.vim' ]
+if = 0
+on_ft = ['rust']
+hook_add = '''
+if (executable('pyls'))
+  augroup LspPython
+    autocmd!
+    autocmd User lsp_setup call lsp#register_server({
+          \ 'name': 'pyls',
+          \ 'cmd': {server_info->['pyls']},
+          \ 'whitelist': ['python']
+          \ })
+  augroup END
+endif
+
+if (executable('bingo'))
+  augroup LspGo
+    autocmd!
+    autocmd User lsp_setup call lsp#register_server({
+          \ 'name': 'go-lang',
+          \ 'cmd': {server_info->['bingo', '-disable-func-snippet', '-mode', 'stdio']},
+          \ 'whitelist': ['go'],
+          \ })
+  augroup END
+endif
+
+if (executable('jdtls'))
+  augroup LspJava
+    autocmd!
+    autocmd User lsp_setup call lsp#register_server({
+          \ 'name': 'jdtls',
+          \ 'cmd': {server_info->['jdtls']},
+          \ 'whitelist': ['java'],
+          \ })
+  augroup END
+endif
+
+if (executable('rls'))
+  augroup LspRust
+    autocmd!
+    autocmd User lsp_setup call lsp#register_server({
+          \ 'name': 'rls',
+          \ 'cmd': {server_info->['rustup', 'run', 'stable', 'rls']},
+          \ 'whitelist': ['rust'],
+          \ })
+  augroup END
+endif
+let g:lsp_diagnostics_enabled = 1
+let g:lsp_signs_enabled = 1
+let g:lsp_diagnostics_echo_cursor = 1
+'''
+
+[[plugins]]
+repo = 'lighttiger2505/deoplete-vim-lsp'
+if = 0
+depends = ['deoplete.nvim', 'vim-lsp']
+
+[[plugins]]
 repo = 'vim-syntastic/syntastic'
 if = 0
 on_ft = 'java'
@@ -159,15 +223,18 @@ on_if = "filereadable('./build.gradle')"
 
 [[plugins]]
 repo = 'fatih/vim-go'
+# if = 0
 on_ft = ['go', 'gotexttmpl', 'gohtmltmpl' ]
 
 [[plugins]]
 repo = 'nsf/gocode'
+# if = 0
 rtp = 'nvim/'
 on_ft = 'go'
 
 [[plugins]]
 repo = 'zchee/deoplete-go'
+# if = 0
 on_ft = 'go'
 depends = ['gocode', 'deoplete.nvim']
 build = 'make'
