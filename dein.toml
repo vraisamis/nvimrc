@@ -56,6 +56,7 @@ let g:ale_javascript_prettier_options = '--print-width 140 --single-quote --jsx-
 let g:ale_javascript_prettier_use_local_config = 1
 " toolchain考慮できてないので今はしない
 " let g:ale_rust_rls_executable = expand('~/.cargo/bin/rls')
+let g:ale_fixers['rust'] = ['rustfmt']
 '''
 
 # statusline
@@ -222,7 +223,7 @@ elseif has('mac')
 else
     let g:previm_open_cmd = 'google-chrome'
 endif
-"let g:previm_custom_css_path = expand('~') . '/.config/nvim/css/bootstrap-md.css'
+"let g:previm_custom_css_path = expand('~/.config/nvim/css/bootstrap-md.css')
 let g:previm_enable_realtime = 1
 '''
 
@@ -231,13 +232,17 @@ repo = 'tyru/open-browser.vim'
 
 [[plugins]]
 repo = 'sirver/ultisnips'
+hook_add = '''
+" let g:UltiSnipsSnippetDirectories = ['my_snippets', 'UltiSnips']
+let g:UltiSnipsSnippetsDir = expand("~/.config/nvim/UltiSnips")
+'''
 
 [[plugins]]
 repo = 'honza/vim-snippets'
 
 [[plugins]]
 repo = 'Shougo/deoplete.nvim'
-depends = ['ultisnips']
+# depends = ['ultisnips']
 hook_add = '''
 let g:deoplete#enable_at_startup = 1
 inoremap <silent> <CR> <C-r>=<SID>my_deoplete_cr_function()<CR>
