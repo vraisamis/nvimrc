@@ -22,7 +22,7 @@ repo = 'junegunn/fzf.vim'
 depends = 'fzf'
 hook_add = '''
 " Ag コマンドがあるが、typoが多いのでalias
-command! -nargs=* -bang AG <bang>Ag <args>
+command! -nargs=* -bang AG Ag<bang> <args>
 '''
 
 # gitコマンド
@@ -233,7 +233,7 @@ repo = 'tyru/open-browser.vim'
 [[plugins]]
 repo = 'sirver/ultisnips'
 hook_add = '''
-" let g:UltiSnipsSnippetDirectories = ['my_snippets', 'UltiSnips']
+let g:UltiSnipsSnippetDirectories = ['UltiSnips', 'local_snippets']
 let g:UltiSnipsSnippetsDir = expand("~/.config/nvim/UltiSnips")
 '''
 

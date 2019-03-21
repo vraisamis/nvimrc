@@ -6,3 +6,5 @@
 !dein_lazy.toml
 !/colors/
 !/colors/**
+!/UltiSnips/
+!/UltiSnips/**
