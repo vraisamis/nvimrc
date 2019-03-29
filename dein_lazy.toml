@@ -129,7 +129,7 @@ let g:LanguageClient_serverCommands['python'] = ['pyls']
 " $ go get -u golang.org/x/lint/golint
 " $ go get -u github.com/sourcegraph/go-langserver
 " $ go get -u -v github.com/nsf/gocode
-let g:LanguageClient_serverCommands['go'] = [ $GOPATH.'/bin/go-langserver', '-format-tool', 'gofmt', 'lint-tool', 'golint' ]
+" let g:LanguageClient_serverCommands['go'] = [ $GOPATH.'/bin/go-langserver', '-format-tool', 'gofmt', 'lint-tool', 'golint' ]
 
 " map
 nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>

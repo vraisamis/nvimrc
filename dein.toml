@@ -409,3 +409,8 @@ command! -nargs=? LoadBranchSession call s:load_session(<f-args>)
 [[plugins]]
 repo = 'kylef/apiblueprint.vim'
 
+[[plugins]]
+repo = 'osyo-manga/vim-over'
+hook_add = '''
+let g:over_enable_auto_nohlsearch = 0
+'''
