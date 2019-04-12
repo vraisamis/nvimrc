@@ -414,3 +414,14 @@ repo = 'osyo-manga/vim-over'
 hook_add = '''
 let g:over_enable_auto_nohlsearch = 0
 '''
+
+[[plugins]]
+repo = 'junegunn/vim-easy-align'
+
+[[plugins]]
+repo = 'haya14busa/vim-edgemotion'
+if = 0
+hook_add = '''
+map <C-j> <Plug>(edgemotion-j)
+map <C-k> <Plug>(edgemotion-k)
+'''
