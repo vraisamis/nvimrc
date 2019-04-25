@@ -186,6 +186,8 @@ nnoremap S <silent>
 nnoremap ch :setl hlsearch!<CR><C-L>
 "toggle <PASTE>
 nnoremap <silent> cp :setl paste!<CR>
+"相対行表示の切り替え
+" nnoremap <silent> cr :setl relativenumber!<CR>
 
 "簡易コンパイル
 "nnoremap [action] <nop>
@@ -245,7 +247,16 @@ function! FullFilePath(line1, line2)
     let l:lines = a:line1 == a:line2 ? a:line1 : a:line1 . "," . a:line2
     return expand("%:p"). " :".l:lines
 endfunction
-command -range CopyFilePath let @+ = call('FullFilePath', [<line1>, <line2>])
+
+function! RelativeFilePath(line1, line2)
+    let l:lines = ""
+    if a:line1 != a:line2
+      let l:lines = " :" . a:line1 . "-" . a:line2
+    endif
+    return expand("%") . l:lines
+endfunction
+
+command -range CopyFilePath let @+ = call('RelativeFilePath', [<line1>, <line2>])
 
 command! OpenBrowserCurrent execute "OpenBrowser" expand("%:p")
 "--------
