@@ -488,3 +488,12 @@ hook_add = '''
 map <C-j> <Plug>(edgemotion-j)
 map <C-k> <Plug>(edgemotion-k)
 '''
+
+[[plugins]]
+repo = 'rhysd/git-messenger.vim'
+hook_add = '''
+autocmd VimEnter,Colorscheme * :hi! link gitmessengerPopupNormal CursorLine
+'''
+
+[[plugins]]
+repo = 'tpope/vim-repeat'
