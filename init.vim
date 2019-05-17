@@ -179,7 +179,7 @@ nnoremap ch <silent>
 nnoremap cj <silent>
 nnoremap ck <silent>
 nnoremap cl <silent>
-nnoremap s <silent>
+" nnoremap s <silent>
 nnoremap S <silent>
 
 "hlsearchの切り替えを簡単にする
@@ -198,6 +198,14 @@ nnoremap <silent> cp :setl paste!<CR>
 "補完候補を<C-j><C-k>で移動
 inoremap <C-j> <C-n>
 inoremap <C-k> <C-p>
+
+onoremap 2 i"
+onoremap 7 i'
+onoremap 8 i(
+onoremap 9 i)
+onoremap @ i`
+onoremap , i<
+onoremap . i>
 "----------------
 "File Encoding Select
 "----------------
