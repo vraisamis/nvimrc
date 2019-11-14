@@ -1,5 +1,10 @@
+global !p
+import px.snippets
+endglobal
+
+post_jump "px.snippets.expand(snip)"
 snippet println "println!( {} , ...)"
-printf("${1:\{\}}"${2:, });
+pln$1
 endsnippet
 
 snippet union "struct Union-Find"
@@ -75,6 +80,7 @@ fn readvv<T: std::str::FromStr>(n: usize) -> Vec<Vec<T>> {
 endsnippet
 
 snippet input "input macro"
+#[allow(dead_code)]
 macro_rules! input {
     (source = $s:expr, $($r:tt)*) => {
         let mut iter = $s.split_whitespace();
@@ -96,6 +102,7 @@ macro_rules! input {
     };
 }
 
+#[allow(dead_code)]
 macro_rules! input_inner {
     ($next:expr) => {};
     ($next:expr, ) => {};
@@ -104,8 +111,14 @@ macro_rules! input_inner {
         let $var = read_value!($next, $t);
         input_inner!{$next $($r)*}
     };
+
+    ($next:expr, mut $var:ident : $t:tt $($r:tt)*) => {
+        let mut $var = read_value!($next, $t);
+        input_inner!{$next $($r)*}
+    };
 }
 
+#[allow(dead_code)]
 macro_rules! read_value {
     ($next:expr, ( $($t:tt),* )) => {
         ( $(read_value!($next, $t)),* )
@@ -127,4 +140,191 @@ macro_rules! read_value {
         $next().parse::<$t>().expect("Parse error")
     };
 }
+
+endsnippet
+
+snippet binse "binary search (lower|upper)_bound"
+#[allow(dead_code)]
+fn lower_bound<T>(v: &Vec<T>, x: &T) -> usize
+where T: Ord {
+    let mut left = 0;
+    let mut right = v.len();
+    while left < right {
+        let mid = (left + right) / 2;
+        let value = &v[mid];
+        if x <= value {
+            right = mid;
+        } else {
+            left = mid + 1;
+        }
+    }
+    return right;
+}
+
+#[allow(dead_code)]
+fn upper_bound<T>(v: &Vec<T>, x: &T) -> usize
+where T: Ord {
+    let mut left = 0;
+    let mut right = v.len();
+    while left < right {
+        let mid = (left + right) / 2;
+        let value = &v[mid];
+        if x < value {
+            right = mid;
+        } else {
+            left = mid + 1;
+        }
+    }
+    return left;
+}
+endsnippet
+
+snippet minmax "use std::cmp::{min, max};"
+#[allow(unused_imports)]
+use std::cmp::{min, max};
+endsnippet
+
+snippet cumsumfn "fn cumulative_sum(Vec<T>) （累積和）"
+    #[allow(dead_code)]
+    fn cumulative_sum<T>(v: Vec<T>) -> Vec<T>
+    where
+        T: std::ops::Add<Output = T> + std::clone::Clone + std::marker::Copy
+    {
+        let n = v.len();
+        if n == 0 {
+            return Vec::new();
+        }
+        let mut result = vec![v[0]; n];
+        for (i, value) in v.iter().enumerate().skip(1) {
+            result[i] = result[i - 1] + *value;
+        }
+        result
+    }
+endsnippet
+
+snippet cumsum "cumulative sum （累積和）"
+    let mut ${1:cumsum} = vec![${2:v}[0]; n];
+    for (i, value) in $2.iter().enumerate().skip(1) {
+        $1[i] = $1[i - 1] + *value;
+    }
+endsnippet
+
+snippet dead "#[allow(dead_code)]"
+    #[allow(dead_code)]
+endsnippet
+
+snippet dead! "#![allow(dead_code)]"
+    #![allow(dead_code)]
+endsnippet
+
+snippet bit "binary index tree"
+    struct BIT<T>
+    where
+        T: std::ops::Add<Output = T> + std::ops::Sub<Output = T> + std::default::Default + std::clone::Clone + std::marker::Copy
+    {
+        v: Vec<T>,
+        n: usize
+    }
+
+    impl <T> BIT<T>
+    where
+        T: std::ops::Add<Output = T> + std::ops::Sub<Output = T> + std::default::Default + std::clone::Clone + std::marker::Copy
+    {
+        #![allow(dead_code)]
+        fn new(n: usize) -> BIT<T> {
+            let v = vec![T::default(); n];
+            BIT { v: v, n: n }
+        }
+
+        fn from(v: Vec<T>) -> BIT<T> {
+            let mut bit = BIT::new(v.len());
+            for (i, value) in v.iter().enumerate() {
+                bit.add(i, *value);
+            }
+            bit
+        }
+
+        fn add(&mut self, index: usize, value: T) {
+            let mut x = index + 1;
+            while x <= self.n {
+                self.v[x - 1] = self.v[x - 1] + value;
+                x += ((x as i64) & -(x as i64)) as usize;
+            }
+        }
+
+        fn sum(&self, left: usize, right: usize) -> T {
+            self.sum0(right) - if left > 0 { self.sum0(left - 1) } else { T::default() }
+        }
+
+        fn sum0(&self, right: usize) -> T {
+            let mut sum = T::default();
+            let mut x = right + 1;
+            while x > 0 {
+                sum = sum + self.v[x - 1];
+                x -= ((x as i64) & -(x as i64)) as usize;
+            }
+            sum
+        }
+    }
+endsnippet
+
+snippet tom "variable to mutable (shadowing)"
+    #[allow(unused_macros)]
+    macro_rules! to_mut {
+        ($($var: ident),*) => {
+            $(
+                #[allow(unused_mut)]
+                let mut $var = $var;
+            )*
+        };
+    }
+endsnippet
+
+snippet vecord "Vector ordering macro"
+    macro_rules! order_by {
+        ($($x:tt)*) => {
+            |l, r| {
+                order_by_inner!(l, r, $($x)*)
+            }
+        }
+    }
+    macro_rules! order_by_inner {
+        () => {};
+        ($l:ident) => {std::cmp::Ordering::Equal};
+        ($l:ident , ) => {std::cmp::Ordering::Equal};
+        ($l:ident , $r:ident) => {std::cmp::Ordering::Equal};
+        ($l:ident , $r:ident , ) => {std::cmp::Ordering::Equal};
+
+        // last
+        ($l:ident , $r:ident , $x:tt asc) => {
+            $l.$x.cmp(&$r.$x)
+        };
+        ($l:ident , $r:ident , $x:tt desc) => {
+            $l.$x.cmp(&$r.$x).reverse()
+        };
+        ($l:ident , $r:ident , $x:tt) => {
+            order_by_inner!($l, $r, $x asc)
+        };
+
+        // mid
+        ($l:ident , $r:ident , $x:tt asc , $($p:tt)+) => {
+            match $l.$x.cmp(&$r.$x) {
+                std::cmp::Ordering::Equal => {
+                    order_by_inner!($l, $r, $($p)+)
+                },
+                    other => other
+            }
+        };
+        ($l:ident , $r:ident , $x:tt desc , $($p:tt)+) => {
+            match $l.$x.cmp(&$r.$x).reverse() {
+                std::cmp::Ordering::Equal => {
+                    order_by_inner!($l, $r, $($p)+)
+                },
+                    other => other
+            }
+        };
+        ($l:ident , $r:ident , $x:tt , $($p:tt)+) => {
+            order_by_inner!($l, $r, $x asc, $($p)+)
+        };
+    }
 endsnippet

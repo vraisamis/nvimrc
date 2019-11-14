@@ -83,6 +83,8 @@ if !exists("g:LanguageClient_rootMarkers")
   let g:LanguageClient_rootMarkers = {}
 endif
 
+" let g:LanguageClient_diagnosticsEnable = 0
+
 " java
 " # Language Server Install
 " $ mkdir ~/local

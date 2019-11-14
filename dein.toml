@@ -119,7 +119,7 @@ let g:ale_javascript_prettier_options = '--print-width 140 --single-quote --jsx-
 let g:ale_javascript_prettier_use_local_config = 1
 " toolchain考慮できてないので今はしない
 " let g:ale_rust_rls_executable = expand('~/.cargo/bin/rls')
-let g:ale_fixers['rust'] = ['rustfmt']
+" let g:ale_fixers['rust'] = ['rustfmt']
 '''
 
 # statusline
@@ -294,7 +294,11 @@ let g:previm_enable_realtime = 1
 repo = 'tyru/open-browser.vim'
 
 [[plugins]]
+repo = 'reconquest/vim-pythonx'
+
+[[plugins]]
 repo = 'sirver/ultisnips'
+depends = ['vim-pythonx']
 hook_add = '''
 let g:UltiSnipsSnippetDirectories = ['UltiSnips', 'local_snippets']
 let g:UltiSnipsSnippetsDir = expand("~/.config/nvim/UltiSnips")
