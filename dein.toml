@@ -16,10 +16,14 @@ repo = 'cocopon/iceberg.vim'
 repo = 'junegunn/fzf'
 build = './install --bin'
 merged = 0
+on_sorce = ['fzf.vim']
+trusted = 1
 
 [[plugins]]
 repo = 'junegunn/fzf.vim'
 depends = 'fzf'
+on_func = 'fzf#'
+trusted = 1
 hook_add = '''
 " Ag コマンドがあるが、typoが多いのでalias
 command! -nargs=* -bang AG Ag<bang> <args>
@@ -131,13 +135,14 @@ let g:lightline = {
 	\ 'colorscheme' : 'iceberg',
 	\ 'mode_map': { 'c': 'NORMAL' },
 	\ 'active': {
-	\   'left': [ [ 'mode', 'paste' ], [ 'gina', 'filename' ] , [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok' ]]
+	\   'left': [ [ 'mode', 'paste' ], [ 'gina', 'session', 'filename' ] , [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok' ]]
 	\ },
 	\ 'component': {
 	\   'gina': '%{g:gina_status_str}'
 	\ },
 	\ 'component_function': {
 	\   'filename': 'LightlineFilename',
+	\   'session': 'MySessionName',
 	\ },
 	" \ 'separator': { 'left': '⮀', 'right': '⮂' },
 	" \ 'subseparator': { 'left': '⮁', 'right': '⮃' }
@@ -171,6 +176,11 @@ function! LightlineFilename()
 				\  &ft =~ '^gina' ? &ft :
 				\ '' != expand('%:t') ? expand('%:t') : '[No Name]') .
 				\ ('' != LightlineModified() ? ' ' . LightlineModified() : '')
+endfunction
+
+function! MySessionName() abort
+  let session_name = xolox#session#find_current_session()
+  return session_name == '' ? '' : '[S]' . session_name
 endfunction
 
 augroup gina-status-lazy
@@ -501,3 +511,6 @@ autocmd VimEnter,Colorscheme * :hi! link gitmessengerPopupNormal CursorLine
 
 [[plugins]]
 repo = 'tpope/vim-repeat'
+
+[[plugins]]
+repo = 'mattn/emmet-vim'
