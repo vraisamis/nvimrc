@@ -86,6 +86,44 @@ if has("nvim-0.4.0")
   " コマンドrenameが必要になりそう
   let g:fzf_layout = { 'window': 'call FloatingFZF()' }
 endif
+
+
+""" menu
+let s:menu = {}
+
+let s:menu['LanguageClient TextDocument CodeAction'] = {
+      \ 'type': 'funccall',
+      \ 'body': 'LanguageClient#textDocument_codeAction'
+      \ }
+
+let s:menu['Rg test'] = {
+      \ 'type': 'command',
+      \ 'body': 'Rg test'
+      \ }
+
+" echo s:menu
+" echo items(s:menu)
+
+" echo map(items(s:menu), {key, val -> key})
+
+let s:menu_list = map(sort(keys(s:menu)), {key, val -> key . "\t" . val})
+echo s:menu_list
+
+function! s:test(selected)
+  " echo できていない
+  " echo a:selected . " is selected"
+  let g:my_my_selected = a:selected
+  echo g:my_my_selected
+endfunction
+
+function! s:my_menu()
+  call fzf#run(fzf#wrap('menu_test', {
+        \ 'source': s:menu_list,
+        \ 'sink': funcref('s:test')
+        \ }))
+endfunction
+
+command! Test call s:my_menu()
 '''
 
 # gitコマンド
@@ -514,3 +552,14 @@ repo = 'tpope/vim-repeat'
 
 [[plugins]]
 repo = 'mattn/emmet-vim'
+
+[[plugins]]
+repo = 'kana/vim-textobj-user'
+
+[[plugins]]
+repo = 'rhysd/vim-textobj-anyblock'
+depends = 'vim-textobj-user'
+
+[[plugins]]
+repo = 'sgur/vim-textobj-parameter'
+depends = 'vim-textobj-user'
