@@ -115,6 +115,12 @@ let g:lsp_diagnostics_enabled = 0
 repo = 'mattn/vim-lsp-settings'
 merged = 0
 on_source = ['vim-lsp']
+hook_source = '''
+let g:lsp_settings = {
+    \ 'rls': {
+    \    'cmd': ['rustup', 'run', 'stable', 'rls']
+    \ }}
+'''
 
 [[plugins]]
 repo = 'prabirshrestha/asyncomplete-lsp.vim'

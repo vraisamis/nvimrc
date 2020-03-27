@@ -320,7 +320,6 @@ repo = 'reconquest/vim-pythonx'
 
 [[plugins]]
 repo = 'sirver/ultisnips'
-if = 0
 depends = ['vim-pythonx']
 hook_add = '''
 let g:UltiSnipsSnippetDirectories = ['UltiSnips', 'local_snippets']
@@ -474,6 +473,7 @@ endif
 let g:ale_linters['java'] = []
 let g:ale_linters['go'] = ['gofmt', 'golint', 'govet', 'golangserver']
 let g:ale_linters['rust'] = ['cargo', 'rls']
+let g:ale_rust_rls_toolchain = 'stable'
 if !exists("g:ale_linters_ignore")
 	let g:ale_linters_ignore = {}
 endif
@@ -495,9 +495,9 @@ let g:ale_javascript_prettier_use_local_config = 1
 [[plugins]]
 repo = 'prabirshrestha/asyncomplete.vim'
 hook_add = '''
-inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-inoremap <expr> <CR>    pumvisible() ? "\<C-y>" : "\<CR>"
+" inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+" inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+" inoremap <expr> <CR>    pumvisible() ? "\<C-y>" : "\<CR>"
 
 imap <c-space> <Plug>(asyncomplete_force_refresh)
 '''
@@ -506,10 +506,9 @@ imap <c-space> <Plug>(asyncomplete_force_refresh)
 repo = 'prabirshrestha/asyncomplete-buffer.vim'
 depends = ['asyncomplete.vim']
 hook_add = '''
-call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
+au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
     \ 'name': 'buffer',
     \ 'whitelist': ['*'],
-    \ 'blacklist': ['go'],
     \ 'completor': function('asyncomplete#sources#buffer#completor'),
     \ 'config': {
     \    'max_buffer_size': 5000000,
@@ -520,7 +519,26 @@ call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options
 
 [[plugins]]
 repo = 'prabirshrestha/asyncomplete-file.vim'
+depends = ['asyncomplete.vim']
+hook_add = '''
+au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#file#get_source_options({
+    \ 'name': 'file',
+    \ 'whitelist': ['*'],
+    \ 'priority': 10,
+    \ 'completor': function('asyncomplete#sources#file#completor')
+    \ }))
+'''
 
+[[plugins]]
+repo = 'prabirshrestha/asyncomplete-ultisnips.vim'
+depends = ['asyncomplete.vim']
+hook_add = '''
+au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#ultisnips#get_source_options({
+    \ 'name': 'ultisnips',
+    \ 'whitelist': ['*'],
+    \ 'completor': function('asyncomplete#sources#ultisnips#completor'),
+    \ }))
+'''
 
 #########################################################
 # Text Object
