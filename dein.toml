@@ -137,6 +137,35 @@ function! s:my_menu()
 endfunction
 
 command! Test call s:my_menu()
+
+
+
+
+" """ autocmdイベントの作成
+" augroup fzf_menuing
+"   au!
+"   au User fzf_menu_setup silent
+" augroup END
+"
+" " ロード済みのメニューの名前を入れておく
+" let s:menu_loded = []
+"
+" " register関数
+" function! fzf#register(name, other) abort
+"   " FIXME
+"   if s:menu_loded.contains(a:name)
+"     " do nothing
+"     return
+"   endif
+"   " register
+"   " TODO
+" endfunction
+"
+" " カスタムPrefixを押したときに実行する関数
+" function! fzf#menu#execute() abort
+"   " TODO
+" endfunction
+
 '''
 
 
@@ -198,36 +227,7 @@ function! MySessionName() abort
   return session_name == '' ? '' : '[S]' . session_name
 endfunction
 
-augroup gina-status-lazy
-  autocmd!
-  autocmd CursorMoved,CursorMovedI * call s:f_gina_status('CursorMoved')
-  autocmd CursorHold,CursorHoldI * call s:f_gina_status('CursorHold')
-  autocmd WinEnter * call s:f_gina_status('WinEnter')
-  autocmd WinLeave * call s:f_gina_status('WinLeave')
-
-  let s:gina_status = 0
-  let g:gina_status_str = gina#component#repo#preset()
-  function! s:f_gina_status(event)
-    if a:event ==# 'WinEnter'
-      let g:gina_status_str = gina#component#repo#preset()
-      let s:gina_status = 2
-    elseif a:event ==# 'WinLeave'
-      " Do nothing
-    elseif a:event ==# 'CursorMoved'
-      if s:gina_status
-        if 1 < s:gina_status
-          let s:gina_status = 1
-        else
-          " Do nothing
-          let s:gina_status = 0
-        endif
-      endif
-    elseif a:event ==# 'CursorHold'
-      let g:gina_status_str = gina#component#repo#preset()
-      let s:gina_status = 1
-    endif
-  endfunction
-augroup END
+let g:gina_status_str = ''
 '''
 
 [[plugins]]
@@ -570,6 +570,38 @@ depends = 'vim-textobj-user'
 #########################################################
 [[plugins]]
 repo = 'lambdalisue/gina.vim'
+hook_add = '''
+augroup gina-status-lazy
+  autocmd!
+  autocmd CursorMoved,CursorMovedI * call s:f_gina_status('CursorMoved')
+  autocmd CursorHold,CursorHoldI * call s:f_gina_status('CursorHold')
+  autocmd WinEnter * call s:f_gina_status('WinEnter')
+  autocmd WinLeave * call s:f_gina_status('WinLeave')
+
+  let s:gina_status = 0
+  let g:gina_status_str = gina#component#repo#preset()
+  function! s:f_gina_status(event)
+    if a:event ==# 'WinEnter'
+      let g:gina_status_str = gina#component#repo#preset()
+      let s:gina_status = 2
+    elseif a:event ==# 'WinLeave'
+      " Do nothing
+    elseif a:event ==# 'CursorMoved'
+      if s:gina_status
+        if 1 < s:gina_status
+          let s:gina_status = 1
+        else
+          " Do nothing
+          let s:gina_status = 0
+        endif
+      endif
+    elseif a:event ==# 'CursorHold'
+      let g:gina_status_str = gina#component#repo#preset()
+      let s:gina_status = 1
+    endif
+  endfunction
+augroup END
+'''
 
 [[plugins]]
 repo = 'tpope/vim-fugitive'
