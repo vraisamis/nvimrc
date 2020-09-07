@@ -280,7 +280,7 @@ command! NEF NERDTreeFind
 repo = 'Xuyuanp/nerdtree-git-plugin'
 depends = 'nerdtree'
 hook_add = '''
-let g:NERDTreeIndicatorMapCustom = {
+let g:NERDTreeGitStatusIndicatorMapCustom = {
     \ "Modified"  : "M",
     \ "Staged"    : "+",
     \ "Untracked" : "?",
