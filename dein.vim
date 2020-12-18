@@ -1,8 +1,6 @@
 " dein.vimの設定
-let s:confhome = $XDG_CONFIG_HOME == '' ? $HOME . '/.config' : $XDG_CONFIG_HOME
 
-let s:neovim_dir = expand(s:confhome . '/nvim')
-let s:dein_dir = expand(s:neovim_dir . '/dein')
+let s:dein_dir = expand(g:vimrc_dir . '/dein')
 
 let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
 
@@ -18,8 +16,8 @@ if dein#load_state(s:dein_dir)
 
 	" プラグインリストを収めた TOML ファイル
 	" 予め TOML ファイル（後述）を用意しておく
-	let s:toml      = s:neovim_dir . '/dein.toml'
-	let s:lazy_toml = s:neovim_dir . '/dein_lazy.toml'
+	let s:toml      = g:vimrc_dir . '/dein.toml'
+	let s:lazy_toml = g:vimrc_dir . '/dein_lazy.toml'
 
 	" TOML を読み込み、キャッシュしておく
 	call dein#load_toml(s:toml,      {'lazy': 0})

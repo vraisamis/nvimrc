@@ -1,11 +1,26 @@
+#########################################################
+# Languages
+#########################################################
+# CSV
 [[plugins]]
-repo = 'plasticboy/vim-markdown'
-on_ft = 'markdown'
+repo = 'mechatroner/rainbow_csv'
+on_ft = ['csv', 'tsv']
+
+# Go
+[[plugins]]
+repo = 'fatih/vim-go'
+on_ft = ['go', 'gotexttmpl', 'gohtmltmpl' ]
+
+# Haskell
+[[plugins]]
+repo = 'kana/vim-filetype-haskell'
+on_ft = 'haskell'
 
 [[plugins]]
-repo = 'cespare/vim-toml'
-on_ft = 'toml'
+repo = 'itchyny/vim-haskell-indent'
+on_ft = 'haskell'
 
+# Javascript, JSX
 [[plugins]]
 repo = 'pangloss/vim-javascript'
 on_ft = ['javascript', 'javascript.jsx']
@@ -39,6 +54,42 @@ autocmd FileType javascript,javascript.jsx call EnableJavascript()
 repo = 'galooshi/vim-import-js'
 on_ft = ['javascript', 'javascript.jsx']
 
+# Markdown
+[[plugins]]
+repo = 'iamcco/markdown-preview.nvim'
+on_ft = ['markdown', 'pandoc.markdown', 'rmd']
+merged = 0
+hook_add = '''
+let g:mkdp_auto_close = 0
+'''
+hook_source = '''
+call mkdp#util#install()
+'''
+
+[[plugins]]
+repo = 'plasticboy/vim-markdown'
+on_ft = 'markdown'
+
+# Ruby on Rails
+[[plugins]]
+repo = 'tpope/vim-rails'
+on_ft = ['ruby', 'erb']
+
+# Rust
+[[plugins]]
+repo = 'rust-lang/rust.vim'
+on_ft = 'rust'
+hook_source = '''
+let g:rustfmt_autosave = 1
+'''
+
+# TOML
+[[plugins]]
+repo = 'cespare/vim-toml'
+on_ft = 'toml'
+
+
+# Others(MULTI)
 [[plugins]]
 repo = 'osyo-manga/vim-precious'
 depends = 'context_filetype.vim'
@@ -48,430 +99,51 @@ on_ft = ['toml', 'markdown', 'jsp']
 repo = 'Shougo/context_filetype.vim'
 on_ft = ['toml', 'markdown', 'jsp']
 
-[[plugins]]
-repo = 'kana/vim-filetype-haskell'
-on_ft = 'haskell'
 
-[[plugins]]
-repo = 'itchyny/vim-haskell-indent'
-on_ft = 'haskell'
-
-[[plugins]]
-repo = 'tpope/vim-rails'
-on_ft = ['ruby', 'erb']
-
-[[plugins]]
-repo = 'rust-lang/rust.vim'
-on_ft = 'rust'
-hook_source = '''
-let g:rustfmt_autosave = 1
-'''
-
-[[plugins]]
-repo = 'autozimu/LanguageClient-neovim'
-depends = [ 'deoplete.nvim' 'fzf.vim' ]
-# if = 0
-on_ft = [ 'rust', 'java', 'python' ]
-build = 'bash ./install.sh'
-merged = 0
-hook_add = '''
-let g:LanguageClient_autoStart = 1
-if !exists("g:LanguageClient_serverCommands")
-	let g:LanguageClient_serverCommands = {}
-endif
-if !exists("g:LanguageClient_rootMarkers")
-  let g:LanguageClient_rootMarkers = {}
-endif
-
-" let g:LanguageClient_diagnosticsEnable = 0
-
-" java
-" # Language Server Install
-" $ mkdir ~/local
-" $ git clone https://github.com/eclipse/eclipse.jdt.ls.git ~/local/eclipse.jdt.ls
-" $ cd ~/local/eclipse.jdt.ls
-" $ git checkout v0.3.0
-" $ ./mvnw clean verify
-" $ mkdir ~/bin
-" $ vim ~/bin/jdtls
-" ```
-" #!/usr/bin/env sh
-" 
-" server=$HOME/local
-" environment=mac # linux, mac, win
-" 
-" java \
-"     -Declipse.application=org.eclipse.jdt.ls.core.id1 \
-"     -Dosgi.bundles.defaultStartLevel=4 \
-"     -Declipse.product=org.eclipse.jdt.ls.core.product \
-"     -noverify \
-"     -Xms1G \
-"     -jar $server/eclipse.jdt.ls/org.eclipse.jdt.ls.product/target/repository/plugins/org.eclipse.equinox.launcher_1.*.jar \
-"     -configuration $server/eclipse.jdt.ls/org.eclipse.jdt.ls.product/target/repository/config_$environment/ \
-"     "$@"
-" ```
-" $ chmod 755 ~/bin/jdtls
-let g:LanguageClient_serverCommands['java'] = ['jdtls']
-let g:LanguageClient_rootMarkers['java'] = ['build.gradle']
-
-" javascript
-" let g:LanguageClient_serverCommands['javascript.jsx'] = ['javascript-typescript-stdio']
-" let g:LanguageClient_serverCommands['javascript'] = ['javascript-typescript-stdio']
-
-" rust
-let g:LanguageClient_serverCommands['rust'] = ['rustup', 'run', 'nightly', 'rls']
-
-" ruby
-" let g:LanguageClient_serverCommands['ruby'] = ['solargraph', 'stdio']
-
-" python
-let g:LanguageClient_serverCommands['python'] = ['pyls']
-
-" go
-" $ go get -u golang.org/x/lint/golint
-" $ go get -u github.com/sourcegraph/go-langserver
-" $ go get -u -v github.com/nsf/gocode
-" let g:LanguageClient_serverCommands['go'] = [ $GOPATH.'/bin/go-langserver', '-format-tool', 'gofmt', 'lint-tool', 'golint' ]
-
-" map
-nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
-nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
-nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
-nnoremap <silent> <F3> :call LanguageClient_textDocument_references()<CR>
-
-call deoplete#custom#source('LanguageClient',
-      \ 'min_pattern_length', 2)
-'''
-
-[[plugins]]
-repo = 'liuchengxu/vista.vim'
-on_source = 'LanguageClient-neovim'
-hook_add = '''
-let g:vista_default_executive = 'lcn'
-'''
-
+#########################################################
+# Language Server
+#########################################################
 [[plugins]]
 repo = 'prabirshrestha/async.vim'
-if = 0
 
 [[plugins]]
 repo = 'prabirshrestha/vim-lsp'
 depends = [ 'async.vim' ]
-if = 0
-on_ft = ['rust']
 hook_add = '''
-if (executable('pyls'))
-  augroup LspPython
-    autocmd!
-    autocmd User lsp_setup call lsp#register_server({
-          \ 'name': 'pyls',
-          \ 'cmd': {server_info->['pyls']},
-          \ 'whitelist': ['python']
-          \ })
-  augroup END
-endif
-
-if (executable('bingo'))
-  augroup LspGo
-    autocmd!
-    autocmd User lsp_setup call lsp#register_server({
-          \ 'name': 'go-lang',
-          \ 'cmd': {server_info->['bingo', '-disable-func-snippet', '-mode', 'stdio']},
-          \ 'whitelist': ['go'],
-          \ })
-  augroup END
-endif
-
-if (executable('jdtls'))
-  augroup LspJava
-    autocmd!
-    autocmd User lsp_setup call lsp#register_server({
-          \ 'name': 'jdtls',
-          \ 'cmd': {server_info->['jdtls']},
-          \ 'whitelist': ['java'],
-          \ })
-  augroup END
-endif
-
-if (executable('rls'))
-  augroup LspRust
-    autocmd!
-    autocmd User lsp_setup call lsp#register_server({
-          \ 'name': 'rls',
-          \ 'cmd': {server_info->['rustup', 'run', 'stable', 'rls']},
-          \ 'whitelist': ['rust'],
-          \ })
-  augroup END
-endif
-let g:lsp_diagnostics_enabled = 1
-let g:lsp_signs_enabled = 1
-let g:lsp_diagnostics_echo_cursor = 1
+" use ALE
+let g:lsp_diagnostics_enabled = 0
 '''
 
 [[plugins]]
-repo = 'lighttiger2505/deoplete-vim-lsp'
-if = 0
-depends = ['deoplete.nvim', 'vim-lsp']
+repo = 'mattn/vim-lsp-settings'
+merged = 0
+on_source = ['vim-lsp']
+hook_source = '''
+let g:lsp_settings = {
+    \ 'rls': {
+    \    'cmd': ['rustup', 'run', 'stable', 'rls']
+    \ }}
+'''
 
 [[plugins]]
-repo = 'vim-syntastic/syntastic'
-if = 0
-on_ft = 'java'
-on_if = "filereadable('./build.gradle')"
+repo = 'prabirshrestha/asyncomplete-lsp.vim'
+on_ft = ['python', 'go', 'rust']
+depends = ['asyncomplete.vim', 'vim-lsp']
+
+[[plugins]]
+repo = 'liuchengxu/vista.vim'
+depends = ['vim-lsp']
 hook_add = '''
-let g:syntastic_java_checkers=['javac']
-let g:syntastic_java_javac_config_file_enabled = 1
+let g:vista_default_executive = 'vim_lsp'
 '''
 
-[[plugins]]
-repo = 'Scuilion/gradle-syntastic-plugin'
-if = 0
-depends = 'syntastic'
-on_ft = 'java'
-on_if = "filereadable('./build.gradle')"
 
-[[plugins]]
-repo = 'fatih/vim-go'
-# if = 0
-on_ft = ['go', 'gotexttmpl', 'gohtmltmpl' ]
-
-[[plugins]]
-repo = 'nsf/gocode'
-# if = 0
-rtp = 'nvim/'
-on_ft = 'go'
-
-[[plugins]]
-repo = 'zchee/deoplete-go'
-# if = 0
-on_ft = 'go'
-depends = ['gocode', 'deoplete.nvim']
-build = 'make'
-
-[[plugins]]
-repo = 'Shougo/denite.nvim'
-depends = ['unite.vim', 'neomru.vim']
-hook_add = '''
-nnoremap <silent> [denite] <nop>
-nmap <C-Space> [denite]
-nnoremap [denite]d     :Denite 
-nnoremap [denite]<C-d> :Denite
-nnoremap [denite]f     :Denite file<CR>
-nnoremap [denite]<C-f> :Denite file<CR>
-nnoremap [denite]b     :Denite buffer<CR>
-nnoremap [denite]<C-b> :Denite buffer<CR>
-nnoremap [denite]h     :Denite file_mru<CR>
-nnoremap [denite]<C-h> :Denite file_mru<CR>
-nnoremap [denite]s     :DeniteProjectDir grep -buffer-name=grep -auto-preview <CR>
-nnoremap [denite]<C-s> :DeniteProjectDir grep -buffer-name=grep -auto-preview <CR>
-nnoremap [denite]n     :Denite -resume -buffer-name=grep -immediately -select=+1<CR>
-nnoremap [denite]<C-n> :Denite -resume -buffer-name=grep -immediately -select=+1<CR>
-nnoremap [denite]p     :Denite -resume -buffer-name=grep -immediately -select=-1<CR>
-nnoremap [denite]<C-p> :Denite -resume -buffer-name=grep -immediately -select=-1<CR>
-""  menu settings
-nnoremap [denite]m     :Denite menu:action<CR>
-nnoremap [denite]<C-m> :Denite menu:action<CR>
-'''
-hook_post_source = '''
-call denite#custom#map(
-			\ 'insert',
-			\ '<C-j>',
-			\ '<denite:move_to_next_line>',
-			\ 'noremap'
-			\)
-call denite#custom#map(
-			\ 'insert',
-			\ '<C-k>',
-			\ '<denite:move_to_previous_line>',
-			\ 'noremap'
-			\)
-call denite#custom#map(
-			\ 'insert',
-			\ '<C-n>',
-			\ '<denite:move_to_next_line>',
-			\ 'noremap'
-			\)
-call denite#custom#map(
-			\ 'insert',
-			\ '<C-p>',
-			\ '<denite:move_to_previous_line>',
-			\ 'noremap'
-			\)
-" init
-let s:menus = {}
-" let s:menus.action = {
-" 			\ 'description' : 'My Shortcuts',
-" 			\ }
-" let s:menus.action.candidates = [
-" 			\ [ '~/.vim' , expand('~/.vim') ],
-" 			\ [ 'vimrc' , expand('~/.vim/vimrc') ],
-" 			\ [ 'plugin' , expand('~/.vim/plugin.vimrc') ],
-" 			\ [ 'VimFiler' , 'VimFiler' ],
-" 			\ [ 'VimShell' , 'VimShell' ],
-" 			\ [ 'NERDTree' , 'NERDTreeToggle' ],
-" 			\ [ 'open in browser' , 'PrevimOpen' ],
-" 			\ ]
-
-" function! s:menus.action.map(key, value)
-" 	let [word, value] = a:value
-" 	if isdirectory(value)
-" 		return {
-" 					\ 'word'              : '[directory] '.word,
-" 					\ 'kind'              : 'command',
-" 					\ 'action__command' : ':VimFiler '.value
-" 					\ }
-" 	elseif !empty(glob(value))
-" 		return {
-" 					\ 'word'           : '[file] '.word,
-" 					\ 'kind'           : 'file',
-" 					\ 'default_action' : 'tabdrop',
-" 					\ 'action__path'   : value
-" 					\ }
-" 	else
-" 		return {
-" 					\ 'word'            : '[command] '.word,
-" 					\ 'kind'            : 'command',
-" 					\ 'action__command' : value
-" 					\ }
-" 	endif
-" endfunction
-
-" call denite#custom#var('menu', 'menus', s:menus)
-call denite#custom#var('menu', 'unite_source_menu_compatibility', v:true)
-
-call denite#custom#var('file_rec', 'command',
-			\ ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
-"for denite grep
-call denite#custom#var('grep', 'command', ['ag'])
-call denite#custom#var('grep', 'default_opts',
-			\ ['--nogroup', '--nocolor', '--column'])
-call denite#custom#var('grep', 'recursive_opts', [])
-call denite#custom#var('grep', 'pattern_opt', [])
-call denite#custom#var('grep', 'separator', ['--'])
-call denite#custom#var('grep', 'final_opts', [])
-'''
-
-[[plugins]]
-repo = 'vim-latex/vim-latex'
-on_ft = ['tex','latex']
-hook_add = '''
-"insert here
-"set shellslash
-"set grepprg=grep\ -nH\ $*
-let g:tex_flavor='latex'
-"let g:Imap_UsePlaceHolders = 1
-"let g:Imap_DeleteEmptyPlaceHolders = 1
-"let g:Imap_StickyPlaceHolders = 0
-let g:Tex_DefaultTargetFormat = 'pdf'
-let g:Tex_MultipleCompileFormats='dvi,pdf'
-let g:Tex_FormatDependency_pdf = 'pdf'
-"let g:Tex_FormatDependency_pdf = 'dvi,pdf'
-"let g:Tex_FormatDependency_pdf = 'dvi,ps,pdf'
-let g:Tex_FormatDependency_ps = 'dvi,ps'
-"let g:Tex_CompileRule_pdf = 'ptex2pdf -u -l -ot "-synctex=1 -interaction=nonstopmode -file-line-error-style" $*'
-"let g:Tex_CompileRule_pdf = 'pdflatex -synctex=1 -interaction=nonstopmode -file-line-error-style $*'
-let g:Tex_CompileRule_pdf = 'lualatex -synctex=1 -interaction=nonstopmode -file-line-error-style $*'
-"let g:Tex_CompileRule_pdf = 'luajitlatex -synctex=1 -interaction=nonstopmode -file-line-error-style $*'
-"let g:Tex_CompileRule_pdf = 'xelatex -synctex=1 -interaction=nonstopmode -file-line-error-style $*'
-"let g:Tex_CompileRule_pdf = 'ps2pdf $*.ps'
-let g:Tex_CompileRule_ps = 'dvips -Ppdf -o $*.ps $*.dvi'
-"let g:Tex_CompileRule_dvi = 'uplatex -synctex=1 -interaction=nonstopmode -file-line-error-style $*'
-let g:Tex_CompileRule_dvi = 'lualatex -synctex=1 -interaction=nonstopmode -file-line-error-style -output-format=dvi $*'
-let g:Tex_BibtexFlavor = 'pbibtex'
-let g:Tex_MakeIndexFlavor = 'mendex $*.idx'
-"let g:Tex_UseEditorSettingInDVIViewer = 1
-let g:Tex_ViewRule_pdf = 'xdg-open'
-"let g:Tex_ViewRule_pdf = 'evince'
-"let g:Tex_ViewRule_pdf = 'okular --unique'
-"let g:Tex_ViewRule_pdf = 'zathura -x "vim --servername synctex -n --remote-silent +\%{line} \%{input}"'
-"let g:Tex_ViewRule_pdf = 'qpdfview --unique'
-"let g:Tex_ViewRule_pdf = 'texworks'
-"let g:Tex_ViewRule_pdf = 'mupdf'
-"let g:Tex_ViewRule_pdf = 'firefox -new-window'
-"let g:Tex_ViewRule_pdf = 'chromium --new-window'
-let g:Imap_FreezeImap=1
-'''
-
-[[plugins]]
-repo = 'Shougo/neomru.vim'
-on_if = 1
-on_source = 'unite.vim'
-
-[[plugins]]
-repo = 'Shougo/unite.vim'
-depends = 'neomru.vim'
-hook_add = '''
-let g:unite_split_rule = 'botright'
-nnoremap <silent> [unite] <nop>
-nmap <Space> [unite]
-nnoremap [unite]u :Unite 
-nnoremap [unite]s :Unite source<CR>
-nnoremap [unite]f :Unite file<CR>
-nnoremap [unite]c :Unite tab buffer<CR>
-nnoremap [unite]h :Unite file_mru directory_mru<CR>
-nnoremap [unite]b :Unite bookmark<CR>
-""  Unite menu settings
-nnoremap [unite]m :Unite menu:action -vertical -winwidth=40<CR>
-" init
-if !exists("g:unite_source_menu_menus")
-	let g:unite_source_menu_menus = {}
-endif
-let g:unite_source_menu_menus.action = {
-			\ 'description' : 'My Shortcuts',
-			\ }
-let g:unite_source_menu_menus.action.candidates = [
-			\ [ '~/.vim' , expand('~/.vim') ],
-			\ [ 'vimrc' , expand('~/.vim/vimrc') ],
-			\ [ 'plugin' , expand('~/.vim/plugin.vimrc') ],
-			\ [ 'VimFiler' , 'VimFiler' ],
-			\ [ 'VimShell' , 'VimShell' ],
-			\ [ 'NERDTree' , 'NERDTreeToggle' ],
-			\ [ 'run cpp' , 'QuickRun cpp'],
-			\ [ 'run and show PDF' , 'call My_latex_compile_and_show_pdf()' ],
-			\ [ 'open in browser' , 'PrevimOpen' ],
-			\ ]
-
-function! g:unite_source_menu_menus.action.map(key, value)
-	let [word, value] = a:value
-	if isdirectory(value)
-		return {
-					\ 'word'              : '[directory] '.word,
-					\ 'kind'              : 'command',
-					\ 'action__command' : ':VimFiler '.value
-					\ }
-	elseif !empty(glob(value))
-		return {
-					\ 'word'           : '[file] '.word,
-					\ 'kind'           : 'file',
-					\ 'default_action' : 'tabdrop',
-					\ 'action__path'   : value
-					\ }
-	else
-		return {
-					\ 'word'            : '[command] '.word,
-					\ 'kind'            : 'command',
-					\ 'action__command' : value
-					\ }
-	endif
-endfunction
-
-function! My_latex_compile_and_show_pdf()
-	exec "QuickRun"
-	exec "!evince %:r.pdf &"
-	return
-endfunction
-
-"for unite grep
-if executable('ag')
-	let g:unite_source_grep_command = 'ag'
-	let g:unite_source_grep_default_opts = '--nogroup --nocolor --column'
-	let g:unite_source_grep_recursive_opt = ''
-endif
-
-'''
-
+#########################################################
+# Motion
+#########################################################
 [[plugins]]
 repo = 'easymotion/vim-easymotion'
+trusted = 1
 on_map = [
   ['n', '<Plug>(easymotion-', 'f', 'F', 't', 'T'],
   ['v', '<Plug>(easymotion-', 'f', 'F', 't', 'T'],
@@ -502,7 +174,3 @@ call SetEasyMotionMapping()
 hook_post_source = '''
 call SetEasyMotionMapping()
 '''
-
-[[plugins]]
-repo = 'mechatroner/rainbow_csv'
-on_ft = ['csv', 'tsv']

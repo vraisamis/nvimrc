@@ -1,3 +1,6 @@
+#########################################################
+# Misc
+#########################################################
 # 起動時に読み込む
 # プラグイン管理
 [[plugins]]
@@ -7,16 +10,36 @@ repo = 'Shougo/dein.vim'
 [[plugins]]
 repo = 'vim-jp/vimdoc-ja'
 
+[[plugins]]
+repo = 'xolox/vim-misc'
+
 # colorscheme
 [[plugins]]
 repo = 'cocopon/iceberg.vim'
 
-# fazzy matcher
+# api blueprint file type
+[[plugins]]
+repo = 'kylef/apiblueprint.vim'
+
+# jinja
+[[plugins]]
+repo = 'glench/vim-jinja2-syntax'
+hook_add = '''
+autocmd BufRead,BufEnter *.html.j2 set filetype=html.jinja
+autocmd BufRead,BufEnter *.sql.j2 set filetype=sql.jinja
+autocmd BufRead,BufEnter *.json.j2 set filetype=json.jinja
+
+'''
+
+
+#########################################################
+# Fuzzy Matcher
+#########################################################
 [[plugins]]
 repo = 'junegunn/fzf'
 build = './install --bin'
 merged = 0
-on_sorce = ['fzf.vim']
+on_source = ['fzf.vim']
 trusted = 1
 
 [[plugins]]
@@ -124,46 +147,41 @@ function! s:my_menu()
 endfunction
 
 command! Test call s:my_menu()
+
+
+
+
+" """ autocmdイベントの作成
+" augroup fzf_menuing
+"   au!
+"   au User fzf_menu_setup silent
+" augroup END
+"
+" " ロード済みのメニューの名前を入れておく
+" let s:menu_loded = []
+"
+" " register関数
+" function! fzf#register(name, other) abort
+"   " FIXME
+"   if s:menu_loded.contains(a:name)
+"     " do nothing
+"     return
+"   endif
+"   " register
+"   " TODO
+" endfunction
+"
+" " カスタムPrefixを押したときに実行する関数
+" function! fzf#menu#execute() abort
+"   " TODO
+" endfunction
+
 '''
 
-# gitコマンド
-[[plugins]]
-repo = 'lambdalisue/gina.vim'
-# if = 0
 
-# linter
-[[plugins]]
-repo = 'w0rp/ale'
-hook_add = '''
-" let g:ale_completion_enabled = 1
-let g:ale_sign_column_always = 1
-" let g:ale_statusline_format = ['x %d', '! %d', '* ok']
-" ファイル保存時に実行
-let g:ale_fix_on_save = 1
-let g:ale_set_loclist = 1
-if !exists("g:ale_linters")
-	let g:ale_linters = {}
-endif
-let g:ale_linters['java'] = []
-let g:ale_linters['go'] = ['gofmt', 'golint', 'govet', 'golangserver']
-let g:ale_linters['rust'] = ['cargo', 'rls']
-if !exists("g:ale_linters_ignore")
-	let g:ale_linters_ignore = {}
-endif
-let g:ale_linters_ignore['javascript'] = ['tsserver', 'flow-language-server']
-let g:ale_linters_ignore['ruby'] = ['solargraph', 'rubocop']
-if !exists("g:ale_fixers")
-  let g:ale_fixers = {}
-endif
-let g:ale_fixers['javascript'] = ['prettier', 'eslint']
-let g:ale_javascript_prettier_options = '--print-width 140 --single-quote --jsx-bracket-same-line'
-" ローカルの設定ファイルを考慮する
-let g:ale_javascript_prettier_use_local_config = 1
-" toolchain考慮できてないので今はしない
-" let g:ale_rust_rls_executable = expand('~/.cargo/bin/rls')
-" let g:ale_fixers['rust'] = ['rustfmt']
-'''
-
+#########################################################
+# Visual
+#########################################################
 # statusline
 [[plugins]]
 repo = 'itchyny/lightline.vim'
@@ -182,8 +200,6 @@ let g:lightline = {
 	\   'filename': 'LightlineFilename',
 	\   'session': 'MySessionName',
 	\ },
-	" \ 'separator': { 'left': '⮀', 'right': '⮂' },
-	" \ 'subseparator': { 'left': '⮁', 'right': '⮃' }
   \ 'component_expand' : {
   \  'linter_checking': 'lightline#ale#checking',
   \  'linter_warnings': 'lightline#ale#warnings',
@@ -191,10 +207,10 @@ let g:lightline = {
   \  'linter_ok': 'lightline#ale#ok',
   \ },
   \ 'component_type' : {
-  " \     'linter_checking': 'left',
+  \     'linter_checking': 'left',
   \     'linter_warnings': 'warning',
   \     'linter_errors': 'error',
-  " \     'linter_ok': 'left',
+  \     'linter_ok': 'left',
   \ },
 	\ }
 
@@ -221,54 +237,12 @@ function! MySessionName() abort
   return session_name == '' ? '' : '[S]' . session_name
 endfunction
 
-augroup gina-status-lazy
-  autocmd!
-  autocmd CursorMoved,CursorMovedI * call s:f_gina_status('CursorMoved')
-  autocmd CursorHold,CursorHoldI * call s:f_gina_status('CursorHold')
-  autocmd WinEnter * call s:f_gina_status('WinEnter')
-  autocmd WinLeave * call s:f_gina_status('WinLeave')
-
-  let s:gina_status = 0
-  let g:gina_status_str = gina#component#repo#preset()
-  function! s:f_gina_status(event)
-    if a:event ==# 'WinEnter'
-      let g:gina_status_str = gina#component#repo#preset()
-      let s:gina_status = 2
-    elseif a:event ==# 'WinLeave'
-      " Do nothing
-    elseif a:event ==# 'CursorMoved'
-      if s:gina_status
-        if 1 < s:gina_status
-          let s:gina_status = 1
-        else
-          " Do nothing
-          let s:gina_status = 0
-        endif
-      endif
-    elseif a:event ==# 'CursorHold'
-      let g:gina_status_str = gina#component#repo#preset()
-      let s:gina_status = 1
-    endif
-  endfunction
-augroup END
+let g:gina_status_str = ''
 '''
 
 [[plugins]]
 repo = 'maximbaz/lightline-ale'
 depends = ['ale', 'lightline']
-
-[[plugins]]
-repo = 'tpope/vim-fugitive'
-
-[[plugins]]
-repo = 'tpope/vim-abolish'
-
-[[plugins]]
-repo = 'mhinz/vim-signify'
-
-[[plugins]]
-repo = 'ryanoasis/vim-devicons'
-if = 0
 
 [[plugins]]
 repo = 'scrooloose/nerdtree'
@@ -295,24 +269,39 @@ let g:NERDTreeGitStatusIndicatorMapCustom = {
 '''
 
 [[plugins]]
-repo = 'tiagofumo/vim-nerdtree-syntax-highlight'
-depends = ['nerdtree', 'vim-devicons']
-if = 0
-hook_add = '''
-let g:NERDTreeLimitedSyntax = 1
-'''
-
-[[plugins]]
 repo = 'nathanaelkane/vim-indent-guides'
-# if = 0
 hook_add = '''
 let g:indent_guides_enable_on_vim_startup=1
 let g:indent_guides_start_level=1
 let g:indent_guides_auto_colors=0
-autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=235
-autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=236
+let g:indent_guides_guide_size=1
+autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=237
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=239
 " let g:indent_guides_guide_size=1
 '''
+
+
+
+#########################################################
+# Action, Command
+#########################################################
+[[plugins]]
+repo = 'osyo-manga/vim-over'
+hook_add = '''
+let g:over_enable_auto_nohlsearch = 0
+'''
+
+[[plugins]]
+repo = 'junegunn/vim-easy-align'
+
+[[plugins]]
+repo = 'tpope/vim-repeat'
+
+[[plugins]]
+repo = 'tpope/vim-surround'
+
+[[plugins]]
+repo = 'tpope/vim-abolish'
 
 [[plugins]]
 repo = 'tomtom/tcomment_vim'
@@ -321,25 +310,21 @@ hook_add = '''
 '''
 
 [[plugins]]
-repo = 'tpope/vim-surround'
-
-[[plugins]]
 repo = 'tpope/vim-endwise'
 
 [[plugins]]
-repo = 'kannokanno/previm'
-hook_add = '''
-if has('win32')
-elseif has('mac')
-else
-    let g:previm_open_cmd = 'google-chrome'
-endif
-"let g:previm_custom_css_path = expand('~/.config/nvim/css/bootstrap-md.css')
-let g:previm_enable_realtime = 1
-'''
+repo = 'tyru/open-browser.vim'
 
 [[plugins]]
-repo = 'tyru/open-browser.vim'
+repo = 'thinca/vim-quickrun'
+hook_add = '''
+let g:quickrun_no_default_key_mappings = 1
+" let g:quickrun_config = {
+"             \    "java": {
+"             \        "exec": "java %S:r:gs?[/\\]?.?"
+"             \    }
+"             \}
+'''
 
 [[plugins]]
 repo = 'reconquest/vim-pythonx'
@@ -356,48 +341,10 @@ let g:UltiSnipsSnippetsDir = expand("~/.config/nvim/UltiSnips")
 repo = 'honza/vim-snippets'
 
 [[plugins]]
-repo = 'Shougo/deoplete.nvim'
-# depends = ['ultisnips']
-hook_add = '''
-let g:deoplete#enable_at_startup = 1
-inoremap <silent> <CR> <C-r>=<SID>my_deoplete_cr_function()<CR>
-function! s:my_deoplete_cr_function()
-	return pumvisible() ? "\<C-y>" : "\<CR>"
-endfunction
-inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
-'''
-
-[[plugins]]
-repo = 'thinca/vim-quickrun'
-hook_add = '''
-let g:quickrun_no_default_key_mappings = 1
-" let g:quickrun_config = {
-"             \    "java": {
-"             \        "exec": "java %S:r:gs?[/\\]?.?"
-"             \    }
-"             \}
-'''
-
-[[plugins]]
 repo = 'luochen1990/rainbow'
 hook_add = '''
 let g:rainbow_active = 1
 '''
-
-[[plugins]]
-repo = 'Shougo/vimfiler'
-depends = 'unite.vim'
-
-[[plugins]]
-repo = 'Shougo/unite-outline'
-# if = 0
-on_source = 'unite.vim'
-hook_add = '''
-nnoremap [unite]o :Unite outline -no-focus -no-quit -vertical -winwidth=40 -toggle<CR>
-'''
-
-[[plugins]]
-repo = 'xolox/vim-misc'
 
 [[plugins]]
 repo = 'xolox/vim-session'
@@ -521,38 +468,105 @@ command! -nargs=? SaveBranchSession call s:save_session(<f-args>)
 command! -nargs=? LoadBranchSession call s:load_session(<f-args>)
 '''
 
+# linter
 [[plugins]]
-repo = 'kylef/apiblueprint.vim'
-
-[[plugins]]
-repo = 'osyo-manga/vim-over'
+repo = 'w0rp/ale'
 hook_add = '''
-let g:over_enable_auto_nohlsearch = 0
+" 常にサイン列を表示
+let g:ale_sign_column_always = 1
+" ファイル保存時に実行
+let g:ale_fix_on_save = 1
+let g:ale_set_loclist = 1
+
+" 言語ごとの設定
+"" 初期化
+if !exists("g:ale_linters")
+	let g:ale_linters = {}
+endif
+if !exists("g:ale_linters_ignore")
+	let g:ale_linters_ignore = {}
+endif
+if !exists("g:ale_fixers")
+  let g:ale_fixers = {}
+endif
+
+""" Go
+let g:ale_linters['go'] = ['gofmt', 'golint', 'govet', 'golangserver']
+""" Java
+let g:ale_linters['java'] = []
+""" Javascript
+let g:ale_linters_ignore['javascript'] = ['tsserver', 'flow-language-server']
+let g:ale_fixers['javascript'] = ['prettier', 'eslint']
+let g:ale_javascript_prettier_options = '--print-width 140 --single-quote --jsx-bracket-same-line'
+"""" ローカルの設定ファイルを考慮する
+let g:ale_javascript_prettier_use_local_config = 1
+""" Ruby
+let g:ale_linters_ignore['ruby'] = ['solargraph', 'rubocop']
+""" Rust
+let g:ale_linters['rust'] = ['cargo', 'rls']
+let g:ale_fixers['rust'] = ['rustfmt']
+let g:ale_rust_rls_toolchain = 'stable'
+let g:ale_rust_rustfmt_options = '+stable'
+""" Python
+let g:ale_linters['python'] = ['flake8']
+let g:ale_fixers['python'] = ['black']
+'''
+
+
+#########################################################
+# Completion
+#########################################################
+[[plugins]]
+repo = 'prabirshrestha/asyncomplete.vim'
+hook_add = '''
+" inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+" inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+" inoremap <expr> <CR>    pumvisible() ? "\<C-y>" : "\<CR>"
+
+imap <c-space> <Plug>(asyncomplete_force_refresh)
 '''
 
 [[plugins]]
-repo = 'junegunn/vim-easy-align'
+repo = 'prabirshrestha/asyncomplete-buffer.vim'
+depends = ['asyncomplete.vim']
+hook_add = '''
+au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
+    \ 'name': 'buffer',
+    \ 'whitelist': ['*'],
+    \ 'completor': function('asyncomplete#sources#buffer#completor'),
+    \ 'config': {
+    \    'max_buffer_size': 5000000,
+    \  },
+    \ }))
+'''
+
 
 [[plugins]]
-repo = 'haya14busa/vim-edgemotion'
-if = 0
+repo = 'prabirshrestha/asyncomplete-file.vim'
+depends = ['asyncomplete.vim']
 hook_add = '''
-map <C-j> <Plug>(edgemotion-j)
-map <C-k> <Plug>(edgemotion-k)
+au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#file#get_source_options({
+    \ 'name': 'file',
+    \ 'whitelist': ['*'],
+    \ 'priority': 10,
+    \ 'completor': function('asyncomplete#sources#file#completor')
+    \ }))
 '''
 
 [[plugins]]
-repo = 'rhysd/git-messenger.vim'
+repo = 'prabirshrestha/asyncomplete-ultisnips.vim'
+depends = ['asyncomplete.vim']
 hook_add = '''
-autocmd VimEnter,Colorscheme * :hi! link gitmessengerPopupNormal CursorLine
+au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#ultisnips#get_source_options({
+    \ 'name': 'ultisnips',
+    \ 'whitelist': ['*'],
+    \ 'completor': function('asyncomplete#sources#ultisnips#completor'),
+    \ }))
 '''
 
-[[plugins]]
-repo = 'tpope/vim-repeat'
-
-[[plugins]]
-repo = 'mattn/emmet-vim'
-
+#########################################################
+# Text Object
+#########################################################
 [[plugins]]
 repo = 'kana/vim-textobj-user'
 
@@ -563,3 +577,54 @@ depends = 'vim-textobj-user'
 [[plugins]]
 repo = 'sgur/vim-textobj-parameter'
 depends = 'vim-textobj-user'
+
+
+#########################################################
+# Git
+#########################################################
+[[plugins]]
+repo = 'lambdalisue/gina.vim'
+hook_add = '''
+augroup gina-status-lazy
+  autocmd!
+  autocmd CursorMoved,CursorMovedI * call s:f_gina_status('CursorMoved')
+  autocmd CursorHold,CursorHoldI * call s:f_gina_status('CursorHold')
+  autocmd WinEnter * call s:f_gina_status('WinEnter')
+  autocmd WinLeave * call s:f_gina_status('WinLeave')
+
+  let s:gina_status = 0
+  let g:gina_status_str = gina#component#repo#preset()
+  function! s:f_gina_status(event)
+    if a:event ==# 'WinEnter'
+      let g:gina_status_str = gina#component#repo#preset()
+      let s:gina_status = 2
+    elseif a:event ==# 'WinLeave'
+      " Do nothing
+    elseif a:event ==# 'CursorMoved'
+      if s:gina_status
+        if 1 < s:gina_status
+          let s:gina_status = 1
+        else
+          " Do nothing
+          let s:gina_status = 0
+        endif
+      endif
+    elseif a:event ==# 'CursorHold'
+      let g:gina_status_str = gina#component#repo#preset()
+      let s:gina_status = 1
+    endif
+  endfunction
+augroup END
+'''
+
+[[plugins]]
+repo = 'tpope/vim-fugitive'
+
+[[plugins]]
+repo = 'mhinz/vim-signify'
+
+[[plugins]]
+repo = 'rhysd/git-messenger.vim'
+hook_add = '''
+autocmd VimEnter,Colorscheme * :hi! link gitmessengerPopupNormal CursorLine
+'''
