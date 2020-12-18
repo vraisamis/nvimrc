@@ -187,6 +187,7 @@ command! Test call s:my_menu()
 repo = 'itchyny/lightline.vim'
 hook_add = '''
 set laststatus=2
+let g:gina_status_str = ''
 let g:lightline = {
 	\ 'colorscheme' : 'iceberg',
 	\ 'mode_map': { 'c': 'NORMAL' },
@@ -237,7 +238,6 @@ function! MySessionName() abort
   return session_name == '' ? '' : '[S]' . session_name
 endfunction
 
-let g:gina_status_str = ''
 '''
 
 [[plugins]]
@@ -349,7 +349,8 @@ let g:rainbow_active = 1
 [[plugins]]
 repo = 'xolox/vim-session'
 depends = [ 'vim-misc' ]
-hook_add = '''
+hook_source = '''
+echomsg "sourced!!!"
 " gitリポジトリ配下ならgitのrootを返す。そうでないなら空を返す
 function! s:GetGitDir()
   " Set 'gitdir' to be the folder containing .git
@@ -584,7 +585,7 @@ depends = 'vim-textobj-user'
 #########################################################
 [[plugins]]
 repo = 'lambdalisue/gina.vim'
-hook_add = '''
+hook_source = '''
 augroup gina-status-lazy
   autocmd!
   autocmd CursorMoved,CursorMovedI * call s:f_gina_status('CursorMoved')
