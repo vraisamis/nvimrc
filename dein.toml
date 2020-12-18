@@ -28,7 +28,6 @@ hook_add = '''
 autocmd BufRead,BufEnter *.html.j2 set filetype=html.jinja
 autocmd BufRead,BufEnter *.sql.j2 set filetype=sql.jinja
 autocmd BufRead,BufEnter *.json.j2 set filetype=json.jinja
-
 '''
 
 
@@ -349,8 +348,7 @@ let g:rainbow_active = 1
 [[plugins]]
 repo = 'xolox/vim-session'
 depends = [ 'vim-misc' ]
-hook_source = '''
-echomsg "sourced!!!"
+hook_add = '''
 " gitリポジトリ配下ならgitのrootを返す。そうでないなら空を返す
 function! s:GetGitDir()
   " Set 'gitdir' to be the folder containing .git
@@ -517,53 +515,8 @@ let g:ale_fixers['python'] = ['black']
 #########################################################
 # Completion
 #########################################################
-[[plugins]]
-repo = 'prabirshrestha/asyncomplete.vim'
-hook_add = '''
-" inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
-" inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-" inoremap <expr> <CR>    pumvisible() ? "\<C-y>" : "\<CR>"
 
-imap <c-space> <Plug>(asyncomplete_force_refresh)
-'''
-
-[[plugins]]
-repo = 'prabirshrestha/asyncomplete-buffer.vim'
-depends = ['asyncomplete.vim']
-hook_add = '''
-au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
-    \ 'name': 'buffer',
-    \ 'whitelist': ['*'],
-    \ 'completor': function('asyncomplete#sources#buffer#completor'),
-    \ 'config': {
-    \    'max_buffer_size': 5000000,
-    \  },
-    \ }))
-'''
-
-
-[[plugins]]
-repo = 'prabirshrestha/asyncomplete-file.vim'
-depends = ['asyncomplete.vim']
-hook_add = '''
-au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#file#get_source_options({
-    \ 'name': 'file',
-    \ 'whitelist': ['*'],
-    \ 'priority': 10,
-    \ 'completor': function('asyncomplete#sources#file#completor')
-    \ }))
-'''
-
-[[plugins]]
-repo = 'prabirshrestha/asyncomplete-ultisnips.vim'
-depends = ['asyncomplete.vim']
-hook_add = '''
-au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#ultisnips#get_source_options({
-    \ 'name': 'ultisnips',
-    \ 'whitelist': ['*'],
-    \ 'completor': function('asyncomplete#sources#ultisnips#completor'),
-    \ }))
-'''
+# NOTHING
 
 #########################################################
 # Text Object
