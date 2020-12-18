@@ -21,6 +21,16 @@ repo = 'cocopon/iceberg.vim'
 [[plugins]]
 repo = 'kylef/apiblueprint.vim'
 
+# jinja
+[[plugins]]
+repo = 'glench/vim-jinja2-syntax'
+hook_add = '''
+autocmd BufRead,BufEnter *.html.j2 set filetype=html.jinja
+autocmd BufRead,BufEnter *.sql.j2 set filetype=sql.jinja
+autocmd BufRead,BufEnter *.json.j2 set filetype=json.jinja
+
+'''
+
 
 #########################################################
 # Fuzzy Matcher
@@ -264,8 +274,9 @@ hook_add = '''
 let g:indent_guides_enable_on_vim_startup=1
 let g:indent_guides_start_level=1
 let g:indent_guides_auto_colors=0
-autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=235
-autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=236
+let g:indent_guides_guide_size=1
+autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=237
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=239
 " let g:indent_guides_guide_size=1
 '''
 
@@ -496,6 +507,9 @@ let g:ale_linters['rust'] = ['cargo', 'rls']
 let g:ale_fixers['rust'] = ['rustfmt']
 let g:ale_rust_rls_toolchain = 'stable'
 let g:ale_rust_rustfmt_options = '+stable'
+""" Python
+let g:ale_linters['python'] = ['flake8']
+let g:ale_fixers['python'] = ['black']
 '''
 
 
