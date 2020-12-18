@@ -66,6 +66,7 @@ exec ( 'source ' . g:vimrc_dir . '/dein.vim')
 
 """Global Settings
 set fileencoding=utf-8
+autocmd ColorScheme iceberg highlight Visual ctermbg=238
 colorscheme iceberg
 "BSで消去できる文字の設定
 set backspace=indent,eol,start
@@ -152,7 +153,7 @@ filetype plugin indent on
 "language settings
 "----------------
 ""markdown
-autocmd BufRead,BufNewFile *.md set filetype=markdown
+autocmd BufRead,BufNewFile *.md setl filetype=markdown tabstop=4 shiftwidth=4 softtabstop=4
 
 
 
