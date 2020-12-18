@@ -106,8 +106,8 @@ on_ft = ['toml', 'markdown', 'jsp']
 [[plugins]]
 repo = 'Shougo/deoplete.nvim'
 on_event = 'InsertEnter'
-hook_source = '''
-  call deoplete#enable()
+hook_add = '''
+let deoplete#enable_at_startup = 1
 '''
 
 #########################################################
@@ -136,18 +136,21 @@ let g:lsp_settings = {
     \ }}
 '''
 
-# [[plugins]]
-# repo = 'liuchengxu/vista.vim'
-# # if = 0
-# depends = ['vim-lsp']
-# hook_add = '''
-# let g:vista_default_executive = 'vim_lsp'
-# '''
+[[plugins]]
+repo = 'liuchengxu/vista.vim'
+# if = 0
+depends = ['vim-lsp']
+hook_add = '''
+let g:vista_default_executive = 'vim_lsp'
+'''
 
 [[plugins]]
 repo = 'lighttiger2505/deoplete-vim-lsp'
 on_ft = ['python', 'go', 'rust']
 depends = ['deoplete.nvim', 'vim-lsp']
+hook_add = '''
+set completeopt-=preview
+'''
 
 
 
