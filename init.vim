@@ -57,7 +57,7 @@ onoremap . i>
 "----------------
 "Plugin
 "----------------
-exec ( 'source ' . g:vimrc_dir . '/dein.vim')
+exec('source ' . g:vimrc_dir . '/dein.vim')
 
 
 "----------------

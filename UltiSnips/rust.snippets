@@ -203,128 +203,351 @@ snippet cumsumfn "fn cumulative_sum(Vec<T>) （累積和）"
 endsnippet
 
 snippet cumsum "cumulative sum （累積和）"
-    let mut ${1:cumsum} = vec![${2:v}[0]; n];
-    for (i, value) in $2.iter().enumerate().skip(1) {
-        $1[i] = $1[i - 1] + *value;
-    }
+let mut ${1:cumsum} = vec![${2:v}[0]; n];
+for (i, value) in $2.iter().enumerate().skip(1) {
+    $1[i] = $1[i - 1] + *value;
+}
 endsnippet
 
 snippet dead "#[allow(dead_code)]"
-    #[allow(dead_code)]
+#[allow(dead_code)]
 endsnippet
 
 snippet dead! "#![allow(dead_code)]"
-    #![allow(dead_code)]
+#![allow(dead_code)]
 endsnippet
 
 snippet bit "binary index tree"
-    struct BIT<T>
-    where
-        T: std::ops::Add<Output = T> + std::ops::Sub<Output = T> + std::default::Default + std::clone::Clone + std::marker::Copy
-    {
-        v: Vec<T>,
-        n: usize
+struct BIT<T>
+where
+    T: std::ops::Add<Output = T> + std::ops::Sub<Output = T> + std::default::Default + std::clone::Clone + std::marker::Copy
+{
+    v: Vec<T>,
+    n: usize
+}
+
+impl <T> BIT<T>
+where
+    T: std::ops::Add<Output = T> + std::ops::Sub<Output = T> + std::default::Default + std::clone::Clone + std::marker::Copy
+{
+    #![allow(dead_code)]
+    fn new(n: usize) -> BIT<T> {
+        let v = vec![T::default(); n];
+        BIT { v: v, n: n }
     }
 
-    impl <T> BIT<T>
-    where
-        T: std::ops::Add<Output = T> + std::ops::Sub<Output = T> + std::default::Default + std::clone::Clone + std::marker::Copy
-    {
-        #![allow(dead_code)]
-        fn new(n: usize) -> BIT<T> {
-            let v = vec![T::default(); n];
-            BIT { v: v, n: n }
+    fn from(v: Vec<T>) -> BIT<T> {
+        let mut bit = BIT::new(v.len());
+        for (i, value) in v.iter().enumerate() {
+            bit.add(i, *value);
         }
+        bit
+    }
 
-        fn from(v: Vec<T>) -> BIT<T> {
-            let mut bit = BIT::new(v.len());
-            for (i, value) in v.iter().enumerate() {
-                bit.add(i, *value);
-            }
-            bit
-        }
-
-        fn add(&mut self, index: usize, value: T) {
-            let mut x = index + 1;
-            while x <= self.n {
-                self.v[x - 1] = self.v[x - 1] + value;
-                x += ((x as i64) & -(x as i64)) as usize;
-            }
-        }
-
-        fn sum(&self, left: usize, right: usize) -> T {
-            self.sum0(right) - if left > 0 { self.sum0(left - 1) } else { T::default() }
-        }
-
-        fn sum0(&self, right: usize) -> T {
-            let mut sum = T::default();
-            let mut x = right + 1;
-            while x > 0 {
-                sum = sum + self.v[x - 1];
-                x -= ((x as i64) & -(x as i64)) as usize;
-            }
-            sum
+    fn add(&mut self, index: usize, value: T) {
+        let mut x = index + 1;
+        while x <= self.n {
+            self.v[x - 1] = self.v[x - 1] + value;
+            x += ((x as i64) & -(x as i64)) as usize;
         }
     }
+
+    fn sum(&self, left: usize, right: usize) -> T {
+        self.sum0(right) - if left > 0 { self.sum0(left - 1) } else { T::default() }
+    }
+
+    fn sum0(&self, right: usize) -> T {
+        let mut sum = T::default();
+        let mut x = right + 1;
+        while x > 0 {
+            sum = sum + self.v[x - 1];
+            x -= ((x as i64) & -(x as i64)) as usize;
+        }
+        sum
+    }
+}
 endsnippet
 
 snippet tom "variable to mutable (shadowing)"
-    #[allow(unused_macros)]
-    macro_rules! to_mut {
-        ($($var: ident),*) => {
-            $(
-                #[allow(unused_mut)]
-                let mut $var = $var;
-            )*
-        };
-    }
+#[allow(unused_macros)]
+macro_rules! to_mut {
+    ($($var: ident),*) => {
+        $(
+            #[allow(unused_mut)]
+            let mut $var = $var;
+        )*
+    };
+}
 endsnippet
 
 snippet vecord "Vector ordering macro"
-    macro_rules! order_by {
-        ($($x:tt)*) => {
-            |l, r| {
-                order_by_inner!(l, r, $($x)*)
+macro_rules! order_by {
+    ($($x:tt)*) => {
+        |l, r| {
+            order_by_inner!(l, r, $($x)*)
+        }
+    }
+}
+macro_rules! order_by_inner {
+    () => {};
+    ($l:ident) => {std::cmp::Ordering::Equal};
+    ($l:ident , ) => {std::cmp::Ordering::Equal};
+    ($l:ident , $r:ident) => {std::cmp::Ordering::Equal};
+    ($l:ident , $r:ident , ) => {std::cmp::Ordering::Equal};
+
+    // last
+    ($l:ident , $r:ident , $x:tt asc) => {
+        $l.$x.cmp(&$r.$x)
+    };
+    ($l:ident , $r:ident , $x:tt desc) => {
+        $l.$x.cmp(&$r.$x).reverse()
+    };
+    ($l:ident , $r:ident , $x:tt) => {
+        order_by_inner!($l, $r, $x asc)
+    };
+
+    // mid
+    ($l:ident , $r:ident , $x:tt asc , $($p:tt)+) => {
+        match $l.$x.cmp(&$r.$x) {
+            std::cmp::Ordering::Equal => {
+                order_by_inner!($l, $r, $($p)+)
+            },
+                other => other
+        }
+    };
+    ($l:ident , $r:ident , $x:tt desc , $($p:tt)+) => {
+        match $l.$x.cmp(&$r.$x).reverse() {
+            std::cmp::Ordering::Equal => {
+                order_by_inner!($l, $r, $($p)+)
+            },
+                other => other
+        }
+    };
+    ($l:ident , $r:ident , $x:tt , $($p:tt)+) => {
+        order_by_inner!($l, $r, $x asc, $($p)+)
+    };
+}
+endsnippet
+
+snippet isum "iterator sum"
+.fold(${1:0}, |sum, a| sum ${2:+} a);
+endsnippet
+
+snippet 'forin' "for i in 0..n"
+for ${1:i} in ${2:0}..${3:n} {
+    ${4}
+}
+endsnippet
+
+snippet 'forin=' "for i in 0..=n"
+for ${1:i} in ${2:0}..${3:=n} {
+    ${4}
+}
+endsnippet
+
+snippet lbub "lower|upper bound"
+#[allow(dead_code)]
+fn lower_bound<F, T>(f: F, x: &T, left: usize, right: usize) -> usize
+where T: Ord, F: Fn(usize) -> T {
+    let mut left = left;
+    let mut right = right;
+    while left < right {
+        let mid = (left + right) / 2;
+        let value = f(mid);
+        if x <= &value {
+            right = mid;
+        } else {
+            left = mid + 1;
+        }
+    }
+    return right;
+}
+
+#[allow(dead_code)]
+fn upper_bound<F, T>(f: F, x: &T, len: usize) -> usize
+where T: Ord, F: Fn(usize) -> T {
+    let mut left = 0;
+    let mut right = len;
+    while left < right {
+        let mid = (left + right) / 2;
+        let value = f(mid);
+        if x < &value {
+            right = mid;
+        } else {
+            left = mid + 1;
+        }
+    }
+    return left;
+}
+endsnippet
+
+snippet test
+fn mods(n: &usize) -> Vec<usize> {
+    match n {
+        &0 => vec![],
+        &1 => vec![1],
+        _ => {
+            let mut v = vec![];
+            let mut i = 1;
+            while i * i <= *n {
+                if n % i == 0 {
+                    v.push(i);
+                    v.push(n / i);
+                }
+                i += 1;
+            }
+            v
+        }
+    }
+}
+
+fn gcd(l: usize, r: usize) -> usize {
+    if r == 0 {
+        l
+    } else {
+        gcd(r, l % r)
+    }
+}
+
+struct BIT<T>
+where
+    T: std::ops::Add<Output = T> + std::ops::Sub<Output = T> + std::default::Default + std::clone::Clone + std::marker::Copy
+{
+    v: Vec<T>,
+    n: usize
+}
+
+impl <T> BIT<T>
+where
+    T: std::ops::Add<Output = T> + std::ops::Sub<Output = T> + std::default::Default + std::clone::Clone + std::marker::Copy
+{
+    #![allow(dead_code)]
+    fn new(n: usize) -> BIT<T> {
+        let v = vec![T::default(); n];
+        BIT { v: v, n: n }
+    }
+
+    fn from(v: Vec<T>) -> BIT<T> {
+        let mut bit = BIT::new(v.len());
+        for (i, value) in v.iter().enumerate() {
+            bit.add(i, *value);
+        }
+        bit
+    }
+
+    fn add(&mut self, index: usize, value: T) {
+        let mut x = index + 1;
+        while x <= self.n {
+            self.v[x - 1] = self.v[x - 1] + value;
+            x += ((x as i64) & -(x as i64)) as usize;
+        }
+    }
+
+    fn sum(&self, left: usize, right: usize) -> T {
+        self.sum0(right) - if left > 0 { self.sum0(left - 1) } else { T::default() }
+    }
+
+    fn sum0(&self, right: usize) -> T {
+        let mut sum = T::default();
+        let mut x = right + 1;
+        while x > 0 {
+            sum = sum + self.v[x - 1];
+            x -= ((x as i64) & -(x as i64)) as usize;
+        }
+        sum
+    }
+}
+
+
+#[allow(dead_code)]
+fn cumlative_sum<T>(v: Vec<T>) -> Vec<T>
+where
+    T: std::ops::Add<Output = T> + std::clone::Clone + std::marker::Copy
+{
+    let n = v.len();
+    if n == 0 {
+        return Vec::new();
+    }
+    let mut result = vec![v[0]; n];
+    for (i, value) in v.iter().enumerate().skip(1) {
+        result[i] = result[i - 1] + *value;
+    }
+    result
+}
+fn primes(n: usize) -> Vec<usize> {
+    if n < 2 {
+        return vec![];
+    }
+
+    let mut v = vec![true; n];
+    v[0] = false;
+    v[1] = false;
+
+    let mut result = vec![];
+    for i in 2..n {
+        if v[i] {
+            result.push(i);
+            let mut j = 2 * i;
+            while j < n {
+                v[j] = false;
+                j += i;
             }
         }
     }
-    macro_rules! order_by_inner {
-        () => {};
-        ($l:ident) => {std::cmp::Ordering::Equal};
-        ($l:ident , ) => {std::cmp::Ordering::Equal};
-        ($l:ident , $r:ident) => {std::cmp::Ordering::Equal};
-        ($l:ident , $r:ident , ) => {std::cmp::Ordering::Equal};
 
-        // last
-        ($l:ident , $r:ident , $x:tt asc) => {
-            $l.$x.cmp(&$r.$x)
-        };
-        ($l:ident , $r:ident , $x:tt desc) => {
-            $l.$x.cmp(&$r.$x).reverse()
-        };
-        ($l:ident , $r:ident , $x:tt) => {
-            order_by_inner!($l, $r, $x asc)
-        };
-
-        // mid
-        ($l:ident , $r:ident , $x:tt asc , $($p:tt)+) => {
-            match $l.$x.cmp(&$r.$x) {
-                std::cmp::Ordering::Equal => {
-                    order_by_inner!($l, $r, $($p)+)
-                },
-                    other => other
-            }
-        };
-        ($l:ident , $r:ident , $x:tt desc , $($p:tt)+) => {
-            match $l.$x.cmp(&$r.$x).reverse() {
-                std::cmp::Ordering::Equal => {
-                    order_by_inner!($l, $r, $($p)+)
-                },
-                    other => other
-            }
-        };
-        ($l:ident , $r:ident , $x:tt , $($p:tt)+) => {
-            order_by_inner!($l, $r, $x asc, $($p)+)
-        };
+    result
+}
+fn primes2(ps: Option<Vec<usize>>, n: usize) -> Vec<usize> {
+    if n < 2 {
+        return vec![];
     }
+    let mut ps = match ps {
+        Some(p) => p,
+        None => vec![2]
+    };
+    let last = ps[ps.len() - 1];
+
+    let fill = |iv: &mut Vec<_>, ik| {
+        let mut j = 2 * ik;
+        while j < last {
+            j += ik;
+        }
+        while j < n {
+            iv[j - last] = false;
+            j += ik;
+        }
+    };
+    let mut v = vec![true; n - last];
+    for &k in ps.iter() {
+        fill(&mut v, k);
+    }
+
+    let mut result = vec![];
+    for i in 1..n - last {
+        if v[i] {
+            result.push(i + last);
+            fill(&mut v, i + last);
+        }
+    }
+
+    ps.append(&mut result);
+    ps
+}
+
+fn count_dividors(n: usize, ps: &Vec<usize>) -> usize {
+    let mut n = n as usize;
+    // let ps = primes(n + 1);
+    let mut v: Vec<(usize, usize)> = vec![];
+    for p in ps {
+        let mut k = 0;
+        while n % p == 0 {
+            n = n / p;
+            k += 1;
+        }
+        if k > 0 {
+            v.push((p.clone(), k));
+        }
+    }
+    v.into_iter().fold(1, |cum, (_, k)| cum * (k + 1))
+}
 endsnippet

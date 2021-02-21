@@ -200,6 +200,8 @@ let g:lightline = {
 	\   'filename': 'LightlineFilename',
 	\   'session': 'MySessionName',
 	\ },
+  \ 'separator': { 'left': '', 'right': '' },
+  \ 'subseparator': { 'left': '', 'right': '' },
   \ 'component_expand' : {
   \  'linter_checking': 'lightline#ale#checking',
   \  'linter_warnings': 'lightline#ale#warnings',
@@ -235,6 +237,13 @@ endfunction
 function! MySessionName() abort
   let session_name = xolox#session#find_current_session()
   return session_name == '' ? '' : '[S]' . session_name
+  " let session_name = ''
+  " try
+  "   let session_name = xolox#session#find_current_session()
+  " catch /E117.*/
+  "   " do nothing
+  " endtry
+  " return session_name == '' ? '' : '[S]' . session_name
 endfunction
 
 '''
@@ -254,16 +263,16 @@ repo = 'Xuyuanp/nerdtree-git-plugin'
 depends = 'nerdtree'
 hook_add = '''
 let g:NERDTreeGitStatusIndicatorMapCustom = {
-    \ "Modified"  : "M",
-    \ "Staged"    : "+",
-    \ "Untracked" : "?",
-    \ "Renamed"   : "R",
-    \ "Unmerged"  : "m",
-    \ "Deleted"   : "D",
-    \ "Dirty"     : "?",
-    \ "Clean"     : "o",
-    \ 'Ignored'   : 'X',
-    \ "Unknown"   : "?"
+    \ "Modified"  : "",
+    \ "Staged"    : "",
+    \ "Untracked" : "",
+    \ "Renamed"   : "",
+    \ "Unmerged"  : "",
+    \ "Deleted"   : "",
+    \ "Dirty"     : "",
+    \ "Clean"     : "",
+    \ 'Ignored'   : "",
+    \ "Unknown"   : ""
     \ }
 '''
 
@@ -538,7 +547,7 @@ depends = 'vim-textobj-user'
 #########################################################
 [[plugins]]
 repo = 'lambdalisue/gina.vim'
-hook_source = '''
+hook_add = '''
 augroup gina-status-lazy
   autocmd!
   autocmd CursorMoved,CursorMovedI * call s:f_gina_status('CursorMoved')
@@ -576,6 +585,7 @@ repo = 'tpope/vim-fugitive'
 
 [[plugins]]
 repo = 'mhinz/vim-signify'
+rev = 'd80e507c8ba31d7d0711eb3b9a8053ec5f01df5c'
 
 [[plugins]]
 repo = 'rhysd/git-messenger.vim'
