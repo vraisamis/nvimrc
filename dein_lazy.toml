@@ -123,6 +123,20 @@ hook_add = '''
 " use ALE
 let g:lsp_diagnostics_enabled = 0
 let g:lsp_auto_enable = 1
+
+""" LspEnable -> On
+function! s:lspEnable(with_disable)
+  if a:with_disable
+    echo 'disable'
+    call lsp#disable()
+  endif
+  echo 'enable'
+  call lsp#enable()
+endfunction
+command! -bang LspEnable call s:lspEnable(<bang>0)
+
+
+nnoremap <leader>a :LspCodeAction<CR>
 '''
 
 [[plugins]]
