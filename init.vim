@@ -183,7 +183,7 @@ command! OpenBrowserCurrent execute "OpenBrowser" expand("%:p")
 "--------
 "Overwrite for Environment
 "--------
-let s:environment_vim_file_path = expand(g:vimrc_dir . 'environment.vim')
+let s:environment_vim_file_path = expand(g:vimrc_dir . '/environment.vim')
 if filereadable(s:environment_vim_file_path)
 	exec('source ' . s:environment_vim_file_path)
 endif
