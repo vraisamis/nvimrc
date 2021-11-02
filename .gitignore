@@ -4,7 +4,10 @@
 !dein.vim
 !dein.toml
 !dein_lazy.toml
+!plug.vim
 !/colors/
 !/colors/**
 !/UltiSnips/
 !/UltiSnips/**
+!/myconfig/
+!/myconfig/**

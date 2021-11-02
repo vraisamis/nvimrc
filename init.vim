@@ -1,5 +1,6 @@
 scriptencoding utf-8
 let g:vimrc_dir = expand("<sfile>:p:h")
+execute 'set runtimepath^=' . g:vimrc_dir . '/runtime'
 
 
 "----------------
@@ -55,19 +56,10 @@ onoremap . i>
 
 
 "----------------
-"Plugin
-"----------------
-exec('source ' . g:vimrc_dir . '/dein.vim')
-
-
-"----------------
 "System Settings
 "----------------
 
 """Global Settings
-set fileencoding=utf-8
-autocmd ColorScheme iceberg highlight Visual ctermbg=238
-colorscheme iceberg
 "BSで消去できる文字の設定
 set backspace=indent,eol,start
 "ウィンドウの大きさを自動で同じにする
@@ -189,3 +181,9 @@ if filereadable(s:environment_vim_file_path)
 endif
 
 source $VIMRUNTIME/macros/matchit.vim
+
+"----------------
+"Plugin
+"----------------
+" exec('source ' . g:vimrc_dir . '/dein.vim')
+exec('source ' . g:vimrc_dir . '/plug.vim')
