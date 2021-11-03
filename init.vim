@@ -142,33 +142,8 @@ filetype plugin indent on
 
 
 "---------------
-"language settings
-"----------------
-""markdown
-autocmd BufRead,BufNewFile *.md setl filetype=markdown tabstop=4 shiftwidth=4 softtabstop=4
-
-
-
-"---------------
 "User Defined Commands
 "----------------
-function! s:lineNumberWithSeparator(line1, line2)
-  if a:line1 != a:line2
-    return ": " . a:line1 . "-" . a:line2
-  endif
-  return ""
-endfunction
-"""現在のファイルの絶対パスを取得
-function! FullFilePath(line1, line2)
-    return expand("%:p"). s:lineNumberWithSeparator(a:line1, a:line2)
-endfunction
-
-"""現在のファイルの相対パスを取得
-function! RelativeFilePath(line1, line2)
-    return expand("%"). s:lineNumberWithSeparator(a:line1, a:line2)
-endfunction
-
-command -range CopyFilePath let @+ = call('RelativeFilePath', [<line1>, <line2>])
 
 command! OpenBrowserCurrent execute "OpenBrowser" expand("%:p")
 
