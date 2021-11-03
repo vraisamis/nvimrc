@@ -35,7 +35,7 @@ Plug 'junegunn/fzf.vim'
 
 " status line
 Plug 'itchyny/lightline.vim'
-Plug 'maximbaz/lightline-ale'
+" Plug 'maximbaz/lightline-ale'
 
 " filer
 Plug 'scrooloose/nerdtree'
@@ -75,7 +75,7 @@ Plug 'xolox/vim-misc'
 Plug 'xolox/vim-session'
 
 " diagnostic
-Plug 'w0rp/ale'
+" Plug 'w0rp/ale'
 
 " text object
 Plug 'kana/vim-textobj-user'
@@ -88,6 +88,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'mhinz/vim-signify'
 Plug 'rhysd/git-messenger.vim'
 
+" language settings
 Plug 'mechatroner/rainbow_csv', {'for': ['csv', 'tsv']}
 Plug 'fatih/vim-go', {'for': ['go', 'gotexttmpl', 'gohtmltmpl' ]}
 Plug 'kana/vim-filetype-haskell', {'for': ['haskell']}
@@ -106,6 +107,7 @@ Plug 'osyo-manga/vim-precious', {'for': ['toml', 'markdown', 'jsp']}
 Plug 'Shougo/context_filetype.vim', {'for': ['toml', 'markdown', 'jsp']}
 
 " TODO: completion
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " Plug 'Shougo/deoplete.nvim'
 " Plug 'prabirshrestha/vim-lsp'
 " Plug 'mattn/vim-lsp-settings'

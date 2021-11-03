@@ -1,0 +1,6 @@
+{
+  "suggest.floatConfig": {
+    "border": true
+  },
+  "diagnostic.virtualText": true
+}
