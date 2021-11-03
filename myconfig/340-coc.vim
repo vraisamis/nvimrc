@@ -2,6 +2,13 @@ UsePlugin 'coc.nvim'
 
 let g:coc_config_home = g:vimrc_dir
 
+let g:coc_global_extensions = [
+      \ 'coc-json',
+      \ 'coc-git',
+      \ 'coc-metals',
+      \ 'coc-rust-analyzer',
+      \ ]
+
 " <CR> で候補決定
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<CR>"
 

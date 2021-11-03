@@ -2,5 +2,6 @@
   "suggest.floatConfig": {
     "border": true
   },
-  "diagnostic.virtualText": true
+  "diagnostic.virtualText": true,
+  "coc.preferences.extensionUpdateCheck": "daily"
 }

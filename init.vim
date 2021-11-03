@@ -90,6 +90,8 @@ set display=lastline,uhex
 set nofen
 "行番号の表示
 set number
+"マーカー列の表示
+set signcolumn=yes
 "モードを表示
 set showmode
 "未完成コマンドをステータス行に表示

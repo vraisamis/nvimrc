@@ -57,7 +57,8 @@ Plug 'tpope/vim-abolish'
 Plug 'tomtom/tcomment_vim'
 
 " auto complete endtag
-Plug 'tpope/vim-endwise'
+" SEE: https://rhysd.hatenablog.com/entry/20111010/1318264556
+" Plug 'tpope/vim-endwise'
 
 Plug 'tyru/open-browser.vim'
 Plug 'thinca/vim-quickrun'
@@ -108,11 +109,7 @@ Plug 'Shougo/context_filetype.vim', {'for': ['toml', 'markdown', 'jsp']}
 
 " TODO: completion
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-" Plug 'Shougo/deoplete.nvim'
-" Plug 'prabirshrestha/vim-lsp'
-" Plug 'mattn/vim-lsp-settings'
-" Plug 'lighttiger2505/deoplete-vim-lsp'
-Plug 'liuchengxu/vista.vim', {'for': []}
+Plug 'liuchengxu/vista.vim', {'on': ['Vista']}
 Plug 'easymotion/vim-easymotion', {'on': ['<Plug>(easymotion-']}
 call plug#end()
 
