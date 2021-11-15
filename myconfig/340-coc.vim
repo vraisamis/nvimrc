@@ -3,10 +3,15 @@ UsePlugin 'coc.nvim'
 let g:coc_config_home = g:vimrc_dir
 
 let g:coc_global_extensions = [
-      \ 'coc-json',
+      \ 'coc-fzf-preview',
       \ 'coc-git',
+      \ 'coc-json',
       \ 'coc-metals',
       \ 'coc-rust-analyzer',
+      \ 'coc-snippets',
+      \ 'coc-swagger',
+      \ 'coc-vimlsp',
+      \ 'coc-yaml',
       \ ]
 
 " <CR> で候補決定
@@ -27,10 +32,14 @@ xmap <Space>c [coc]
 " nnoremap <silent> [coc]g <Plug>(coc-diagnostic-next)
 
 " GoTo code navigation.
-nnoremap <silent> [coc]d <Plug>(coc-definition)
-nnoremap <silent> [coc]t <Plug>(coc-type-definition)
-nnoremap <silent> [coc]i <Plug>(coc-implementation)
-nnoremap <silent> [coc]r <Plug>(coc-references)
+nmap <silent> [coc]d :call CocAction('jumpDefinition')<CR>
+nmap <silent> [coc]D :call CocAction('jumpDefinition', 'tabe')<CR>
+nmap <silent> [coc]t :call CocAction('jumpTypeDefinition')<CR>
+nmap <silent> [coc]T :call CocAction('jumpTypeDefinition', 'tabe')<CR>
+nmap <silent> [coc]i :call CocAction('jumpImplementation')<CR>
+nmap <silent> [coc]I :call CocAction('jumpImplementation', 'tabe')<CR>
+nmap <silent> [coc]r :call CocAction('jumpReferences')<CR>
+nmap <silent> [coc]R :call CocAction('jumpReferences', 'tabe')<CR>
 
 " Use K to show documentation in preview window.
 nnoremap <silent> K :call <SID>show_documentation()<CR>
@@ -49,11 +58,11 @@ endfunction
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
 " Symbol renaming.
-nnoremap [coc]rn <Plug>(coc-rename)
+nmap [coc]rn <Plug>(coc-rename)
 
 " Formatting selected code.
-xnoremap [coc]f  <Plug>(coc-format-selected)
-nnoremap [coc]f  <Plug>(coc-format-selected)
+xmap [coc]f  <Plug>(coc-format-selected)
+nmap [coc]f  <Plug>(coc-format-selected)
 
 " Applying codeAction to the selected region.
 " Example: `<leader>aap` for current paragraph
@@ -100,23 +109,23 @@ command! -nargs=? CocFold :call CocAction('fold', <f-args>)
 " Add `:CocOrganizeImport` command for organize imports of the current buffer.
 command! -nargs=0 CocOrganizeImport :call CocAction('runCommand', 'editor.action.organizeImport')
 
-nnoremap [coc-list] <silent> <nop>
+nmap [coc-list] <silent> <nop>
 nmap <Space>l [coc-list]
 
 " Mappings for CoCList
 " Show all diagnostics.
-nnoremap <silent><nowait> [coc-list]d  :<C-u>CocList diagnostics<cr>
+nmap <silent><nowait> [coc-list]d  :<C-u>CocList diagnostics<cr>
 " Manage extensions.
-nnoremap <silent><nowait> [coc-list]e  :<C-u>CocList extensions<cr>
+nmap <silent><nowait> [coc-list]e  :<C-u>CocList extensions<cr>
 " Show commands.
-nnoremap <silent><nowait> [coc-list]c  :<C-u>CocList commands<cr>
+nmap <silent><nowait> [coc-list]c  :<C-u>CocList commands<cr>
 " Find symbol of current document.
-nnoremap <silent><nowait> [coc-list]o  :<C-u>CocList outline<cr>
+nmap <silent><nowait> [coc-list]o  :<C-u>CocList outline<cr>
 " Search workspace symbols.
-nnoremap <silent><nowait> [coc-list]s  :<C-u>CocList -I symbols<cr>
+nmap <silent><nowait> [coc-list]s  :<C-u>CocList -I symbols<cr>
 " Do default action for next item.
-nnoremap <silent><nowait> [coc-list]n  :<C-u>CocNext<CR>
+nmap <silent><nowait> [coc-list]n  :<C-u>CocNext<CR>
 " Do default action for previous item.
-nnoremap <silent><nowait> [coc-list]p  :<C-u>CocPrev<CR>
+nmap <silent><nowait> [coc-list]p  :<C-u>CocPrev<CR>
 " Resume latest coc list.
-nnoremap <silent><nowait> [coc-list]r  :<C-u>CocListResume<CR>
+nmap <silent><nowait> [coc-list]r  :<C-u>CocListResume<CR>

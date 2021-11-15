@@ -109,7 +109,10 @@ set linebreak
 "折り返し先頭の表示文字
 set showbreak=>\ 
 "マルチバイト文字幅の設定
-set ambiwidth=double
+" SEE: https://twitter.com/otukaw/status/1367741425765412871
+if !exists('g:vscode')
+  set ambiwidth=double
+endif
 "ヘルプウィンドウの最小の高さ
 set helpheight=0
 set winminheight=0

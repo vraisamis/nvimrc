@@ -9,3 +9,6 @@ autocmd BufRead,BufEnter *.json.j2 set filetype=json.jinja
 " csv, tsv
 autocmd BufRead,BufEnter *.csv set filetype=csv
 autocmd BufRead,BufEnter *.tsv set filetype=tsv
+
+" mustache
+au BufNewFile,BufRead *.scala.mustache set filetype=scala.mustache

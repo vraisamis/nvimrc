@@ -40,6 +40,15 @@ Plug 'itchyny/lightline.vim'
 " filer
 Plug 'scrooloose/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'ryanoasis/vim-devicons'
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+
+Plug 'lambdalisue/fern.vim'
+Plug 'lambdalisue/nerdfont.vim'
+Plug 'lambdalisue/glyph-palette.vim'
+Plug 'lambdalisue/fern-renderer-nerdfont.vim'
+Plug 'lambdalisue/fern-git-status.vim'
+Plug 'antoinemadec/FixCursorHold.nvim'
 
 " show indents
 Plug 'nathanaelkane/vim-indent-guides'
@@ -86,8 +95,9 @@ Plug 'sgur/vim-textobj-parameter'
 " git
 Plug 'lambdalisue/gina.vim'
 Plug 'tpope/vim-fugitive'
-Plug 'mhinz/vim-signify'
 Plug 'rhysd/git-messenger.vim'
+" NOTE: coc-git で目的が果たせている
+" Plug 'mhinz/vim-signify'
 
 " language settings
 Plug 'mechatroner/rainbow_csv', {'for': ['csv', 'tsv']}
@@ -106,8 +116,11 @@ Plug 'rust-lang/rust.vim', {'for': ['rust']}
 Plug 'cespare/vim-toml', {'for': ['toml']}
 Plug 'osyo-manga/vim-precious', {'for': ['toml', 'markdown', 'jsp']}
 Plug 'Shougo/context_filetype.vim', {'for': ['toml', 'markdown', 'jsp']}
+Plug 'hashivim/vim-terraform', {'for': ['terraform', 'hcl']}
+Plug 'mustache/vim-mustache-handlebars', {'for': ['mustache', 'handlebars']}
 
-" TODO: completion
+" completion
+" NOTE: cocのプラグインはauto install にしたいので 340-coc.vim で管理する
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'liuchengxu/vista.vim', {'on': ['Vista']}
 Plug 'easymotion/vim-easymotion', {'on': ['<Plug>(easymotion-']}
