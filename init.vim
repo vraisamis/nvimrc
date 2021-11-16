@@ -1,5 +1,6 @@
 scriptencoding utf-8
 let g:vimrc_dir = expand("<sfile>:p:h")
+execute 'set runtimepath^=' . g:vimrc_dir . '/runtime'
 
 
 "----------------
@@ -55,19 +56,10 @@ onoremap . i>
 
 
 "----------------
-"Plugin
-"----------------
-exec('source ' . g:vimrc_dir . '/dein.vim')
-
-
-"----------------
 "System Settings
 "----------------
 
 """Global Settings
-set fileencoding=utf-8
-autocmd ColorScheme iceberg highlight Visual ctermbg=238
-colorscheme iceberg
 "BSで消去できる文字の設定
 set backspace=indent,eol,start
 "ウィンドウの大きさを自動で同じにする
@@ -98,6 +90,8 @@ set display=lastline,uhex
 set nofen
 "行番号の表示
 set number
+"マーカー列の表示
+set signcolumn=yes
 "モードを表示
 set showmode
 "未完成コマンドをステータス行に表示
@@ -115,7 +109,10 @@ set linebreak
 "折り返し先頭の表示文字
 set showbreak=>\ 
 "マルチバイト文字幅の設定
-set ambiwidth=double
+" SEE: https://twitter.com/otukaw/status/1367741425765412871
+if !exists('g:vscode')
+  set ambiwidth=double
+endif
 "ヘルプウィンドウの最小の高さ
 set helpheight=0
 set winminheight=0
@@ -150,33 +147,8 @@ filetype plugin indent on
 
 
 "---------------
-"language settings
-"----------------
-""markdown
-autocmd BufRead,BufNewFile *.md setl filetype=markdown tabstop=4 shiftwidth=4 softtabstop=4
-
-
-
-"---------------
 "User Defined Commands
 "----------------
-function! s:lineNumberWithSeparator(line1, line2)
-  if a:line1 != a:line2
-    return ": " . a:line1 . "-" . a:line2
-  endif
-  return ""
-endfunction
-"""現在のファイルの絶対パスを取得
-function! FullFilePath(line1, line2)
-    return expand("%:p"). s:lineNumberWithSeparator(a:line1, a:line2)
-endfunction
-
-"""現在のファイルの相対パスを取得
-function! RelativeFilePath(line1, line2)
-    return expand("%"). s:lineNumberWithSeparator(a:line1, a:line2)
-endfunction
-
-command -range CopyFilePath let @+ = call('RelativeFilePath', [<line1>, <line2>])
 
 command! OpenBrowserCurrent execute "OpenBrowser" expand("%:p")
 
@@ -189,3 +161,9 @@ if filereadable(s:environment_vim_file_path)
 endif
 
 source $VIMRUNTIME/macros/matchit.vim
+
+"----------------
+"Plugin
+"----------------
+" exec('source ' . g:vimrc_dir . '/dein.vim')
+exec('source ' . g:vimrc_dir . '/plug.vim')

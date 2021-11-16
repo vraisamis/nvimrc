@@ -4,7 +4,11 @@
 !dein.vim
 !dein.toml
 !dein_lazy.toml
+!plug.vim
+!coc-settings.json
 !/colors/
 !/colors/**
 !/UltiSnips/
 !/UltiSnips/**
+!/myconfig/
+!/myconfig/**

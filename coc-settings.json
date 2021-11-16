@@ -1,0 +1,18 @@
+{
+  "suggest.floatConfig": {
+    "border": true
+  },
+  "diagnostic.virtualText": true,
+  "coc.preferences.extensionUpdateCheck": "daily",
+  "languageserver": {
+    "rust": {
+      "command": "rust-analyzer",
+      "filetypes": [
+        "rust"
+      ],
+      "rootPatterns": [
+        "Cargo.toml"
+      ]
+    }
+  }
+}
