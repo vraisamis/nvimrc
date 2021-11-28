@@ -29,6 +29,9 @@ Plug 'cocopon/iceberg.vim'
 Plug 'kylef/apiblueprint.vim'
 Plug 'glench/vim-jinja2-syntax'
 
+" tree-sitter
+" Plug 'nvim-treesitter/nvim-treesitter', {'branch': '0.5-compat', 'do': ':TSUpdate'}
+
 " fzf
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
@@ -38,10 +41,10 @@ Plug 'itchyny/lightline.vim'
 " Plug 'maximbaz/lightline-ale'
 
 " filer
-Plug 'scrooloose/nerdtree'
-Plug 'Xuyuanp/nerdtree-git-plugin'
-Plug 'ryanoasis/vim-devicons'
-Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+" Plug 'scrooloose/nerdtree'
+" Plug 'Xuyuanp/nerdtree-git-plugin'
+" Plug 'ryanoasis/vim-devicons'
+" Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 
 Plug 'lambdalisue/fern.vim'
 Plug 'lambdalisue/nerdfont.vim'
@@ -132,7 +135,9 @@ let s:plugs = get(s:, 'plugs', get(g:, 'plugs', {}))
 function! FindPlugin(name) abort
   return has_key(s:plugs, a:name) ? isdirectory(s:plugs[a:name].dir) : 0
 endfunction
-command! -nargs=1 UsePlugin if !FindPlugin(<args>) | finish | endif
+" UsePlugin 'hoge' で利用チェック
+" UsePlugin! 'foo' で不使用チェック
+command! -bang -nargs=1 UsePlugin if <bang>!FindPlugin(<args>) | finish | endif
 
 " NOTE: runtimepathを仮定しないのでglobでファイルを拾う
 let s:files = sort(glob(g:vimrc_dir . '/myconfig/*.vim', v:true, v:true))
