@@ -30,7 +30,7 @@ Plug 'kylef/apiblueprint.vim'
 Plug 'glench/vim-jinja2-syntax'
 
 " tree-sitter
-Plug 'nvim-treesitter/nvim-treesitter', {'branch': '0.5-compat', 'do': ':TSUpdate'}
+" Plug 'nvim-treesitter/nvim-treesitter', {'branch': '0.5-compat', 'do': ':TSUpdate'}
 
 " fzf
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
