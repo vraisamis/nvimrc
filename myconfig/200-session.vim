@@ -121,13 +121,15 @@ command! -nargs=? LoadBranchSession call s:load_session(<f-args>)
 
 " for ale
 function! MySessionName() abort
-  let session_name = xolox#session#find_current_session()
-  return session_name == '' ? '' : '[S]' . session_name
-  " let session_name = ''
-  " try
-  "   let session_name = xolox#session#find_current_session()
-  " catch /E117.*/
-  "   " do nothing
-  " endtry
-  " return session_name == '' ? '' : '[S]' . session_name
+  let l:session_name = xolox#session#find_current_session()
+  if empty(l:session_name)
+    return ''
+  else
+    if strridx(l:session_name, '.branch')
+      let l:session_display_name = ''
+    else
+      let l:session_display_name = l:session_name
+    endif
+    return '' . l:session_display_name
+  endif
 endfunction
