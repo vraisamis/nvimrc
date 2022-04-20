@@ -3,13 +3,16 @@ UsePlugin 'coc.nvim'
 let g:coc_config_home = g:vimrc_dir
 
 let g:coc_global_extensions = [
+      \ 'coc-eslint',
       \ 'coc-fzf-preview',
       \ 'coc-git',
       \ 'coc-json',
       \ 'coc-metals',
+      \ 'coc-prettier',
       \ 'coc-rust-analyzer',
       \ 'coc-snippets',
       \ 'coc-swagger',
+      \ 'coc-tsserver',
       \ 'coc-vimlsp',
       \ 'coc-yaml',
       \ ]
@@ -62,15 +65,15 @@ nmap [coc]rn <Plug>(coc-rename)
 
 " Formatting selected code.
 xmap [coc]f  <Plug>(coc-format-selected)
-nmap [coc]f  <Plug>(coc-format-selected)
+nmap [coc]f  <Plug>(coc-format)
 
 " Applying codeAction to the selected region.
 " Example: `<leader>aap` for current paragraph
 xmap [coc]a  <Plug>(coc-codeaction-selected)
-nmap [coc]a  <Plug>(coc-codeaction-selected)
+nmap [coc]a  <Plug>(coc-codeaction)
 
 " Remap keys for applying codeAction to the current buffer.
-nmap [coc]ac  <Plug>(coc-codeaction)
+" nmap [coc]ac  <Plug>(coc-codeaction)
 " Apply AutoFix to problem on the current line.
 nmap [coc]qf  <Plug>(coc-fix-current)
 

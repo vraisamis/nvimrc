@@ -87,7 +87,7 @@ unlet s:local_session_directory
 
 " セッション保存と復帰のコマンド
 " https://qiita.com/ToruIwashita/items/8c5039655ab73ea9261e
-function! s:save_session(...)
+function! s:save_session(bang, ...)
   if a:0
     let session_name = a:1
   else
@@ -95,13 +95,13 @@ function! s:save_session(...)
   end
 
   if strlen(session_name)
-    execute 'SaveSession ' . session_name . '.branch'
+    execute 'SaveSession' . ToBang(a:bang) . ' ' . session_name . '.branch'
   else
     echo 'not a git repository'
   endif
 endfunction
 
-function! s:load_session(...)
+function! s:load_session(bang, ...)
   if a:0
     let session_name = a:1
   else
@@ -109,14 +109,14 @@ function! s:load_session(...)
   end
 
   if strlen(session_name)
-    execute 'OpenSession ' . session_name . '.branch'
+    execute 'OpenSession' . ToBang(a:bang) . ' ' . session_name . '.branch'
   else
     echo 'no target session found'
   endif
 endfunction
 
-command! -nargs=? SaveBranchSession call s:save_session(<f-args>)
-command! -nargs=? LoadBranchSession call s:load_session(<f-args>)
+command! -nargs=? -bang SaveBranchSession call s:save_session(<bang>v:false, <f-args>)
+command! -nargs=? -bang LoadBranchSession call s:load_session(<bang>v:false, <f-args>)
 
 
 " for ale
