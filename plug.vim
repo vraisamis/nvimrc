@@ -23,7 +23,9 @@ call plug#begin(s:vim_plug_dir)
 Plug 'vim-jp/vimdoc-ja'
 
 " colorscheme
-Plug 'cocopon/iceberg.vim'
+" Plug 'cocopon/iceberg.vim'
+Plug 'sainnhe/sonokai'
+Plug 'EdenEast/nightfox.nvim'
 
 " syntax
 Plug 'kylef/apiblueprint.vim'
@@ -145,7 +147,18 @@ endfunction
 " UsePlugin 'hoge' で利用チェック
 " UsePlugin! 'foo' で不使用チェック
 command! -bang -nargs=1 UsePlugin if <bang>!FindPlugin(<args>) | finish | endif
+" 利用例（lua）
+" if UsePlugin('like_this') then
+"   -- code here
+" end
+lua <<EOF
+function _G.My.UsePlugin(pluginName)
+  return (vim.fn.FindPlugin(pluginName) ~= 0)
+end
+EOF
 
 " NOTE: runtimepathを仮定しないのでglobでファイルを拾う
-let s:files = sort(glob(g:vimrc_dir . '/myconfig/*.vim', v:true, v:true))
-call map(s:files, {->[execute('exec "so" . v:val')]})
+let s:vim_files = glob(g:vimrc_dir . '/myconfig/*.vim', v:true, v:true)
+let s:lua_files = glob(g:vimrc_dir . '/myconfig/*.lua', v:true, v:true)
+let s:files = sort(s:vim_files + s:lua_files)
+call map(s:files, {->[execute('exec "so " . v:val')]})

@@ -2,6 +2,8 @@ scriptencoding utf-8
 let g:vimrc_dir = expand("<sfile>:p:h")
 execute 'set runtimepath^=' . g:vimrc_dir . '/runtime'
 
+lua _G.My = {}
+
 
 "----------------
 "Maps
