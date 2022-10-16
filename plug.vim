@@ -30,7 +30,13 @@ Plug 'kylef/apiblueprint.vim'
 Plug 'glench/vim-jinja2-syntax'
 
 " tree-sitter
-" Plug 'nvim-treesitter/nvim-treesitter', {'branch': '0.5-compat', 'do': ':TSUpdate'}
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+" tree-sitter indent
+Plug 'yioneko/nvim-yati'
+Plug 'p00f/nvim-ts-rainbow'
+" tree-sitter highlight arguments
+Plug 'm-demare/hlargs.nvim'
+Plug 'haringsrob/nvim_context_vt'
 
 " fzf
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
@@ -81,7 +87,8 @@ Plug 'sirver/ultisnips'
 Plug 'honza/vim-snippets'
 
 " color brackets
-Plug 'luochen1990/rainbow'
+" -> nvim-ts-rainbow
+" Plug 'luochen1990/rainbow'
 
 " session
 Plug 'xolox/vim-misc'
