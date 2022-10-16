@@ -81,6 +81,7 @@ Plug 'tomtom/tcomment_vim'
 
 " auto complete endtag
 " SEE: https://rhysd.hatenablog.com/entry/20111010/1318264556
+" →cocとの競合を解決する方法はありそう。coc側のconfigにメモ。
 " Plug 'tpope/vim-endwise'
 
 Plug 'tyru/open-browser.vim'

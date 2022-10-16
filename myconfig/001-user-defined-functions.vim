@@ -18,3 +18,20 @@ function! RelativeFilePath(range, line1, line2)
 endfunction
 
 command -bang -range CopyFilePath let @+ = call(<bang>0 ? 'FullFilePath' : 'RelativeFilePath', [<range>, <line1>, <line2>])
+
+""" if true, returns "!"
+""" if false, returns ""
+function! ToBang(bang) abort
+  return a:bang ? "!" : ""
+endfunction
+
+""" for colorscheme
+function! UseColorScheme(name, with_lightline) abort
+  if a:with_lightline
+    let g:lightline = get(g:, 'lightline', {})
+    let g:lightline.colorscheme = a:name
+  endif
+
+  exe 'colorscheme' a:name
+endfunction
+command -nargs=1 -bang -bar UseColorScheme call UseColorScheme(<args>, <bang>v:true)
