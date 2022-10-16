@@ -2,6 +2,15 @@ UsePlugin 'coc.nvim'
 
 let g:coc_config_home = g:vimrc_dir
 
+" coc-metalsは非推奨になっているので後ほど対応を検討
+      " cs bootstrap \
+      " --java-opt -Xss4m \
+      " --java-opt -Xms100m \
+      " --java-opt -Dmetals.client=vim-lsc \
+      " org.scalameta:metals_2.13:0.11.8 \
+      " -r bintray:scalacenter/releases \
+      " -r sonatype:snapshots \
+      " -o ~/bin/metals-vim -f
 let g:coc_global_extensions = [
       \ 'coc-eslint',
       \ 'coc-fzf-preview',
@@ -11,14 +20,33 @@ let g:coc_global_extensions = [
       \ 'coc-prettier',
       \ 'coc-rust-analyzer',
       \ 'coc-snippets',
+      \ 'coc-sumneko-lua',
       \ 'coc-swagger',
       \ 'coc-tsserver',
       \ 'coc-vimlsp',
       \ 'coc-yaml',
       \ ]
 
+
 " <CR> で候補決定
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<CR>"
+" inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<CR>"
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+      \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+" vim-endwise との共存はここから
+" https://github.com/tpope/vim-endwise/issues/22#issuecomment-652621302
+" let g:endwise_no_mappings = v:true
+" if exists('*complete_info')
+"   inoremap <silent><expr> <Plug>CustomCocCR
+"         \ complete_info()["selected"] != "-1" ? coc#_select_confirm() :
+"         \ "\<C-g>u\<CR>\<C-r>=coc#on_enter()\<CR>"
+" else
+"   inoremap <silent><expr> <Plug>CustomCocCR
+"         \ pumvisible() ? coc#_select_confirm() :
+"         \ "\<C-g>u\<CR>\<C-r>=coc#on_enter()\<CR>"
+" endif
+" imap <CR> <Plug>CustomCocCR<Plug>DiscretionaryEnd
+
 
 " Use <c-space> to trigger completion.
 inoremap <silent><expr> <c-space> coc#refresh()
@@ -109,8 +137,16 @@ command! -nargs=0 CocFormat :call CocAction('format')
 " Add `:CocFold` command to fold current buffer.
 command! -nargs=? CocFold :call CocAction('fold', <f-args>)
 
+" s:organize_import(v:false): インポート整理してformat
+" s:organize_import(v:true): インポート整理のみ
+function! s:organize_import(without_format)
+  call CocAction('runCommand', 'editor.action.organizeImport')
+  if !a:without_format
+    call CocAction('format')
+  endif
+endfunction
 " Add `:CocOrganizeImport` command for organize imports of the current buffer.
-command! -nargs=0 CocOrganizeImport :call CocAction('runCommand', 'editor.action.organizeImport')
+command! -nargs=0 -bar -bang CocOrganizeImport :call s:organize_import(<bang>0)
 
 nmap [coc-list] <silent> <nop>
 nmap <Space>l [coc-list]
