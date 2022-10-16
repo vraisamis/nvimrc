@@ -27,6 +27,9 @@ Plug 'vim-jp/vimdoc-ja'
 Plug 'sainnhe/sonokai'
 Plug 'EdenEast/nightfox.nvim'
 
+" firenvim
+Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
+
 " syntax
 Plug 'kylef/apiblueprint.vim'
 Plug 'glench/vim-jinja2-syntax'
