@@ -44,5 +44,13 @@
   "coc.preferences.extensionUpdateCheck": "daily",
   "sumneko-lua.enableNvimLuaDev": true,
   "Lua.telemetry.enable": false,
-  "Lua.diagnostics.globals": ["My"]
+  "Lua.diagnostics.globals": ["My"],
+  "languageserver": {
+    "metals": {
+    "command": "metals-vim",
+    "trace.server": "verbose",
+    "rootPatterns": ["build.sbt"],
+    "filetypes": ["scala", "sbt"]
+    }
+  }
 }
