@@ -50,12 +50,6 @@ if My.UsePlugin("coc.nvim") then
     ["Lua.telemetry.enable"] = false,
     ["Lua.diagnostics.globals"] = {"My"},
     ["languageserver"] = {
-      ["metals"] = {
-      ["command"] = "metals-vim",
-      ["trace.server"] = "verbose",
-      ["rootPatterns"] = {"build.sbt"},
-      ["filetypes"] = {"scala", "sbt"}
-      }
     }
   }
 

@@ -6,7 +6,11 @@ local get_metals_state = function()
   end
   local metals_info = My.find_all(services, cond)
 
-  return metals_info[0].state == 'starting'
+  if #metals_info > 0 then
+    -- luaの配列番号は1から……
+    return metals_info[1].state
+  end
+  return nil
 end
 
 local add_coc_command = function(name, command, description)
@@ -54,18 +58,35 @@ local define_metals_commands = function()
 end
 
 local define_metals_commands_if_metals_started = function()
-  local state = get_metals_state()
-  if state == 'starting' or state == 'running' then
+  local metals_state = get_metals_state()
+  if metals_state == 'starting' or metals_state == 'running' then
     define_metals_commands()
   end
 end
+
 if My.UsePlugin("coc.nvim") then
-  -- metals起動時にコマンドを登録する
-  -- SEE: https://github.com/neoclide/coc.nvim/discussions/3901
-  local group = vim.api.nvim_create_augroup('coc-nvim-metals-config', { clear = true })
-  vim.api.nvim_create_autocmd({ 'user' }, {
-    group = group,
-    pattern = 'CocNvimInit',
-    callback = define_metals_commands_if_metals_started
-  })
+  local metals_executable_name = "metals-vim"
+
+  if My.has_executable(metals_executable_name) then
+    -- configに追加する
+    local languageserver_config = My.coc_config.languageserver
+    languageserver_config.metals = {
+      ["command"] = metals_executable_name,
+      ["rootPatterns"] = { "build.sbt" },
+      ["filetypes"] = { "scala", "sbt" },
+      ["trace.server"] = "verbose", -- デバッグするときに有効にする
+    }
+    My.PutCocConfig("languageserver", languageserver_config)
+
+    -- TODO: metals起動時にコマンドを登録する
+    -- SEE: https://github.com/neoclide/coc.nvim/discussions/3901
+    local group = vim.api.nvim_create_augroup('coc-nvim-metals-config', { clear = true })
+    vim.api.nvim_create_autocmd({ 'User' }, {
+      group = group,
+      pattern = 'CocNvimInit',
+      -- 理屈としてはこうしたいんだけど、CocNvimInitのときにはmetalsはinit状態なので無理
+      -- callback = define_metals_commands_if_metals_started
+      callback = define_metals_commands
+    })
+  end
 end
