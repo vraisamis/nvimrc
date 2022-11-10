@@ -3,6 +3,7 @@ UsePlugin 'coc.nvim'
 let g:coc_config_home = g:vimrc_dir
 
 " coc-metalsは非推奨になっているので後ほど対応を検討
+      " \ 'coc-metals',
       " cs bootstrap \
       " --java-opt -Xss4m \
       " --java-opt -Xms100m \
@@ -16,7 +17,6 @@ let g:coc_global_extensions = [
       \ 'coc-fzf-preview',
       \ 'coc-git',
       \ 'coc-json',
-      \ 'coc-metals',
       \ 'coc-prettier',
       \ 'coc-rust-analyzer',
       \ 'coc-snippets',
