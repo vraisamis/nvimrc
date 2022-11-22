@@ -1,7 +1,7 @@
 if My.UsePlugin('firenvim') then
   if vim.fn.exists('g:started_by_firenvim') == 1 then
     vim.api.nvim_set_option('guifont', 'migu NF:h12')
-    vim.cmd([[autocmd BufEnter * set lines=max(&lines, 10)]])
+    vim.cmd([[autocmd BufEnter * exec "set lines=".max([&lines, 10])]])
   end
 
   local get = function(name, default)
