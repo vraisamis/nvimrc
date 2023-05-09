@@ -35,3 +35,18 @@ function! UseColorScheme(name, with_lightline) abort
   exe 'colorscheme' a:name
 endfunction
 command -nargs=1 -bang -bar UseColorScheme call UseColorScheme(<args>, <bang>v:true)
+
+""" {{{
+" SEE: https://rcmdnk.com/blog/2013/12/01/computer-vim/
+function ShowHighlight(bang) abort
+  let hi = synID(line("."), col("."), 1)
+  " bangなら大本を表示、そうでなければハイライトアイテム名を表示
+  if a:bang
+    let hi = synIDtrans(hi)
+  endif
+  return synIDattr(hi, "name") 
+endfunction
+
+" カーソル下のハイライトを表示するコマンド
+command! -bang ShowHighlight echo ShowHighlight(<bang>0)
+""" }}}
