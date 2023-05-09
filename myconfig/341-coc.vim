@@ -27,26 +27,22 @@ let g:coc_global_extensions = [
       \ 'coc-yaml',
       \ ]
 
-
+""" pop up menu {{{
+" CTRL-j,k で候補選択orCTRL-n,p
+inoremap <silent><expr> <C-j> coc#pum#visible() ? coc#pum#next(1) : "\<C-n>"
+inoremap <silent><expr> <C-k> coc#pum#visible() ? coc#pum#prev(1) : "\<C-p>"
+inoremap <silent><expr> <C-e> coc#pum#visible() ? coc#pum#cancel() : "\<C-e>"
+inoremap <silent><expr> <C-y> coc#pum#visible() ? coc#pum#insert() : "\<C-y>"
+" CTRL-hで補完候補を閉じる
+inoremap <silent><expr> <C-h> coc#pum#visible() ? coc#pum#cancel() : "\<C-h>"
 " <CR> で候補決定
-" inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<CR>"
+" NOTE: coc#pum#insertを使うことで括弧を追加させない
+" SEE: https://github.com/neoclide/coc.nvim/issues/4331
+" inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#insert()
+"       \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
       \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-
-" vim-endwise との共存はここから
-" https://github.com/tpope/vim-endwise/issues/22#issuecomment-652621302
-" let g:endwise_no_mappings = v:true
-" if exists('*complete_info')
-"   inoremap <silent><expr> <Plug>CustomCocCR
-"         \ complete_info()["selected"] != "-1" ? coc#_select_confirm() :
-"         \ "\<C-g>u\<CR>\<C-r>=coc#on_enter()\<CR>"
-" else
-"   inoremap <silent><expr> <Plug>CustomCocCR
-"         \ pumvisible() ? coc#_select_confirm() :
-"         \ "\<C-g>u\<CR>\<C-r>=coc#on_enter()\<CR>"
-" endif
-" imap <CR> <Plug>CustomCocCR<Plug>DiscretionaryEnd
-
+""" }}} -- pop up menu
 
 " Use <c-space> to trigger completion.
 inoremap <silent><expr> <c-space> coc#refresh()
@@ -76,12 +72,10 @@ nmap <silent> [coc]R :call CocAction('jumpReferences', 'tabe')<CR>
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 
 function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  elseif (coc#rpc#ready())
+  if CocAction('hasProvider', 'hover')
     call CocActionAsync('doHover')
   else
-    execute '!' . &keywordprg . " " . expand('<cword>')
+    call feedkeys('K', 'in')
   endif
 endfunction
 
@@ -95,15 +89,30 @@ nmap [coc]rn <Plug>(coc-rename)
 xmap [coc]f  <Plug>(coc-format-selected)
 nmap [coc]f  <Plug>(coc-format)
 
+augroup mygroup
+  autocmd!
+  " Setup formatexpr specified filetype(s).
+  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+  " Update signature help on jump placeholder.
+  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+augroup end
+
 " Applying codeAction to the selected region.
 " Example: `<leader>aap` for current paragraph
 xmap [coc]a  <Plug>(coc-codeaction-selected)
-nmap [coc]a  <Plug>(coc-codeaction)
+nmap [coc]aa <Plug>(coc-codeaction)
+" Remap keys for apply code actions at the cursor position.
+nmap [coc]ac  <Plug>(coc-codeaction-cursor)
+" Remap keys for apply code actions affect whole buffer.
+nmap [coc]as  <Plug>(coc-codeaction-source)
 
-" Remap keys for applying codeAction to the current buffer.
-" nmap [coc]ac  <Plug>(coc-codeaction)
 " Apply AutoFix to problem on the current line.
 nmap [coc]qf  <Plug>(coc-fix-current)
+
+" Remap keys for apply refactor code actions.
+" nmap <silent> [coc]re <Plug>(coc-codeaction-refactor)
+" xmap <silent> [coc]r  <Plug>(coc-codeaction-refactor-selected)
+" nmap <silent> [coc]r  <Plug>(coc-codeaction-refactor-selected)
 
 " Map function and class text objects
 " NOTE: Requires 'textDocument.documentSymbol' support from the language server.
