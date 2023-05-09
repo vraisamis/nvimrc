@@ -12,7 +12,9 @@ if My.UsePlugin("coc.nvim") then
     ["list.insertMappings"] = {
       ["<C-t>"] = "action:tabe",
       ["<C-s>"] = "command:wincmd k",
-      ["<C-v>"] = "command:wincmd h"
+      ["<C-v>"] = "command:wincmd h",
+      ["<C-n>"] = "do:next",
+      ["<C-p>"] = "do:previous",
     },
     ["coc.preferences.formatOnSaveFiletypes"] = {"scala"},
     ["suggest.completionItemKindLabels"] = {
