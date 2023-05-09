@@ -72,6 +72,8 @@ set formatoptions+=roqmM
 set hlsearch
 "インクリメンタルサーチ
 set incsearch
+" バッファを隠さない
+set nohidden
 
 """Tab Settings
 set tabstop=2
@@ -136,7 +138,7 @@ set smartcase
 set smarttab
 
 "最後のカーソル位置を復元する
-autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line('$') | exe "normal! g `\"" | endif
+autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line('$') | exe "normal! g`\"" | endif
 
 
 "----------------
