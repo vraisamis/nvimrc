@@ -126,12 +126,13 @@ Plug 'othree/es.next.syntax.vim', {'for': ['javascript', 'javascript.jsx']}
 Plug 'othree/javascript-libraries-syntax.vim', {'for': ['javascript', 'javascript.jsx']}
 Plug 'galooshi/vim-import-js', {'for': ['javascript', 'javascript.jsx']}
 Plug 'iamcco/markdown-preview.nvim', {'for': ['markdown', 'pandoc.markdown', 'rmd']}
+Plug 'godlygeek/tabular' " required by vim-markdown
 Plug 'plasticboy/vim-markdown', {'for': ['markdown', 'pandoc.markdown', 'rmd']}
 Plug 'tpope/vim-rails', {'for': ['ruby', 'erb']}
 Plug 'rust-lang/rust.vim', {'for': ['rust']}
 Plug 'cespare/vim-toml', {'for': ['toml']}
-Plug 'osyo-manga/vim-precious', {'for': ['toml', 'markdown', 'jsp']}
-Plug 'Shougo/context_filetype.vim', {'for': ['toml', 'markdown', 'jsp']}
+" Plug 'osyo-manga/vim-precious', {'for': ['toml', 'markdown', 'jsp']}
+" Plug 'Shougo/context_filetype.vim', {'for': ['toml', 'markdown', 'jsp']}
 Plug 'hashivim/vim-terraform', {'for': ['terraform', 'hcl']}
 Plug 'mustache/vim-mustache-handlebars', {'for': ['mustache', 'handlebars']}
 
