@@ -1,3 +1,7 @@
+-- Prerequirements:
+-- - executable `metals-vim` on PATH
+--   SEE: https://scalameta.org/metals/docs/contributors/getting-started#manual-tests
+
 local get_metals_state = function()
   local services = vim.fn.CocAction("services")
 

@@ -49,8 +49,11 @@ if My.UsePlugin("coc.nvim") then
     ["diagnostic.virtualText"] = true,
     ["coc.preferences.extensionUpdateCheck"] = "daily",
     ["sumneko-lua.enableNvimLuaDev"] = true,
-    ["Lua.telemetry.enable"] = false,
-    ["Lua.diagnostics.globals"] = {"My"},
+    ["Lua"] = {
+      ["telemetry.enable"] = false,
+      ["diagnostics.globals"] = {"My"},
+      ["workspace.checkThirdParty"] = false
+    },
     ["languageserver"] = {
     }
   }

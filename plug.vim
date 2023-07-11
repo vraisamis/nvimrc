@@ -28,17 +28,19 @@ Plug 'sainnhe/sonokai'
 Plug 'EdenEast/nightfox.nvim'
 
 " firenvim
-Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
+Plug 'glacambre/firenvim', { 'do': { -> firenvim#install(0) } }
 
 " syntax
 Plug 'kylef/apiblueprint.vim'
 Plug 'glench/vim-jinja2-syntax'
 
 " tree-sitter
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
 " tree-sitter indent
 Plug 'yioneko/nvim-yati'
-Plug 'p00f/nvim-ts-rainbow'
+" no longer maintained
+" Plug 'p00f/nvim-ts-rainbow'
+Plug 'HiPhish/nvim-ts-rainbow2'
 " tree-sitter highlight arguments
 Plug 'm-demare/hlargs.nvim'
 Plug 'haringsrob/nvim_context_vt'
@@ -46,6 +48,11 @@ Plug 'haringsrob/nvim_context_vt'
 " fzf
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
+
+" telescope
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.2' }
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' }
 
 " status line
 Plug 'itchyny/lightline.vim'
@@ -141,6 +148,7 @@ Plug 'mustache/vim-mustache-handlebars', {'for': ['mustache', 'handlebars']}
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'liuchengxu/vista.vim', {'on': ['Vista']}
 Plug 'easymotion/vim-easymotion', {'on': ['<Plug>(easymotion-']}
+
 call plug#end()
 
 

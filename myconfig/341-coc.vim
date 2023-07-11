@@ -2,22 +2,13 @@ UsePlugin 'coc.nvim'
 
 let g:coc_config_home = g:vimrc_dir
 
-" coc-metalsは非推奨になっているので後ほど対応を検討
-      " \ 'coc-metals',
-      " cs bootstrap \
-      " --java-opt -Xss4m \
-      " --java-opt -Xms100m \
-      " --java-opt -Dmetals.client=vim-lsc \
-      " org.scalameta:metals_2.13:0.11.8 \
-      " -r bintray:scalacenter/releases \
-      " -r sonatype:snapshots \
-      " -o ~/bin/metals-vim -f
 let g:coc_global_extensions = [
       \ 'coc-eslint',
       \ 'coc-fzf-preview',
       \ 'coc-git',
       \ 'coc-json',
       \ 'coc-prettier',
+      \ 'coc-pyright',
       \ 'coc-rust-analyzer',
       \ 'coc-snippets',
       \ 'coc-sumneko-lua',
